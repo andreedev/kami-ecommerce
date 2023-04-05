@@ -1,0 +1,17 @@
+<div class="d-flex justify-content-center align-items-center bg-dark vh-100">
+    <div class="card text-dark bg-light mb-3 mx-3 my-5 cardLogin">
+        <div class="card-header">Iniciar sesión</div>
+        <div class="card-body">
+            <div class="mb-3">
+                <input type="email" class="form-control" placeholder="username" [(ngModel)]="username">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="password" [(ngModel)]="password" (keyup.enter)="login()">
+            </div>
+            <p class="text-danger text-center fs-12px">{{ message }}</p>
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary btn-block" (click)="login()">LOGIN</button>
+            </div>
+        </div>
+    </div>
+</div>

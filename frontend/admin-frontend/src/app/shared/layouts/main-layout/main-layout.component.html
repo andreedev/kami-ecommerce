@@ -1,0 +1,32 @@
+<div class="position-absolute" *ngIf="dataService.screenWidth >= 768; else mobile">
+    <app-sidebar-main-layout></app-sidebar-main-layout>
+</div>
+
+<ng-template #mobile>
+    <div class="d-flex flex-column">
+        <div
+            class="d-flex align-items-center justify-content-between bg-dark border-bottom border-light sticky-top z-index-2">
+            <div class="text-center text-white border rounded cp btnMenuMovil ms-3 ms-sm-5 fs-20px"
+                (click)="dataService.displayMobileMenu=true">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <a class="navbar-brand" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="pt-3 pb-3 pt-md-1 pb-md-2">
+                <img src="https://picsum.photos/100/50" class="w-100px">
+            </a>
+
+            <div class="text-center text-white border rounded cp btnMenuMovil me-3 me-sm-5 fs-20px invisible">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </div>
+    <p-sidebar [(visible)]="dataService.displayMobileMenu" styleClass="sidebar-popup p-0 bg-light" position="left">
+        <div class="d-flex flex-column justify-content-center">
+            <app-sidebar-main-layout></app-sidebar-main-layout>
+        </div>
+    </p-sidebar>
+</ng-template>
+
+<div class="main-content">
+    <router-outlet></router-outlet>
+</div>
