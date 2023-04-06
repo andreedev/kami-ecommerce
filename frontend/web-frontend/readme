@@ -1,0 +1,21 @@
+This baseplate Angular app contains the following dependencies
+
+
+- Bootstrap latest version
+npm i bootstrap --save
+
+- Ngx cookie service util
+npm install ngx-cookie-service --save
+
+- PrimeNG ui library
+npm install primeng --save
+npm install primeicons --save
+npm i moment
+npm install ngx-daterangepicker-material --save
+
+- Auxiliary libraries
+npm install @angular/cdk --save
+
+- CSS utils
+- CSS bootstrap customs improvements
+

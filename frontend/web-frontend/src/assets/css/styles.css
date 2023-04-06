@@ -1,0 +1,89 @@
+.sidebar-popup {
+    width: 100% !important;
+}
+
+@media (min-width: 417px) {
+    .sidebar-popup {
+        width: 400px !important;
+    }
+}
+
+
+/* primeng table */
+
+.p-datatable-scrollable-header-box {
+    padding-right: 0px !important;
+}
+
+.p-datatable table {
+    table-layout: fixed !important;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight {
+    background-color: #0063cc70 !important;
+    color: #000000 !important;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight {
+    background: #007bff70 !important;
+    color: #181818 !important;
+}
+
+/* Custom css ngx date range picker*/
+
+.md-drppicker .btn {
+    background-color: var(--blue) !important;
+}
+
+.md-drppicker td.active, .md-drppicker td.active:hover {
+    background-color: var(--blue) !important;
+}
+
+/* Custom css btn upload */
+
+.p-fileupload-advanced .p-button{
+    padding: 5px !important;
+    margin-bottom: 10px !important;
+}
+
+.p-fileupload-buttonbar{
+    padding: 10px !important;
+}
+
+.main-content {
+    margin-left: 0;
+}
+
+@media (min-width: 768px){
+    .main-content {
+        margin-left: 150px;
+    }
+}
+
+.btnMenuMovil {
+    padding: 3px 9px;
+}
+
+.images-popup {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .images-popup {
+        width: 700px;
+    }
+}
+
+.debugger{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    cursor: pointer;
+    background-color: var(--blue);
+    border-radius: 50%;
+    border: 1px solid var(--blue);
+    text-align: center;
+    color: #ffffff;
+}
