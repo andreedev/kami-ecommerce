@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { DynamicReport } from 'app/core/models/dynamic-report';
@@ -12,7 +13,7 @@ import moment from 'moment';
   styles: [
   ]
 })
-export class ProductReportComponent {
+export class ProductReportComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   query: string = '';
   loading: boolean = true;
@@ -37,11 +38,12 @@ export class ProductReportComponent {
 
   constructor(
     public dataService: DataService,
-    public productService: ProductService
+    public productService: ProductService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
-    
+    this.dataService.selectedProduct = undefined
   }
 
   async getReport(e:any=null): Promise<void>{
@@ -72,6 +74,7 @@ export class ProductReportComponent {
   }
 
   updateProduct(product: Product): void {
-
+    this.dataService.selectedProduct = product;
+    this.router.navigate([AppRoutes.PRODUCT_UPDATE_COMPONENT_ROUTE_NAME]);
   }
 }

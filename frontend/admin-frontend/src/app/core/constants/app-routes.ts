@@ -22,7 +22,7 @@ export abstract class AppRoutes {
     static readonly PRODUCT_CREATE_COMPONENT_NAME: string = `create`
     static readonly PRODUCT_CREATE_COMPONENT_ROUTE_NAME: string = `${AppRoutes.PRODUCT_MODULE_ROUTE_NAME}${AppRoutes.PRODUCT_CREATE_COMPONENT_NAME}`
 
-    static readonly PRODUCT_UPDATE_COMPONENT_NAME: string = `create`
+    static readonly PRODUCT_UPDATE_COMPONENT_NAME: string = `update`
     static readonly PRODUCT_UPDATE_COMPONENT_ROUTE_NAME: string = `${AppRoutes.PRODUCT_MODULE_ROUTE_NAME}${AppRoutes.PRODUCT_UPDATE_COMPONENT_NAME}`
 
 }

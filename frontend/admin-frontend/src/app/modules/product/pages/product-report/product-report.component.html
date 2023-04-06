@@ -123,8 +123,8 @@
                     <td>
                         <ng-container *ngIf="product.discount; else empty">
                             <div class="text-center fs-16px">{{product.discount.percentage}}%</div>
-                            <div>{{product.discount.startDate | date: 'yyyy-MM-dd HH:mm'}}</div>
-                           <div>{{product.discount.endDate | date: 'yyyy-MM-dd HH:mm'}}</div>
+                            <div class="text-center">{{product.discount.startDate | date: 'yyyy-MM-dd HH:mm'}}</div>
+                           <div class="text-center">{{product.discount.endDate | date: 'yyyy-MM-dd HH:mm'}}</div>
                         </ng-container>
                     </td>
 

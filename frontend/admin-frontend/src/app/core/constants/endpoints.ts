@@ -13,4 +13,5 @@ export abstract class Endpoints {
     static readonly PRODUCT: string = 'admin/product'
     static readonly PRODUCT_REPORT: string = `${Endpoints.PRODUCT}/report`
     static readonly PRODUCT_CREATE: string = `${Endpoints.PRODUCT}/create`
+    static readonly PRODUCT_UPDATE: string = `${Endpoints.PRODUCT}/update`
 }

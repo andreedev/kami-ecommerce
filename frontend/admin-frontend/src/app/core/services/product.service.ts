@@ -56,6 +56,24 @@ export class ProductService {
     }
   }
 
+  async updateProduct(product: Product): Promise<any> {
+    try {
+      const headers = this.dataService.getAuthHeaders();
+      const response = await firstValueFrom(
+        this.http.post(Utils.getURL(Endpoints.PRODUCT_CREATE), product, { headers })
+      );
+      return response;
+    } catch (error: any) {
+      if (error.status === 401) {
+        const tokenRefreshed = await this.authService.refreshToken();
+        if (!tokenRefreshed) return null;
+        return await this.updateProduct(product);
+      }
+      if (error.status === 400) return error;
+      throw error;
+    }
+  }
+
 
 
 }

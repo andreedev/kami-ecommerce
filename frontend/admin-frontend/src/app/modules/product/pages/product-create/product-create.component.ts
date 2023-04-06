@@ -47,7 +47,13 @@ export class ProductCreateComponent{
     private sanitizer: DomSanitizer,
     private router: Router
   ) {
-    this.categoriesForm = this.specificationsForm = this.mediaUrlsForm = new FormGroup({
+    this.categoriesForm = new FormGroup({
+      values: new FormControl<string[] | null>(null)
+    });
+    this.specificationsForm = new FormGroup({
+      values: new FormControl<string[] | null>(null)
+    });
+    this.mediaUrlsForm = new FormGroup({
       values: new FormControl<string[] | null>(null)
     });
     this.categoriesForm.valueChanges.subscribe(() => {
