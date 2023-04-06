@@ -23,6 +23,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public boolean existsById(String id) {
+        return productRepository.existsById(id);
+    }
+
+    @Override
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
     }
@@ -35,5 +40,10 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Integer createProduct(Product product) {
         return productRepository.createProduct(product);
+    }
+
+    @Override
+    public Integer updateProduct(Product product) {
+        return productRepository.updateProduct(product);
     }
 }

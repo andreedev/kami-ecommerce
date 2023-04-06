@@ -60,7 +60,7 @@ export class ProductService {
     try {
       const headers = this.dataService.getAuthHeaders();
       const response = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.PRODUCT_CREATE), product, { headers })
+        this.http.post(Utils.getURL(Endpoints.PRODUCT_UPDATE), product, { headers })
       );
       return response;
     } catch (error: any) {

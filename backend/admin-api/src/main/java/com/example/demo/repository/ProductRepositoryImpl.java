@@ -4,6 +4,7 @@ import com.example.demo.model.Customer;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
+import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -71,6 +73,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public boolean existsById(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        return mongoTemplate.exists(query, Product.class);
+    }
+
+    @Override
     public boolean existsByName(String name) {
         Query query = new Query();
         query.addCriteria(
@@ -97,5 +106,24 @@ public class ProductRepositoryImpl implements ProductRepository {
         log.info("create");
         Product result = mongoTemplate.save(product, "products");
         return 1;
+    }
+
+    @Override
+    public Integer updateProduct(Product product) {
+        Query query = new Query(Criteria.where("id").is(product.getId()));
+        Update update = new Update();
+        update.set("status", product.getStatus());
+        update.set("name", product.getName());
+        update.set("sku", product.getSku());
+        update.set("price", product.getPrice());
+        update.set("discount", product.getDiscount());
+        update.set("brand", product.getBrand());
+        update.set("categories", product.getCategories());
+        update.set("specifications", product.getSpecifications());
+        update.set("mediaUrls", product.getMediaUrls());
+        update.set("keywords", product.getKeywords());
+        update.set("stock", product.getStock());
+        UpdateResult result = mongoTemplate.updateFirst(query, update, Product.class);
+        return (int) result.getModifiedCount();
     }
 }

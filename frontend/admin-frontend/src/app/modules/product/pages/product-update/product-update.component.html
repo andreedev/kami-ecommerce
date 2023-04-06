@@ -36,7 +36,7 @@
                         (change)="onCheckboxChange($event)" [checked]="discountCheckbox">
                     <label class="form-check-label" for="discountCheckbox">Discount</label>
                 </div>
-                <ng-container *ngIf="product.discount!==undefined">
+                <ng-container *ngIf="product.discount!==undefined && product.discount!==null">
                     <div class="ms-3">
                         <div class="mb-3">
                             <label class="form-label px-2">
