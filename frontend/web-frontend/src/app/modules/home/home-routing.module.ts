@@ -6,8 +6,8 @@ const routes: Routes = [
   {
     path: "",
     children: [
-      { path: "inicio", component: HomePageComponent },
-      { path: "", pathMatch: "full", redirectTo: "inicio" }
+      { path: "", component: HomePageComponent },
+      { path: "", pathMatch: "full", redirectTo: "" }
     ]
   },
   { path: "", pathMatch: "full", redirectTo: "" },

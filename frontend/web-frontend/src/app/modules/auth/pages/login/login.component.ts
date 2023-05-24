@@ -1,10 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { AppRoutes } from 'app/core/constants';
-import { Employee } from 'app/core/models';
-import { AuthService } from 'app/core/services';
-import { LoginResponse } from '../../../../core/models/login-response';
-import { DataService } from '../../../../core/services/data.service';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppRoutes } from 'app/core/constants';
+import { AuthService } from 'app/core/services';
+import { DataService } from 'app/core/services/data.service';
 
 @Component({
   selector: 'app-login',

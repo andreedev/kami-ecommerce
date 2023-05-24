@@ -9,39 +9,35 @@ import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.co
 
 const routes: Routes = [
   {
-    path: '',
-    component: MainLayoutComponent,
-    children: [
-      {
-        path: AppRoutes.HOME_MODULE_NAME,
-        loadChildren: () =>
-          import('app/modules/home/home.module').then(m => m.HomeModule)
-      },
-      {
-        path: AppRoutes.CUSTOMER_MODULE_NAME,
-        loadChildren: () =>
-          import('app/modules/customer/customer.module').then(m => m.CustomerModule)
-      },
-      {
-        path: AppRoutes.PRODUCT_MODULE_NAME,
-        loadChildren: () =>
-          import('app/modules/product/product.module').then(m => m.ProductModule)
-      },
-      { path: '', pathMatch: "full", redirectTo: AppRoutes.HOME_MODULE_NAME }
-    ],
-    canActivate: [AuthenticatedGuard]
-  },
-  {
     path: 'auth',
     component: AuthLayoutComponent,
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import('./modules/auth/auth.module').then(m => m.AuthModule)
+        loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
       }
     ],
     canActivate: [UnauthenticatedGuard]
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      {
+        path: AppRoutes.HOME_MODULE_NAME,
+        loadChildren: () => import('app/modules/home/home.module').then(m => m.HomeModule)
+      },
+      {
+        path: AppRoutes.ACCOUNT_MODULE_NAME,
+        loadChildren: () => import('app/modules/account/account.module').then(m => m.AccountModule),
+          canActivate: [AuthenticatedGuard]
+      },
+      // {
+      //   path: AppRoutes.PRODUCT_MODULE_NAME,
+      //   loadChildren: () => import('app/modules/product/product.module').then(m => m.ProductModule)
+      // },
+      { path: '', pathMatch: "full", redirectTo: AppRoutes.HOME_MODULE_NAME }
+    ],
   },
   { path: "", pathMatch: "full", redirectTo: "" },
   { path: "**", redirectTo: "" }
