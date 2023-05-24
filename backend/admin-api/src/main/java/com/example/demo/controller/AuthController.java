@@ -54,7 +54,7 @@ public class AuthController {
             log.info("User logged succesfully: "+request.getUsername());
             return ResponseEntity.ok(new JwtResponse(jwtToken, refreshJwtToken));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -74,7 +74,7 @@ public class AuthController {
             log.info("User: "+username+ " refreshed token successfully");
             return ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
 
