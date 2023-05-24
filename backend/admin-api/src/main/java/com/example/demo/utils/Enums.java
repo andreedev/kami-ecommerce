@@ -14,7 +14,7 @@ public class Enums {
 
     @Getter
     @AllArgsConstructor
-    public static enum OrderStatus {
+    public enum OrderStatus {
         NEW(1), PROCESSING(2), SHIPPED(3), DELIVERED(4), CANCELLED(5);
         private int code;
     }

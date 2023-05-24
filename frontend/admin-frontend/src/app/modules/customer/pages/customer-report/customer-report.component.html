@@ -28,8 +28,9 @@
                 <i class="fas fa-calendar-alt"></i>
                 Filter by date:
             </span>
-            <input type="text" ngxDaterangepickerMd [(ngModel)]="dateFilter" class="form-control form-control-sm"
-                 [alwaysShowCalendars]="true" [showDropdowns]="true" [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}"/>
+            <input type="text" ngxDaterangepickerMd [(ngModel)]="dateFilter" class="form-control form-control-sm" 
+                (change)="getReport($event)" [alwaysShowCalendars]="true" [showDropdowns]="true"
+                [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}"/>
         </div>
         <div class="d-flex flex-column mx-4">
             <span class="d-none d-md-block p-2 invisible">.</span>
