@@ -1,0 +1,127 @@
+<div class="bg-light py-0 border-bottom sticky-top z-index-2">
+    <div class="container-fluid px-2 px-md-4">
+
+        <div class="d-flex align-items-center justify-content-between py-3 py-md-0">
+
+            <a type="button" class="text-center text-gray-60 fs-20px px-2 px-sm-3 pb-1"(click)="dataService.displayMobileMenu = true">
+                <i class="fas fa-bars"></i>
+            </a>
+
+            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="pt-3 pb-3 pt-md-1 pb-md-2 mx-3 d-none d-md-block">
+                <img src="https://picsum.photos/75/50">
+            </a>
+            
+            <div class="d-flex flex-fill">
+                <div class="form-group flex-fill-9">
+                    <div class="input-group">
+                        <input [(ngModel)]="dataService.search.query" name="query" type="text"
+                        class="form-control border-right-0" placeholder="Search by name, category, brand, sku"
+                        (keyup.enter)="search()" autocomplete="off" autofocus>
+                        <span class="input-group-text cursor-pointer bg-white text-gray-70 border-left-0 px-16px" (click)="search()"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    </div>
+                </div>
+            </div>
+
+           
+
+            <div class="mx-3">
+                <ng-container *ngIf="authService.verifyUserIsAuthenticated(); else unathenticated">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <a role="button" class="ms-2" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME">USER</a>
+                    <span class="mx-2">|</span>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <a role="button" (click)="logout()" class="ms-2">Cerrar sesión</a>
+                </ng-container>
+                <ng-template #unathenticated>
+                    <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <i class="fa-solid fa-circle-user fs-22px text-gray-60"></i>
+                            <span class="d-none d-lg-block ps-2">Ingresar</span>
+                        </div>
+                    </a>
+                </ng-template>
+            </div>
+
+            <div class="d-flex pe-2 pe-md-3 ps-md-3" (click)="dataService.displayCart = true">
+                <a role="button" class="fs-22px text-dark">
+                    <i class="fa-solid fa-cart-shopping position-relative text-gray-80">
+                        <span class="amount-items-shopcart position-absolute top-0 start-100 translate-middle bg-green">
+                            {{ dataService.cart.products.length }}
+                        </span>
+                    </i>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- mobile menu -->
+<p-sidebar [(visible)]="dataService.displayMobileMenu" [fullScreen]="dataService.screenWidth>=400?false:true" styleClass="p-0" [showCloseIcon]="false">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex justify-content-between align-items-center my-2 px-3">
+            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" (click)="dataService.displayMobileMenu = false">
+                <img width="auto" src="https://picsum.photos/75/50">
+            </a>
+            <i class="fa-regular fa-circle-xmark cursor-pointer fs-18px" (click)="dataService.displayMobileMenu = false"></i>
+        </div>
+        <hr class="m-0">
+        <div class="list-group list-group-flush mb-3">
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false"
+                aria-current="true">
+                Principales categorías
+            </a>
+            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" (click)="dataService.displayMobileMenu = false"
+                class="list-group-item list-group-item-action cp">
+                Marcas
+            </a>
+            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" (click)="dataService.displayMobileMenu = false"
+                class="list-group-item list-group-item-action">
+                Piezas de repuesto
+            </a>
+        </div>
+        <div class="d-flex flex-column container-fluid">
+            <div class="pb-3 ps-1">
+                <ng-container *ngIf="authService.verifyUserIsAuthenticated(); else unathenticated2">
+                    <i class="far fa-user"></i>
+                    <a role="button" (click)="dataService.displayMobileMenu = false" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME"
+                        class="ms-2">
+                        Mi cuenta
+                    </a>
+                    <span class="mx-2">|</span>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <a role="button" (click)="dataService.displayMobileMenu = false; logout()" class="ms-2">Cerrar sesión</a>
+                </ng-container>
+                <ng-template #unathenticated2>
+                    <i class="far fa-user"></i>
+                    <a role="button" class="ms-2 link-dark" (click)="dataService.displayMobileMenu = false"
+                        [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">Log in</a>
+                    <span class="mx-2">|</span>
+                    <a role="button" class="link-dark" (click)="dataService.displayMobileMenu = false"
+                        [routerLink]="[appRoutes.REGISTRATION_COMPONENT_ROUTE_NAME]">¿New client?</a>
+                </ng-template>
+            </div>
+        </div>
+        <div class="container-fluid p-3 fs-54px text-secondary">
+            <span class="p-2">
+                <i class="fab fa-dhl hover-transform-scale-125 transition-300ms"></i>
+            </span>
+            <span class="p-2">
+                <i class="fab fa-fedex hover-transform-scale-125 transition-300ms"></i>
+            </span>
+            <span class="p-2">
+                <i class="fab fa-cc-visa hover-transform-scale-125 transition-300ms"></i>
+            </span>
+            <span class="p-2">
+                <i class="fab fa-cc-mastercard hover-transform-scale-125 transition-300ms"></i>
+            </span>
+            <span class="p-2 bg-secondary px-3 py-0 pb-2">
+                <img [src]="resourcesUrl + 'img/' + 'logos/' + 'transfer_bancaria.svg' "
+                    class="w-135px hover-transform-scale-125 transition-300ms">
+            </span>
+        </div>
+    </div>
+</p-sidebar>
+
+<!-- Cart -->
+<cart></cart>

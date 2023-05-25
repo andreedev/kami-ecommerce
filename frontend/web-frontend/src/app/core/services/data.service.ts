@@ -16,11 +16,24 @@ export class DataService {
   //loading
   loading: boolean = false
 
-  displayMobileMenu: boolean = false
+  displayMobileMenu: boolean = true
 
   loggedInEmployee: Employee | null = null;
 
   selectedProduct: Product | undefined;
+
+  search: any = {
+    query: ""
+  }
+
+  displayCart: boolean = false
+
+  cart: any = {
+    products: [],
+    subtotal : null
+  }
+
+  categories: string[] = []
 
   constructor(
     private cookieService: CookieService,

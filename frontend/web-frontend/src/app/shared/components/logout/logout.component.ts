@@ -16,7 +16,7 @@ export class LogoutComponent {
 
   logout(): void {
     this.authService.logout()
-   this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
+    this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
   }
 
 

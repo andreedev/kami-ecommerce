@@ -1,7 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { AppRoutes } from 'app/core/constants';
 
-import { AuthService } from 'app/core/services/auth.service';
 import { DataService } from 'app/core/services/data.service';
 
 @Component({
@@ -9,10 +7,9 @@ import { DataService } from 'app/core/services/data.service';
   templateUrl: './main-layout.component.html'
 })
 export class MainLayoutComponent implements OnInit {
-  readonly appRoutes: typeof AppRoutes = AppRoutes;
 
   constructor(
-    public dataService: DataService
+    private dataService: DataService,
   ) { }
 
   ngOnInit(): void {
@@ -21,5 +18,9 @@ export class MainLayoutComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.dataService.screenWidth = event.target.innerWidth
+  }
+
+  debug(): void {
+    console.log(this.dataService);
   }
 }

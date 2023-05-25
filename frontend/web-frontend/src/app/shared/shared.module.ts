@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import * as fromComponents from './index';
+import * as index from './index';
+import { CoreModule } from 'app/core/core.module';
 
 //UI
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
@@ -14,11 +15,12 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   //Components
   declarations: [
-    ...fromComponents.components
+    ...index.components,
   ],
 
   //Modules imports
@@ -27,6 +29,7 @@ import { ChipsModule } from 'primeng/chips';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    CoreModule,
 
     //Ui modules,(
     NgxDaterangepickerMd.forRoot(),
@@ -37,13 +40,14 @@ import { ChipsModule } from 'primeng/chips';
     ScrollPanelModule,
     DialogModule,
     ChipsModule,
+    OverlayPanelModule,
 
     SharedRoutingModule
   ],
 
   //Components and modules exports
   exports: [
-    ...fromComponents.components,
+    ...index.components,
     CommonModule,
     HttpClientModule,
     FormsModule,
@@ -57,7 +61,8 @@ import { ChipsModule } from 'primeng/chips';
     TableModule,
     ScrollPanelModule,
     DialogModule,
-    ChipsModule
+    ChipsModule,
+    OverlayPanelModule
   ]
 })
 export class SharedModule { }

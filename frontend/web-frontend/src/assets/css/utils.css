@@ -11,7 +11,7 @@
     --orange-hover: #c4691e;
     --yellow: #ffc107;
     --yellow-hover: #ce9f11;
-    --green: #24b947;
+    --green: #29d884;
     --green-hover: #238f3a;
     --dark-green: #198754;
     --dark-green-hover: #15643f;
@@ -528,6 +528,18 @@ img {
 
 .text-gray {
     color: var(--gray-50) !important;
+}
+
+.text-gray-60 {
+    color: var(--gray-60) !important;
+}
+
+.text-gray-70 {
+color: var(--gray-70) !important;
+}
+
+.text-gray-80 {
+    color: var(--gray-80) !important;
 }
 
 .text-black {
@@ -2759,6 +2771,10 @@ img {
     background-color: var(--black-hover) !important;
 }
 
+.bg-transparent-force{
+    background-color: transparent !important;
+}
+
 /*overflows*/
 .overflow-auto{
     overflow: auto !important;
@@ -2804,4 +2820,16 @@ img {
 
 .border-0-force{
     border: 0px solid transparent;
+}
+
+.border-right-0{
+    border-right: 0px solid transparent;
+}
+
+.border-left-0{
+    border-left: 0px solid transparent;
+}
+
+.flex-fill-9{
+    flex: .9 .9 auto!important;
 }
