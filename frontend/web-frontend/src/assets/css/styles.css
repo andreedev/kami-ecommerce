@@ -239,3 +239,8 @@
 .p-sidebar .p-sidebar-header, .p-sidebar .p-sidebar-content {
     padding: 0px !important;
 }
+
+hr {
+    margin: 0;
+    opacity: 0.15;
+}

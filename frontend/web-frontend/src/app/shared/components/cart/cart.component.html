@@ -1,17 +1,20 @@
 <p-sidebar [(visible)]="dataService.displayCart" styleClass="p-0 bg-light" position="right"
     [showCloseIcon]="false">
     <div class="border-bottom p-2">
-        <span class="mt-3 fs-4">
-            <span><i class="fab fa-opencart mx-3"></i></span>
-            <span class="text-mi-carrito">
-                Mi carrito
-                <ng-container *ngIf="dataService.cart.products.length > 0">
-                    <span>
-                        ({{ dataService.cart.products.length }})
-                    </span>
-                </ng-container>
-            </span>
-        </span>
+        <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
+            <div>
+                <span><i class="fa-solid fa-cart-shopping mx-3 text-gray-80"></i></span>
+                <span class="text-mi-carrito">
+                    Mi carrito
+                    <ng-container *ngIf="dataService.cart.products.length > 0">
+                        <span>
+                            ({{ dataService.cart.products.length }})
+                        </span>
+                    </ng-container>
+                </span>
+            </div>
+            <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px" (click)="dataService.displayMobileMenu = false"></i>
+        </div>
     </div>
 
     <ng-container *ngIf="dataService.cart.products.length <= 0; else carrito">

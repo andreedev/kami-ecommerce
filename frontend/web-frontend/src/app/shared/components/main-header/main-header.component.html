@@ -63,24 +63,61 @@
             <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" (click)="dataService.displayMobileMenu = false">
                 <img width="auto" src="https://picsum.photos/75/50">
             </a>
-            <i class="fa-regular fa-circle-xmark cursor-pointer fs-18px" (click)="dataService.displayMobileMenu = false"></i>
+            <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px" (click)="dataService.displayMobileMenu = false"></i>
+        </div>
+        <hr>
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action cursor-pointer" (click)="dataService.displayMobileMenu = false">
+                <div class="py-2 px-2">
+                    <ng-container *ngIf="authService.verifyUserIsAuthenticated() && dataService.loggedInCustomer; else unathenticated2">
+                        <i class="fa-solid fa-circle-user"></i>
+                        Hola {{dataService.loggedInCustomer.name}}
+                    </ng-container>
+                    <ng-template #unathenticated2>
+                        <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">
+                            <div class="d-flex flex-row align-items-center">
+                                <i class="fa-solid fa-circle-user fs-22px text-gray-60"></i>
+                                <span class="ps-2">Ingresar</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </div>
+            </a>
         </div>
         <hr class="m-0">
+        <div class="ps-3 py-3">
+            <span class="fs-10px">CATEGORIES</span>
+        </div>
         <div class="list-group list-group-flush mb-3">
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false"
-                aria-current="true">
-                Principales categorías
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                Category 1
             </a>
-            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" (click)="dataService.displayMobileMenu = false"
-                class="list-group-item list-group-item-action cp">
-                Marcas
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                Category 2
             </a>
-            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" (click)="dataService.displayMobileMenu = false"
-                class="list-group-item list-group-item-action">
-                Piezas de repuesto
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                Category 3
+            </a>
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                Category 4
+            </a>
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                Category 5
             </a>
         </div>
-        <div class="d-flex flex-column container-fluid">
+        <hr class="m-0">
+        <div class="ps-3 py-3">
+            <span class="fs-10px">MY INFORMATION</span>
+        </div>  
+        <div class="list-group list-group-flush mb-3">
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                My profile
+            </a>
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                My purchases
+            </a>
+        </div>
+        <!-- <div class="d-flex flex-column container-fluid">
             <div class="pb-3 ps-1">
                 <ng-container *ngIf="authService.verifyUserIsAuthenticated(); else unathenticated2">
                     <i class="far fa-user"></i>
@@ -101,13 +138,10 @@
                         [routerLink]="[appRoutes.REGISTRATION_COMPONENT_ROUTE_NAME]">¿New client?</a>
                 </ng-template>
             </div>
-        </div>
+        </div> -->
         <div class="container-fluid p-3 fs-54px text-secondary">
             <span class="p-2">
                 <i class="fab fa-dhl hover-transform-scale-125 transition-300ms"></i>
-            </span>
-            <span class="p-2">
-                <i class="fab fa-fedex hover-transform-scale-125 transition-300ms"></i>
             </span>
             <span class="p-2">
                 <i class="fab fa-cc-visa hover-transform-scale-125 transition-300ms"></i>
@@ -115,10 +149,11 @@
             <span class="p-2">
                 <i class="fab fa-cc-mastercard hover-transform-scale-125 transition-300ms"></i>
             </span>
-            <span class="p-2 bg-secondary px-3 py-0 pb-2">
-                <img [src]="resourcesUrl + 'img/' + 'logos/' + 'transfer_bancaria.svg' "
-                    class="w-135px hover-transform-scale-125 transition-300ms">
-            </span>
+        </div>
+        <div class="list-group list-group-flush mb-3">
+            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+                Log out
+            </a>
         </div>
     </div>
 </p-sidebar>

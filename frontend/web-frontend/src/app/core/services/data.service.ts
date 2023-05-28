@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Constants } from '../constants';
 import { Employee } from 'app/core/models';
 import { Product } from '../models/product';
+import { Customer } from '../models/customer';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class DataService {
   //loading
   loading: boolean = false
 
-  displayMobileMenu: boolean = true
+  displayMobileMenu: boolean = false
 
   loggedInEmployee: Employee | null = null;
 
@@ -34,6 +35,8 @@ export class DataService {
   }
 
   categories: string[] = []
+
+  loggedInCustomer: Customer | null = null;
 
   constructor(
     private cookieService: CookieService,
