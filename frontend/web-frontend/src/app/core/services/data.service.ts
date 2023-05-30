@@ -1,11 +1,10 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Employee } from 'app/core/models';
 import { CookieService } from 'ngx-cookie-service';
 import { Constants } from '../constants';
-import { Employee } from 'app/core/models';
-import { Product } from '../models/product';
 import { Customer } from '../models/customer';
+import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,7 @@ export class DataService {
 
   selectedProduct: Product | undefined;
 
-  search: any = {
+  searchRequest: any = {
     query: ""
   }
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppRoutes } from 'app/core/constants';
+import { AppRoutes, Constants } from 'app/core/constants';
 import { AuthService, DataService } from 'app/core/services';
 import { environment } from 'assets/environments/environment';
 
@@ -20,14 +20,15 @@ export class MainHeaderComponent {
   ) { }
 
   search(): void {
-    // if (
-    //   this.dataService.busquedaProducto.query != '' &&
-    //   this.dataService.busquedaProducto.query.length >= Constants.MIN_LENGTH_QUERY_SEARCH
-    // ) {
-    //   let qp: BusquedaProductoQueryParams = {};
-    //   qp.query = this.dataService.busquedaProducto.query;
-    //   this.dataService.go(AppRoutes.SEARCH, { queryParams: qp, queryParamsHandling: "merge" });
-    // }
+    if (
+      this.dataService.searchRequest.query != '' &&
+      this.dataService.searchRequest.query.length >= Constants.QUERY_SEARCH_MIN_LENGTH
+    ) {
+      const queryParams = {
+        query : this.dataService.searchRequest.query
+      };
+      this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
+    }
   }
 
   logout(): void {

@@ -14,7 +14,7 @@ public class Enums {
 
     @Getter
     @AllArgsConstructor
-    public static enum OrderStatus {
+    public enum OrderStatus {
         NEW(1), PROCESSING(2), SHIPPED(3), DELIVERED(4), CANCELLED(5);
         private int code;
     }
@@ -41,6 +41,19 @@ public class Enums {
         REGISTERED(1, "registered"),
         EMAIL_VERIFIED(2, "email_verified"),
         DISABLED(3, "disabled");
+        private final int code;
+        private final String value;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum SearchRequestOrderFilter {
+        DEFAULT(1, "default"),
+        LOWEST_PRICE(2, "lowest price"),
+        HIGHEST_PRICE(3, "highest price"),
+        RECOMMENDED(4, "recommended"),
+        ALPHABETICAL(5, "alphabetical"),
+        ;
         private final int code;
         private final String value;
     }

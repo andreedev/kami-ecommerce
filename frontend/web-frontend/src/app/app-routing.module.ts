@@ -9,7 +9,7 @@ import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.co
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: AppRoutes.AUTH_MODULE_NAME,
     component: AuthLayoutComponent,
     children: [
       {
@@ -24,18 +24,19 @@ const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       {
-        path: AppRoutes.HOME_MODULE_NAME,
-        loadChildren: () => import('app/modules/home/home.module').then(m => m.HomeModule)
-      },
-      {
         path: AppRoutes.ACCOUNT_MODULE_NAME,
         loadChildren: () => import('app/modules/account/account.module').then(m => m.AccountModule),
           canActivate: [AuthenticatedGuard]
       },
-      // {
-      //   path: AppRoutes.PRODUCT_MODULE_NAME,
-      //   loadChildren: () => import('app/modules/product/product.module').then(m => m.ProductModule)
-      // },
+      {
+        path: AppRoutes.SEARCH_MODULE_NAME,
+        loadChildren: () => import('./modules/search/search.module').then(m => m.SearchModule),
+        canActivate: [UnauthenticatedGuard]
+      },
+      {
+        path: AppRoutes.HOME_MODULE_NAME,
+        loadChildren: () => import('app/modules/home/home.module').then(m => m.HomeModule)
+      },
       { path: '', pathMatch: "full", redirectTo: AppRoutes.HOME_MODULE_NAME }
     ],
   },
