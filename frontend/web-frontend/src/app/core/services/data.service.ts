@@ -1,10 +1,9 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Employee } from 'app/core/models';
+import { DynamicReport, Employee, Product, SearchRequest } from 'app/core/models';
 import { CookieService } from 'ngx-cookie-service';
 import { Constants } from '../constants';
 import { Customer } from '../models/customer';
-import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +21,16 @@ export class DataService {
 
   selectedProduct: Product | undefined;
 
-  searchRequest: any = {
-    query: ""
+  searchRequest: SearchRequest = {
+    query: "",
+    onSaleFilter : false,
+    page: 1,
+    orderFilter: 1
   }
+
+  searchRequestLoading: boolean = false
+
+
 
   displayCart: boolean = false
 

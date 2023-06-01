@@ -6,7 +6,7 @@ import { Endpoints } from '../constants';
 import { Constants } from '../constants/constants';
 import { Utils } from '../helpers/utils';
 import { Employee } from '../models';
-import { LoginResponse } from '../models/login-response';
+import { LoginResponse } from '../models/rest/login-response';
 import { DataService } from './data.service';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class AuthService {
     private dataService: DataService
   ) { }
 
-  updateSession = (res: LoginResponse): void =>{
+  updateSession = (res: LoginResponse): void => {
     this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.token!)
     this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.refreshToken!)
   }
@@ -30,16 +30,16 @@ export class AuthService {
     this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
   }
 
-  verifyUserIsAuthenticated(): boolean{
+  verifyUserIsAuthenticated(): boolean {
     return this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)
   }
 
-  async refreshToken(): Promise<boolean>{
+  async refreshToken(): Promise<boolean> {
     try {
-      const refreshToken= this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME))
-      const body = {refreshToken}
+      const refreshToken = this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME))
+      const body = { refreshToken }
       const headers = this.dataService.getAuthHeaders()
-      const response: LoginResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, {headers}))
+      const response: LoginResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }))
       this.updateSession(response)
       return true
     } catch (error: any) {
@@ -50,8 +50,8 @@ export class AuthService {
 
   async login(username: string, password: string): Promise<LoginResponse | null> {
     try {
-      const body: Employee = {username, password }
-      const response: any= await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
+      const body: Employee = { username, password }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
       return response
     } catch (error: any) {
       if (error.status === 401) return null
@@ -59,6 +59,6 @@ export class AuthService {
     }
   }
 
- 
+
 
 }

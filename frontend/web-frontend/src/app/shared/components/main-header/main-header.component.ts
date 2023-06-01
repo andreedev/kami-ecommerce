@@ -22,7 +22,7 @@ export class MainHeaderComponent {
   search(): void {
     if (
       this.dataService.searchRequest.query != '' &&
-      this.dataService.searchRequest.query.length >= Constants.QUERY_SEARCH_MIN_LENGTH
+      this.dataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH
     ) {
       const queryParams = {
         query : this.dataService.searchRequest.query

@@ -1,15 +1,11 @@
 package com.example.demo.model.validation;
 
-import com.example.demo.model.Product;
-import com.example.demo.utils.validators.AllowedRoles;
 import com.example.demo.utils.validators.AllowedSearchRequestOrderFilter;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,6 +27,7 @@ public class SearchRequest {
 
     private String brandFilter;
 
+    @NotNull(message = "Order filter is required")
     @AllowedSearchRequestOrderFilter
     private Integer orderFilter;
 
@@ -42,5 +39,5 @@ public class SearchRequest {
 
     private Boolean inStockFilter;
 
-    private Integer resultsLimit;
+    private Integer pageSize;
 }

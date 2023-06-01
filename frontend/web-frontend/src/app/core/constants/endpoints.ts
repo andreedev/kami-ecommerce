@@ -10,8 +10,8 @@ export abstract class Endpoints {
     static readonly CUSTOMER: string = 'admin/customer'
     static readonly CUSTOMER_REPORT: string = `${Endpoints.CUSTOMER}/report`
 
-    static readonly PRODUCT: string = 'admin/product'
-    static readonly PRODUCT_REPORT: string = `${Endpoints.PRODUCT}/report`
+    static readonly PRODUCT: string = 'product'
+    static readonly SEARCH: string = `${Endpoints.PRODUCT}/search`
     static readonly PRODUCT_CREATE: string = `${Endpoints.PRODUCT}/create`
     static readonly PRODUCT_UPDATE: string = `${Endpoints.PRODUCT}/update`
 }

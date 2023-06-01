@@ -56,6 +56,15 @@ public class Enums {
         ;
         private final int code;
         private final String value;
+
+        public static boolean isValid(int code) {
+            for (SearchRequestOrderFilter filter : values()) {
+                if (filter.getCode() == code) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
 }

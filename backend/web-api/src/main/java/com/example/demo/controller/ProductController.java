@@ -1,14 +1,18 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Product;
-import com.example.demo.model.validation.ProductSaveRequest;
+import com.example.demo.model.DynamicReport;
+import com.example.demo.model.validation.CustomProduct;
+import com.example.demo.model.validation.EnumResponse;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.service.ProductService;
+import com.example.demo.utils.Enums;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -22,8 +26,17 @@ public class ProductController {
     }
 
     @PostMapping("search")
-    public ResponseEntity<Integer> search(@RequestBody @Valid SearchRequest req){
-        productService.search(req);
-        return ResponseEntity.ok(1);
+    public DynamicReport<CustomProduct> search(@RequestBody @Valid SearchRequest req){
+        req.setPageSize(20);
+        return productService.search(req);
     }
+
+    /*@GetMapping("getSearchRequestOrderFilter")
+    public List<EnumResponse> getSearchRequestOrderFilter() {
+        List<EnumResponse> response = new ArrayList<>();
+        for (Enums.SearchRequestOrderFilter filter : Enums.SearchRequestOrderFilter.values()) {
+            response.add(new EnumResponse(filter.getCode(), filter.toString()));
+        }
+        return response;
+    }*/
 }

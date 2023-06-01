@@ -1,1 +1,479 @@
-asdasda
+<ng-container *ngIf="dataService.searchRequestLoading; else content">
+    <div class="h-100vh"></div>
+</ng-container>
+
+<ng-template #content>
+    <div class="container-fluid mx-0  ps-3 ps-md-5 py-2 fs-12px border-bottom border-dark">
+        <nav>
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item cp hover-text-underline">
+                    <i class="fa fa-home"></i>
+                    Mi repuestito
+                </li>
+                <li class="breadcrumb-item">
+                    <i class="fas fa-angle-right"></i>
+                    Resultados de búsqueda para : {{ queryCopy }}
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="container-fluid container-xl my-3">
+        <div class="row justify-content-evenly m-0-force">
+            <div class="d-none d-lg-block h-max-content col-2 bg-light p-2 border px-0 px-md-2 px-lg-3">
+                <span class="h5 ms-2">Filtros</span>
+                <div class="text-center mt-3">
+                    <div class="px-2 py-1 border rounded-0 cp element4 transition-300ms" (click)="limpiarFiltros()">
+                        <i class="fas fa-times me-2"></i>
+                        Limpiar Filtros
+                    </div>
+                </div>
+                <hr>
+                <!-- <p-scrollPanel styleClass="containerFiltrosMarca">
+                    <span class="fw-bold">Marca</span>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="marcaProd" id="marcaProdAll"
+                            (change)="filtrarMarcaProducto(-1)"
+                            [checked]="dataService.searchRequest.filtroIdMarcaProducto == -1">
+                        <label class="form-check-label" for="marcaProdAll">Todas</label>
+                    </div>
+                    <ng-container *ngIf="!dataService.loadingMarcasProducto">
+                        <div class="form-check" *ngFor="let marcaProd of dataService.resourceMarcasProducto">
+                            <input class="form-check-input" type="radio" name="marcaProd"
+                                [id]=" 'marcaProd'+marcaProd.idMarcaProducto "
+                                (change)="filtrarMarcaProducto(marcaProd.idMarcaProducto)"
+                                [checked]="dataService.searchRequest.filtroIdMarcaProducto == marcaProd.idMarcaProducto">
+                            <label class="form-check-label" [for]=" 'marcaProd'+marcaProd.idMarcaProducto ">
+                                {{ marcaProd.nombreMarcaProducto }}
+                            </label>
+                        </div>
+                    </ng-container>
+                </p-scrollPanel> -->
+                <div class="mt-4">
+                    <span class="fw-bold">Precio</span>
+                </div>
+                <input [(ngModel)]="dataService.searchRequest.maxPriceFilter"
+                    [min]="constants.PRODUCT_MIN_PRICE"
+                    [max]="constants.PRODUCT_MAX_PRICE" step="10" type="range" class="form-range">
+                <span class="text-center">
+                    From S/{{ constants.PRODUCT_MIN_PRICE }} <br>
+                    to S/{{ dataService.searchRequest.maxPriceFilter }}
+                </span>
+                <div class="mt-4">
+                    <span class="fw-bold">Categoría</span>
+                </div>
+                <!-- <p-scrollPanel styleClass="containerFiltrosCategoria">
+                    <ng-container *ngIf="!dataService.loadingClasificaciones">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="categoria" id="categoriaAll"
+                                (change)="filtrarPorCategoria(-1)"
+                                [checked]="dataService.searchRequest.filtroIdCategoria == -1">
+                            <label class="form-check-label" for="categoriaAll">
+                                Todas
+                            </label>
+                        </div>
+                        <div class="form-check" *ngFor="let cat of dataService.resourcesClasificaciones[0].categorias">
+                            <input class="form-check-input" type="radio" name="categoria" [value]="idCategoria"
+                                id="cat{{ cat.idCategoria }}" (change)="filtrarPorCategoria(cat.idCategoria)"
+                                [checked]="dataService.searchRequest.filtroIdCategoria == cat.idCategoria">
+                            <label class="form-check-label" for="cat{{ cat.idCategoria }}">
+                                {{ cat.nombreCategoria }}
+                            </label>
+                        </div>
+                    </ng-container>
+                </p-scrollPanel> -->
+                <div class="mt-4">
+                    <span class="fw-bold">Ofertas</span>
+                </div>
+                <div class="form-check">
+                    <input [(ngModel)]="dataService.searchRequest.onSaleFilter" class="form-check-input"
+                        type="checkbox" id="ofertas" (change)="search()">
+                    <label class="form-check-label" for="ofertas">
+                        Descuentos
+                    </label>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-10 px-0 px-md-2 px-lg-3 pe-md-0">
+                <div
+                    class="row justify-content-evenly justify-content-sm-between align-items-center bg-light border px-2 py-2 mx-0 mx-md-3 mb-3">
+                    <div class="col-12 col-sm-auto px-0 px-sm-2">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            <span class="fs-12px p-2">Ordenar por</span>
+                            <select class="form-select form-select-sm orden">
+                                <option value="1">Default</option>
+                                <option value="2">Lowest price</option>
+                                <option value="3">Highest price</option>
+                                <option value="4">Recommended</option>
+                                <option value="5">Alphabetical</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-auto mt-2 mt-sm-0">
+                        <div class="px-3 py-1 border rounded-0 cp element4 transition-300ms" (click)="applyFilters()">
+                            <i class="fas fa-filter"></i>
+                            Aplicar filtros
+                        </div>
+                    </div>
+                    <div class="col-auto mt-2 mt-sm-0">
+                        <div class="d-flex">
+                            <div (click)=" viewDesign='parrilla' "
+                                class="px-3 py-1 border rounded-0 cp way-to-show transition-300ms border-end-0">
+                                <i class="fas fa-grip-horizontal"></i>
+                            </div>
+                            <div (click)=" viewDesign='lista' "
+                                class="px-3 py-1 border rounded-0 cp way-to-show transition-300ms">
+                                <i class="fas fa-equals"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto mt-2 mt-sm-0 d-block d-lg-none">
+                        <div class="px-3 py-1 border rounded-0 cp way-to-show transition-300ms"
+                            (click)="modalFiltros=true">
+                            Filtros
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row p-2 bg-light border mx-0 mx-md-3">
+                    <ng-container *ngIf="searchResults!.data.length!=0; else emptyProducts">
+                        <div *ngFor="let product of searchResults!.data"
+                            [ngClass]="viewDesign=='lista' ? 'col-12' : 'col-6 col-sm-4 col-lg-3'"
+                            class="mb-3 px-1 px-sm-2">
+
+                            <!-- Modo lista -->
+                            <ng-container *ngIf="viewDesign=='lista'; else parrilla">
+                                <div class="row mx-0 justify-content-start">
+                                    <div class="col-4 col-sm-4 col-md-4 px-0 py-0 p-sm-2 p-lg-3">
+                                        <div class="d-flex container-img-product-wts-lista">
+                                            <ng-container *ngIf="product.mediaUrls; else sinImagen">
+                                                <img [src]="product" class="cp img-fluid mx-auto"
+                                                    (click)="productDetails(product.id)">
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                    <div class="col-8 col-sm-8 col-md-8 px-2 py-0 p-sm-2 p-lg-3">
+                                        <div class="d-flex flex-column">
+                                            <strong class="fs-12px text-uppercase">
+                                                {{ product.brand }}
+                                            </strong>
+                                            <span class="nombre-product-wts-lista cp"
+                                                (click)="productDetails(product.id)">{{ product.name }}</span>
+                                            <span class="codigo-producto">Código: {{ product.sku }}</span>
+                                            <span class="fs-12px">
+                                                Stock:
+                                                <ng-container *ngIf="product.stock! < 1; else hayStock">
+                                                    <span class="text-red">
+                                                        Agotado
+                                                    </span>
+                                                </ng-container>
+                                                <ng-template #hayStock>
+                                                    <span>
+                                                        {{ product.stock! }}
+                                                    </span>
+                                                </ng-template>
+                                            </span>
+                                            <ng-container *ngIf="product.discount; else normal">
+                                                <!-- <span class="fw-bold precio-dscto-wts-lista">
+                                                    <span class="badge bg-danger oferta1-wts-lista bg-red text-wrap"
+                                                        *ngIf="product.estadoDsctoProducto == 1">
+                                                        {{ product.porcentajeDsctoProducto }}% DCTO
+                                                    </span>
+                                                    <span class="badge bg-danger oferta1-wts-lista bg-red text-wrap"
+                                                        *ngIf="product.estadoDsctoProducto == 2">
+                                                        S/{{ product.montoDsctoProducto }} DCTO
+                                                    </span>
+                                                    S/{{ product.precioProducto |
+                                                    dscto:product.precioProducto:product.estadoDsctoProducto:product.porcentajeDsctoProducto:product.montoDsctoProducto
+                                                    }}
+                                                </span>
+                                                <span class="fs-12px">Normal
+                                                    S/{{ product.precioProducto }}</span> -->
+                                            </ng-container>
+                                            <ng-template #normal>
+                                                <span class="precio fw-bold">S/{{ product.price }}</span>
+                                                <span class="fs-12px invisible">-</span>
+                                            </ng-template>
+                                            <!-- <span class="fs-10px text-muted">
+                                                IGV incl. 18%, gastos de envío no incluidos.
+                                            </span> -->
+
+                                            <ng-container *ngIf="product.stock! > 0">
+                                                <ng-container *ngIf="product.amount; else productoCarrito">
+                                                    <a class="btn-interact-producto-carrito-wts-lista">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <!-- <ng-container
+                                                                *ngIf="product.cantidadProducto==1; else disminuirProducto">
+                                                                <i class="fa fa-trash cp mx-2"
+                                                                    (click)="eliminarProducto(product.id)"></i>
+                                                            </ng-container>
+                                                            <ng-template #disminuirProducto>
+                                                                <i class="fa fa-minus cp mx-2"
+                                                                    (click)="disminuirCantidadProducto(product.id)"></i>
+                                                            </ng-template>
+                                                            <span class="mx-3">{{ product.cantidadProducto }}</span>
+                                                            <i class="fa fa-plus cp mx-2"
+                                                                *ngIf="product.cantidadProducto < product.stock!; else outOfStock"
+                                                                (click)="aumentarCantidadProducto(product.id)"></i>
+                                                            <ng-template #outOfStock>
+                                                                <img [src]="urlResources + 'img/' + 'logos/' + 'sin-stock-2.svg' "
+                                                                    class="w-25px">
+                                                            </ng-template> -->
+                                                        </div>
+                                                    </a>
+                                                </ng-container>
+                                                <ng-template #productoCarrito>
+                                                    <a class="btn-agregar-producto-wts-lista"
+                                                        (click)="agregarProducto(product.id)">
+                                                        <div class="d-inline-flex align-items-center">
+                                                            <i class="fas fa-cart-plus"></i>
+                                                            <span
+                                                                class="d-none d-sm-block ms-2 text-agregar">Agregar</span>
+                                                        </div>
+                                                    </a>
+                                                </ng-template>
+                                            </ng-container>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <!-- Modo parrilla -->
+                            <ng-template #parrilla>
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex container-img-producto-wts-parrilla">
+                                        <ng-container *ngIf="product.mediaUrls; else sinImagen">
+                                            <img [src]="product.mediaUrls[0]"
+                                                class="my-3 cp my-auto" (click)="productDetails(product.id)">
+                                        </ng-container>
+                                    </div>
+                                    <strong class="fs-12px text-uppercase">
+                                        {{ product.brand }}
+                                    </strong>
+                                    <span class="nombre-producto mb-2 cp"
+                                        (click)="productDetails(product.id)">{{ product.name }}</span>
+                                    <span class="codigo-product">Código: {{ product.sku }}</span>
+                                    <span class="fs-12px">
+                                        Stock:
+                                        <ng-container *ngIf="product.stock! < 1; else hayStock">
+                                            <span class="text-red">
+                                                Agotado
+                                            </span>
+                                        </ng-container>
+                                        <ng-template #hayStock>
+                                            <span>
+                                                {{ product.stock! }}
+                                            </span>
+                                        </ng-template>
+                                    </span>
+                                    <ng-container *ngIf="product.discount; else normal">
+                                        <!-- <span class="fs-4 fw-bold precio-dscto-wts-parrilla">
+                                            <span class="badge bg-danger rounded-pill oferta1 bg-red text-wrap"
+                                                *ngIf="product.estadoDsctoProducto == 1">
+                                                {{ product.porcentajeDsctoProducto }}% DCTO
+                                            </span>
+                                            <span class="badge bg-danger oferta2 bg-red text-wrap"
+                                                *ngIf="product.estadoDsctoProducto == 2">
+                                                S/{{ product.montoDsctoProducto }} DCTO
+                                            </span>
+                                            S/{{ product.precioProducto |
+                                            dscto:product.precioProducto:product.estadoDsctoProducto:product.porcentajeDsctoProducto:product.montoDsctoProducto
+                                            }}
+                                        </span>
+                                        <span class="fs-12px">Normal S/{{ product.precioProducto }}</span> -->
+                                    </ng-container>
+                                    <ng-template #normal>
+                                        <span class="fs-4 fw-bold">S/{{ product.price }}</span>
+                                        <span class="fs-12px invisible">-</span>
+                                    </ng-template>
+                                    <span class="fs-10px text-muted">IGV incl. 18%, gastos de envío no incluidos.</span>
+
+                                    <ng-container *ngIf="product.stock! > 0">
+                                        <ng-container *ngIf="product.amount! > 0; else productoCarrito">
+                                            <a class="btn-interact-product-carrito align-self-center">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <!-- <ng-container
+                                                        *ngIf="product.cantidadProducto==1; else disminuirProducto">
+                                                        <i class="fa fa-trash cp mx-2"
+                                                            (click)="eliminarProducto(product.id)"></i>
+                                                    </ng-container>
+                                                    <ng-template #disminuirProducto>
+                                                        <i class="fa fa-minus cp mx-2"
+                                                            (click)="disminuirCantidadProducto(product.id)"></i>
+                                                    </ng-template>
+                                                    <span class="mx-1 mx-md-3">{{ product.cantidadProducto }}</span>
+                                                    <i class="fa fa-plus cp mx-2"
+                                                        *ngIf="product.cantidadProducto < product.stock!; else outOfStock"
+                                                        (click)="aumentarCantidadProducto(product.id)"></i> -->
+                                                    <ng-template #outOfStock>
+                                                        <img [src]="urlResources + 'img/' + 'logos/' + 'sin-stock-2.svg' "
+                                                            class="w-25px">
+                                                    </ng-template>
+                                                </div>
+                                            </a>
+                                        </ng-container>
+                                        <ng-template #productoCarrito>
+                                            <a class="btn-agregar-product"
+                                                (click)="agregarProducto(product.id)">
+                                                <div class="d-inline-flex align-items-center">
+                                                    <i class="fas fa-cart-plus"></i>
+                                                    <span class="d-none d-lg-block ms-2 text-agregar">Agregar</span>
+                                                </div>
+                                            </a>
+                                        </ng-template>
+                                    </ng-container>
+
+                                </div>
+                            </ng-template>
+                        </div>
+                    </ng-container>
+                    <ng-template #emptyProducts>
+                        <div class="container-fluid container-xl my-3">
+                            <div class="row justify-content-center align-items-center">
+                                <h3 class="text-center">
+                                    <i class="fas fa-pastafarianism"></i>
+                                    No se encontraron resultados para tu búsqueda, prueba quitando algunos filtros o
+                                    usando otras palabras.
+                                </h3>
+                                <p class="text-center text-muted">asd</p>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+
+                <!-- Pagination -->
+                <div class="row mt-3 justify-content-center">
+                    <div class="col-auto">
+                        <ul class="pagination pagination-sm">
+
+                            <li class="page-item">
+                                <ng-container *ngIf="dataService.searchRequest.page!-1 > 0; else previusPageDisabled">
+                                    <span class="page-link cp"
+                                        (click)="updatePage(dataService.searchRequest.page!-1)"><i
+                                            class="fas fa-angle-left"></i></span>
+                                </ng-container>
+                                <ng-template #previusPageDisabled>
+                                    <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
+                                </ng-template>
+                            </li>
+                            <li *ngFor="let i of pages" class="page-item"
+                                [ngClass]="{'active': i==dataService.searchRequest.page}">
+                                <ng-container *ngIf="i != '...'; else noActivePage">
+                                    <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
+                                </ng-container>
+                                <ng-template #noActivePage>
+                                    <span class="page-link">...</span>
+                                </ng-template>
+                            </li>
+                            <li class="page-item">
+                                <!-- <ng-container
+                                    *ngIf="dataService.searchRequest.page < dataService.searchRequest?.data.length; else nextPageDisabled">
+                                    <span class="page-link cp"
+                                        (click)="updatePage(dataService.searchRequest.page+1)"><i
+                                            class="fas fa-angle-right"></i></span>
+                                </ng-container> -->
+                                <ng-template #nextPageDisabled>
+                                    <span class="page-link cp"><i class="fas fa-angle-right"></i></span>
+                                </ng-template>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <!-- . -->
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<p-dialog #filtrosModal header="FILTROS" [(visible)]="modalFiltros" [baseZIndex]="1" [modal]="true"
+    [style]="{width: '350px'}" [draggable]="false" [resizable]="false">
+
+    <div class="d-block bg-light p-3 px-4 m--15px">
+        <div class="text-center">
+            <div class="px-3 py-1 border rounded-0 cp element4 transition-300ms" (click)="limpiarFiltros()">
+                <i class="fas fa-times me-2"></i>
+                Limpiar Filtros
+            </div>
+        </div>
+        <hr>
+        <p-scrollPanel styleClass="containerFiltrosMarca">
+            <span class="fw-bold">Marca</span>
+
+            <div class="form-check">
+                <!-- <input class="form-check-input" type="radio" name="marcaProd" id="marcaProdAll"
+                    (change)="filtrarMarcaProducto(-1)"
+                    [checked]="dataService.searchRequest.filtroIdMarcaProducto == -1"> -->
+                <label class="form-check-label" for="marcaProdAll">
+                    Todas
+                </label>
+            </div>
+
+            <!-- <div class="form-check" *ngFor="let marcaProd of dataService.resourceMarcasProducto">
+                <input class="form-check-input" type="radio" name="marcaProd"
+                    id="marcaProd{{ marcaProd.idMarcaProducto }}"
+                    (change)="filtrarMarcaProducto(marcaProd.idMarcaProducto)"
+                    [checked]="dataService.searchRequest.filtroIdMarcaProducto == marcaProd.idMarcaProducto">
+                <label class="form-check-label" for="marcaProd{{ marcaProd.idMarcaProducto }}">
+                    {{ marcaProd.nombreMarcaProducto }}
+                </label>
+            </div> -->
+
+        </p-scrollPanel>
+        <div class="mt-4">
+            <span class="fw-bold">Price</span>
+        </div>
+
+        <input [(ngModel)]="dataService.searchRequest.maxPriceFilter"
+            [min]="constants.PRODUCT_MIN_PRICE"
+            [max]="constants.PRODUCT_MAX_PRICE" step="10" type="range" class="form-range">
+        <span class="text-center">
+            From S/{{ constants.PRODUCT_MIN_PRICE }} <br>
+            to S/{{ dataService.searchRequest.maxPriceFilter }}
+        </span>
+
+        <div class="mt-4">
+            <span class="fw-bold">Categoría</span>
+        </div>
+
+        <!-- <p-scrollPanel styleClass="containerFiltrosCategoria">
+            <ng-container *ngIf="!dataService.loadingClasificaciones">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="categoria" id="categoriaAll"
+                        (change)="filtrarPorCategoria(-1)"
+                        [checked]="dataService.searchRequest.filtroIdCategoria == -1">
+                    <label class="form-check-label" for="categoriaAll">
+                        Todas
+                    </label>
+                </div>
+                <div class="form-check" *ngFor="let cat of dataService.resourcesClasificaciones[0].categorias">
+                    <input class="form-check-input" type="radio" name="categoria" value="idCategoria"
+                        id="cat{{ cat.idCategoria }}" (change)="filtrarPorCategoria(cat.idCategoria)"
+                        [checked]="dataService.searchRequest.filtroIdCategoria == cat.idCategoria">
+                    <label class="form-check-label" for="cat{{ cat.idCategoria }}">
+                        {{ cat.nombreCategoria }}
+                    </label>
+                </div>
+            </ng-container>
+        </p-scrollPanel> -->
+
+        
+
+        <div class="mt-4">
+            <span class="fw-bold">Ofertas</span>
+        </div>
+        <div class="form-check">
+            <input [(ngModel)]="dataService.searchRequest.onSaleFilter" class="form-check-input" type="radio"
+                value="true" id="filtroOferta">
+            <label class="form-check-label" for="filtroOferta">
+                Descuentos
+            </label>
+        </div>
+    </div>
+</p-dialog>
+
+
+<ng-template #sinImagen>
+    <img [src]="urlResources + 'img/' + 'logos/' + 'product_without_image.png' " class="my-3 cp my-auto">
+</ng-template>

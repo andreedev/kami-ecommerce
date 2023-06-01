@@ -4,6 +4,7 @@ import com.example.demo.model.Customer;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
+import com.example.demo.utils.Enums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -52,20 +53,56 @@ public class ProductRepositoryImpl implements ProductRepository {
             Criteria nameCriteria = Criteria.where("name").regex(req.getQuery(), "i");
             Criteria usernameCriteria = Criteria.where("sku").regex(req.getQuery(), "i");
             Criteria emailCriteria = Criteria.where("keywords").regex(req.getQuery(), "i");
-            query.addCriteria(new Criteria().orOperator(nameCriteria, usernameCriteria, emailCriteria));
+            Criteria brandCriteria = Criteria.where("brand").regex(req.getQuery(), "i");
+            query.addCriteria(new Criteria().orOperator(nameCriteria, usernameCriteria, emailCriteria, brandCriteria));
         }
 
-        if (req.getBrandFilter() != null) {
-            query.addCriteria(Criteria.where("brand").regex(req.getQuery(), "i"));
+        if (req.getCategoriesFilter() != null && !req.getCategoriesFilter().isEmpty()) {
+            query.addCriteria(Criteria.where("categories").all(req.getCategoriesFilter()));
         }
 
-        int page = (req.getPage() != null) ? req.getPage() - 1 : 0;
-        Pageable pageable = PageRequest.of(page, 10);
+        if (req.getMaxPriceFilter() != null) {
+            query.addCriteria(Criteria.where("price").lte(req.getMaxPriceFilter()));
+        }
 
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        if (req.getInStockFilter() != null) {
+            query.addCriteria(Criteria.where("stock").gte(req.getInStockFilter() ? 1 : 0));
+        }
+
+        if (req.getBrandFilter() != null && !req.getBrandFilter().isEmpty()) {
+             query.addCriteria(Criteria.where("brand").regex(req.getBrandFilter(), "i"));
+        }
+
+        int page = req.getPage() - 1;
+        Pageable pageable = PageRequest.of(page, req.getPageSize());
+
+        Sort sort = null;
+        if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.DEFAULT.getCode()){
+            sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.LOWEST_PRICE.getCode()){
+             sort = Sort.by(Sort.Direction.ASC, "price");
+        } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.HIGHEST_PRICE.getCode()){
+             sort = Sort.by(Sort.Direction.DESC, "price");
+        } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.RECOMMENDED.getCode()){
+             sort = Sort.by(Sort.Direction.ASC, "stock");
+        } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.ALPHABETICAL.getCode()){
+             sort = Sort.by(Sort.Direction.ASC, "name");
+        }
+
+        if (req.getOnSaleFilter() != null && req.getOnSaleFilter()) {
+            LocalDate currentDate = LocalDate.now();
+            Criteria discountExistsCriteria = Criteria.where("discount").exists(true);
+            Criteria startDateCriteria = Criteria.where("discount.startDate").lte(currentDate);
+            Criteria endDateCriteria = Criteria.where("discount.endDate").gte(currentDate);
+
+            query.addCriteria(discountExistsCriteria);
+            query.addCriteria(startDateCriteria);
+            query.addCriteria(endDateCriteria);
+        }
+
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
         long totalCustomers = mongoTemplate.count(query, Customer.class);
-        int totalPages = (int) Math.ceil((double) totalCustomers / 10);
+        int totalPages = (int) Math.ceil((double) totalCustomers / 20);
 
         // Create DynamicReport object with the data and the total number of pages
         return DynamicReport.<Product>builder()

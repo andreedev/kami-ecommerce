@@ -29,7 +29,7 @@ export abstract class AppRoutes {
     static readonly SEARCH_MODULE_NAME: string = 'search'
     static readonly SEARCH_MODULE_ROUTE_NAME: string = `/${AppRoutes.SEARCH_MODULE_NAME}`
 
-    static readonly SEARCH_PAGE_COMPONENT_NAME: string = ''
-    static readonly SEARCH_PAGE_COMPONENT_ROUTE_NAME: string =  `${AppRoutes.SEARCH_MODULE_ROUTE_NAME}${AppRoutes.SEARCH_PAGE_COMPONENT_NAME}`
+    // static readonly SEARCH_PAGE_COMPONENT_NAME: string = ''
+    // static readonly SEARCH_PAGE_COMPONENT_ROUTE_NAME: string =  `${AppRoutes.SEARCH_MODULE_ROUTE_NAME}${AppRoutes.SEARCH_PAGE_COMPONENT_NAME}`
 
 }

@@ -4,10 +4,9 @@ import { firstValueFrom } from 'rxjs';
 import { Endpoints } from '../constants';
 import { Utils } from '../helpers/utils';
 import { Employee } from '../models';
+import { DynamicReport } from '../models/rest/dynamic-report';
 import { AuthService } from './auth.service';
 import { DataService } from './data.service';
-import { Customer } from '../models/customer';
-import { DynamicReport } from '../models/dynamic-report';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +22,12 @@ export class CustomerService {
   async customerReport(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Employee> | null> {
     try {
       const headers = this.dataService.getAuthHeaders();
-      const body = { query, page, statusFilter, dateFilter}
+      const body = { query, page, statusFilter, dateFilter }
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.CUSTOMER_REPORT), body, { headers })
       );
       return response;
-  
+
     } catch (error: any) {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();

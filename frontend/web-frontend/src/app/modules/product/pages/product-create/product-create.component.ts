@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { Product } from 'app/core/models/product';
-import { AuthService, DataService, ProductService } from 'app/core/services';
+import { Product } from 'app/core/models';
+import { DataService, ProductService } from 'app/core/services';
 import * as moment from 'moment';
 
 @Component({
