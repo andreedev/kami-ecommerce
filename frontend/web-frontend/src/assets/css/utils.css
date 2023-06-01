@@ -1733,6 +1733,11 @@ color: var(--gray-70) !important;
 /*padding horizontal*/
 
 .px-0 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.px-0-force {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -2832,4 +2837,9 @@ color: var(--gray-70) !important;
 
 .flex-fill-9{
     flex: .9 .9 auto!important;
+}
+
+
+.white-space-nowrap{
+    white-space: nowrap;
 }

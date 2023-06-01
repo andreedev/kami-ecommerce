@@ -20,15 +20,11 @@ export class MainHeaderComponent {
   ) { }
 
   search(): void {
-    if (
-      this.dataService.searchRequest.query != '' &&
-      this.dataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH
-    ) {
-      const queryParams = {
-        query : this.dataService.searchRequest.query
-      };
-      this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
-    }
+    // if (this.dataService.searchRequest.query!.length < Constants.QUERY_SEARCH_MIN_LENGTH) return;
+    const queryParams = {
+      query : this.dataService.searchRequest.query
+    };
+    this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
   }
 
   logout(): void {

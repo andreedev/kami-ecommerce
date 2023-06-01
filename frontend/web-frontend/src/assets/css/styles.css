@@ -165,10 +165,6 @@
     text-overflow: ellipsis;
 }
 
-.nombre-producto:hover {
-    transform: scale(1.030);
-}
-
 .img-producto {
     width: 55px !important;
 }
@@ -243,4 +239,8 @@
 hr {
     margin: 0;
     opacity: 0.15;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    content: '';
 }

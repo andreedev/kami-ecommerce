@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { DynamicReport, Product, SearchRequest } from 'app/core/models';
+import { DynamicReport, Product } from 'app/core/models';
 import { AuthService, DataService, ProductService } from 'app/core/services';
 import { environment } from 'assets/environments/environment';
-import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-search-page',
-  templateUrl: './search-page.component.html',
-  styleUrls: ['./search-page.component.css']
+  templateUrl: './search-page.component.html'
 })
 export class SearchPageComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
   readonly urlResources: string = environment.resourcesUrl;
 
-  viewDesign: string = 'parrilla';
-  modalFiltros: boolean = false;
+  viewDesign: string = 'grid';
+  displayFiltersModal: boolean = false;
   pages: any[] = [];
   queryCopy: string = '';
   searchResults: DynamicReport<Product> | null = null;
@@ -42,9 +40,9 @@ export class SearchPageComponent {
     this.activatedRoute.queryParams.subscribe({
       next: (params: Params) => {
         const query: string = params["query"];
-        if (!query || query.length < Constants.QUERY_SEARCH_MIN_LENGTH) {
-          return this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
-        }
+        // if (!query || query.length < Constants.QUERY_SEARCH_MIN_LENGTH) {
+        //   return this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
+        // }
         this.queryCopy = query;
         this.dataService.searchRequest.query = query;
         this.search();
@@ -74,11 +72,11 @@ export class SearchPageComponent {
   }
 
   applyFilters(): void {
-    if (this.dataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH)
+    // if (this.dataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH)
     this.search();
   }
 
-  limpiarFiltros(): void {
+  clearFilters(): void {
     // this.dataService.searchRequest = {
     //   filtroIdCatalogo: -1,
     //   filtroIdCategoria: -1,

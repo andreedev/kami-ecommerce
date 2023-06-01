@@ -25,7 +25,11 @@ export class DataService {
     query: "",
     onSaleFilter : false,
     page: 1,
-    orderFilter: 1
+    orderFilter: 1,
+    categoriesFilter: [],
+    inStockFilter: false,
+    brand: undefined,
+    maxPriceFilter: Constants.PRODUCT_MAX_PRICE
   }
 
   searchRequestLoading: boolean = false

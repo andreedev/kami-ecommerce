@@ -1,0 +1,97 @@
+<div class="d-block bg-light p-4 p-xl-3">
+    <div class="text-center mb-2">
+        <div class="px-3 py-1 border rounded-0 cp element4 transition-300ms" (click)="clearFiltersEventEmitter.emit()">
+            <i class="fas fa-times me-2"></i>
+            Clear filters
+        </div>
+    </div>
+    <div class="text-center">
+        <div class="px-3 py-1 border rounded-0 cp element4 transition-300ms" (click)="applyFiltersEventEmitter.emit()">
+            <i class="fas fa-filter me-2"></i>
+            Apply filters
+        </div>
+    </div>
+    <!-- <p-scrollPanel styleClass="containerFiltrosMarca">
+        <span class="fw-bold">Marca</span>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="marcaProd" id="marcaProdAll"
+                (change)="filtrarMarcaProducto(-1)"
+                [checked]="dataService.searchRequest.filtroIdMarcaProducto == -1">
+            <label class="form-check-label" for="marcaProdAll">
+                Todas
+            </label>
+        </div>
+
+        <div class="form-check" *ngFor="let marcaProd of dataService.resourceMarcasProducto">
+            <input class="form-check-input" type="radio" name="marcaProd"
+                id="marcaProd{{ marcaProd.idMarcaProducto }}"
+                (change)="filtrarMarcaProducto(marcaProd.idMarcaProducto)"
+                [checked]="dataService.searchRequest.filtroIdMarcaProducto == marcaProd.idMarcaProducto">
+            <label class="form-check-label" for="marcaProd{{ marcaProd.idMarcaProducto }}">
+                {{ marcaProd.nombreMarcaProducto }}
+            </label>
+        </div>
+
+    </p-scrollPanel> -->
+    <div class="mt-4">
+        <span class="fw-bold">Price</span>
+    </div>
+
+    <input [(ngModel)]="dataService.searchRequest.maxPriceFilter"
+        [min]="constants.PRODUCT_MIN_PRICE"
+        [max]="constants.PRODUCT_MAX_PRICE" step="10" type="range" class="form-range">
+    <span class="text-center">
+        From S/{{ constants.PRODUCT_MIN_PRICE }} <br>
+        to S/{{ dataService.searchRequest.maxPriceFilter }}
+    </span>
+
+    <!-- <div class="mt-4">
+        <span class="fw-bold">Categoría</span>
+    </div> -->
+
+    <!-- <p-scrollPanel styleClass="containerFiltrosCategoria">
+        <ng-container *ngIf="!dataService.loadingClasificaciones">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="categoria" id="categoriaAll"
+                    (change)="filtrarPorCategoria(-1)"
+                    [checked]="dataService.searchRequest.filtroIdCategoria == -1">
+                <label class="form-check-label" for="categoriaAll">
+                    Todas
+                </label>
+            </div>
+            <div class="form-check" *ngFor="let cat of dataService.resourcesClasificaciones[0].categorias">
+                <input class="form-check-input" type="radio" name="categoria" value="idCategoria"
+                    id="cat{{ cat.idCategoria }}" (change)="filtrarPorCategoria(cat.idCategoria)"
+                    [checked]="dataService.searchRequest.filtroIdCategoria == cat.idCategoria">
+                <label class="form-check-label" for="cat{{ cat.idCategoria }}">
+                    {{ cat.nombreCategoria }}
+                </label>
+            </div>
+        </ng-container>
+    </p-scrollPanel> -->
+
+    
+
+    <div class="mt-4">
+        <span class="fw-bold">Offers</span>
+    </div>
+    <div class="form-check">
+        <input [(ngModel)]="dataService.searchRequest.onSaleFilter" class="form-check-input" type="checkbox"
+            value="true" id="filtroOferta">
+        <label class="form-check-label" for="filtroOferta">
+            Discounts
+        </label>
+    </div>
+
+    <div class="mt-4">
+        <span class="fw-bold">Stock</span>
+    </div>
+    <div class="form-check">
+        <input [(ngModel)]="dataService.searchRequest.inStockFilter" class="form-check-input"
+            type="checkbox" id="ofertas">
+        <label class="form-check-label" for="ofertas">
+            Con stock
+        </label>
+    </div>
+</div>
