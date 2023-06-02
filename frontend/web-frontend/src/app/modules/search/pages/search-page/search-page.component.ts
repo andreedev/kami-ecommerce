@@ -18,9 +18,12 @@ export class SearchPageComponent {
 
   viewDesign: string = 'grid';
   displayFiltersModal: boolean = false;
-  pages: any[] = [];
+  pagesUI: any[] = [];
   queryCopy: string = '';
-  searchResults: DynamicReport<Product> | null = null;
+  searchResults: DynamicReport<Product> = {
+    data: [],
+    totalPages: 0
+  }
 
   constructor(
     private titleService: Title,
@@ -63,8 +66,8 @@ export class SearchPageComponent {
     const response: DynamicReport<Product> | null = await this.productService.search(this.dataService.searchRequest)
     console.log(response);
     if (response!.data.length !== 0) {
-      this.searchResults = response;
-      this.pages = Utils.generatePagesUIArray(this.searchResults!.data.length, this.searchResults!.totalPages);
+      this.searchResults = response!;
+      this.pagesUI = Utils.generatePagesUIArray(this.searchResults!.totalPages, this.dataService.searchRequest.page!);
       // this.syncProductos();
     }
     this.dataService.searchRequestLoading = false;
@@ -77,21 +80,17 @@ export class SearchPageComponent {
   }
 
   clearFilters(): void {
-    // this.dataService.searchRequest = {
-    //   filtroIdCatalogo: -1,
-    //   filtroIdCategoria: -1,
-    //   filtroIdSubcategoria: -1,
-    //   filtroIdMarcaProducto: -1,
-    //   filtroVehiculo: new Vehiculo(-1, -1, -1, -1),
-    //   filtroOrdenProductos: FiltroOrdenProductos.DEFAULT.getCode(),
-    //   filtroOferta: false,
-    //   filtroPrecioMax: 10000,
-    //   page: 1,
-    //   query: this.queryCopy,
-    //   productos: [],
-    //   total: null
-    // }
-    // this.buscarProductos();
+    this.dataService.searchRequest = {
+      query: this.queryCopy,
+      onSaleFilter : false,
+      page: 1,
+      orderFilter: 1,
+      categoriesFilter: [],
+      inStockFilter: false,
+      brand: undefined,
+      maxPriceFilter: Constants.PRODUCT_MAX_PRICE
+    }
+    this.search();
   }
 
   // filtrarMarcaProducto(idMarcaProducto: number): void {

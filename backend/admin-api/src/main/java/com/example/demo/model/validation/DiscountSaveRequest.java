@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.validation.constraints.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
 public class DiscountSaveRequest {
@@ -16,14 +16,19 @@ public class DiscountSaveRequest {
     private Integer percentage;
 
     @NotNull(message = "Start date is required")
-    @FutureOrPresent(message = "Start date must be in the present or future")
-    private LocalDateTime startDate;
+    private String startDate;
 
     @NotNull(message = "End date is required")
-    @Future(message = "End date must be in the future")
-    private LocalDateTime endDate;
+    private String endDate;
 
     public Discount toDiscount() {
-        return new Discount(percentage, startDate, endDate);
+//        ZoneId desiredZone = ZoneId.of("America/Bogota");
+//        ZonedDateTime startDateColombia = startDate.atZone(ZoneOffset.UTC).withZoneSameInstant(desiredZone);
+//        ZonedDateTime endDateColombia = endDate.atZone(ZoneOffset.UTC).withZoneSameInstant(desiredZone);
+//        return new Discount(percentage, startDateColombia.toLocalDateTime(), endDateColombia.toLocalDateTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(startDate, formatter);
+        return new Discount(percentage, startDateTime, endDateTime);
     }
 }

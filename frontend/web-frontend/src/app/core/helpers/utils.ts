@@ -113,35 +113,35 @@ export class Utils {
         return Math.ceil(total / 10);
     }
 
-    static generatePagesUIArray(total: number, page: number): any[] {
+    static generatePagesUIArray(totalPages: number, page: number): any[] {
         let arr: any = [];
-        if (total === 0) {
+        if (totalPages === 0) {
             arr = ['-'];
-        } else if (total === 1) {
+        } else if (totalPages === 1) {
             arr = [1];
-        } else if (total === 2) {
+        } else if (totalPages === 2) {
             arr = [1, 2];
-        } else if (total === 3) {
+        } else if (totalPages === 3) {
             arr = [1, 2, 3];
-        } else if (total === 4) {
+        } else if (totalPages === 4) {
             arr = [1, 2, 3, 4];
-        } else if (total === 5) {
+        } else if (totalPages === 5) {
             arr = [1, 2, 3, 4, 5];
-        } else if (total > 5) {
+        } else if (totalPages > 5) {
             if (page === 1) {//1
-                arr = [1, 2, 3, '...', total];
+                arr = [1, 2, 3, '...', totalPages];
             } else if (page === 2) {
-                arr = [1, 2, 3, '...', total];
+                arr = [1, 2, 3, '...', totalPages];
             } else if (page == 3) {
-                arr = [1, 2, 3, '...', total];
-            } else if (page > 3 && page < total - 2) {//x
-                arr = [1, '...', page, '...', total];
-            } else if (page == total - 2) {
-                arr = [1, '...', total - 2, total - 1, total];
-            } else if (page == total - 1) {
-                arr = [1, '...', total - 2, total - 1, total];
-            } else if (page == total) {//n
-                arr = [1, '...', total - 2, total - 1, total];
+                arr = [1, 2, 3, '...', totalPages];
+            } else if (page > 3 && page < totalPages - 2) {//x
+                arr = [1, '...', page, '...', totalPages];
+            } else if (page == totalPages - 2) {
+                arr = [1, '...', totalPages - 2, totalPages - 1, totalPages];
+            } else if (page == totalPages - 1) {
+                arr = [1, '...', totalPages - 2, totalPages - 1, totalPages];
+            } else if (page == totalPages) {//n
+                arr = [1, '...', totalPages - 2, totalPages - 1, totalPages];
             }
         }
         return arr;

@@ -33,7 +33,7 @@ public class SearchRequest {
 
     private Boolean onSaleFilter;
 
-    @DecimalMin(value = "10.00", message = "The max price filter must be greater than or equal to 10.00")
+    @DecimalMin(value = "1.00", message = "The max price filter must be greater than or equal to 1.00")
     @Digits(integer = 10, fraction = 2, message = "The max price filter must have at most 2 decimal places")
     private BigDecimal maxPriceFilter;
 

@@ -17,19 +17,20 @@
             </ol>
         </nav>
     </div>
-    <div class="container-fluid container-xl my-3">
+    <div class="container-fluid container-xl my-3 px-0">
         <div class="row justify-content-between m-0-force grid gx-5">
             <div class="d-none d-xl-block h-max-content bg-light col-2 px-0-force px-md-2 px-lg-3">
-                <search-filters></search-filters>
+                <search-filters (clearFiltersEventEmitter)="clearFilters()" (applyFiltersEventEmitter)="applyFilters()"></search-filters>
             </div>
 
             <div class="col-12 col-xl-10 px-0 px-md-3 px-xl-4">
                 
+                <!-- Adicional search filters -->
                 <div class="row justify-content-evenly justify-content-sm-between align-items-center bg-light px-2 py-2 mx-0 mx-md-3 mb-3">
                     <div class="col-12 col-sm-auto px-0 px-sm-2">
                         <div class="d-flex flex-row justify-content-center align-items-center">
                             <span class="fs-12px p-2 white-space-nowrap">Ordenar por</span>
-                            <select class="form-select form-select-sm orden w-auto">
+                            <select class="form-select form-select-sm orden w-auto" [(ngModel)]="dataService.searchRequest.orderFilter" (change)="search()">
                                 <option value="1">Default</option>
                                 <option value="2">Lowest price</option>
                                 <option value="3">Highest price</option>
@@ -38,7 +39,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-auto mt-2 mt-sm-0">
+                    <!-- <div class="col-auto mt-2 mt-sm-0">
                         <div class="d-flex">
                             <div (click)=" viewDesign='grid' "
                                 class="px-3 py-1 border rounded-0 cp way-to-show transition-300ms border-end-0">
@@ -49,7 +50,7 @@
                                 <i class="fas fa-equals"></i>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-auto mt-2 mt-sm-0 d-block d-xl-none">
                         <div class="px-3 py-1 border rounded-0 cp way-to-show transition-300ms"
                             (click)="displayFiltersModal=true">
@@ -58,8 +59,9 @@
                     </div>
                 </div>
 
+                <!-- Search results -->
                 <div class="row p-2 bg-light mx-0 mx-md-3">
-                    <ng-container *ngIf="searchResults!.data.length!=0; else emptyProducts">
+                    <ng-container *ngIf="searchResults!.data.length!==0; else emptyProducts">
                         <div *ngFor="let product of searchResults!.data"
                             [ngClass]="viewDesign=='list' ? 'col-12' : 'col-6 col-sm-4 col-lg-3'"
                             class="mb-3 px-1 px-sm-2">
@@ -67,19 +69,19 @@
                             <!-- List display mode -->
                             <ng-container *ngIf="viewDesign=='list'; else grid">
                                 <div class="row mx-0 justify-content-start">
-                                    <div class="col-4 col-sm-4 col-md-4 px-0 py-0 p-sm-2 p-lg-3">
+                                    <!-- <div class="col-4 col-sm-4 col-md-4 px-0 py-0 p-sm-2 p-lg-3">
                                         <div class="d-flex container-img-product-wts-lista">
                                             <ng-container *ngIf="product.mediaUrls; else sinImagen">
-                                                <img [src]="product" class="cp img-fluid mx-auto"
+                                                <img [src]="product.mediaUrls[0]" class="cp img-fluid mx-auto"
                                                     (click)="productDetails(product.id)">
                                             </ng-container>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="col-8 col-sm-8 col-md-8 px-2 py-0 p-sm-2 p-lg-3">
                                         <div class="d-flex flex-column">
-                                            <strong class="fs-12px text-uppercase">
+                                            <!-- <span class="fs-12px text-gray">
                                                 {{ product.brand }}
-                                            </strong>
+                                            </span>
                                             <span class="nombre-product-wts-lista cp"
                                                 (click)="productDetails(product.id)">{{ product.name }}</span>
                                             <span class="codigo-producto">Sku: {{ product.sku }}</span>
@@ -95,7 +97,7 @@
                                                         {{ product.stock! }}
                                                     </span>
                                                 </ng-template>
-                                            </span>
+                                            </span> -->
                                             <ng-container *ngIf="product.discount; else normal">
                                                 <!-- <span class="fw-bold precio-dscto-wts-lista">
                                                     <span class="badge bg-danger oferta1-wts-lista bg-red text-wrap"
@@ -146,14 +148,14 @@
                                                     </a>
                                                 </ng-container>
                                                 <ng-template #productoCarrito>
-                                                    <a class="btn-agregar-producto-wts-lista"
+                                                    <!-- <a class="btn-agregar-producto-wts-lista"
                                                         (click)="agregarProducto(product.id)">
                                                         <div class="d-inline-flex align-items-center">
                                                             <i class="fas fa-cart-plus"></i>
                                                             <span
                                                                 class="d-none d-sm-block ms-2 text-agregar">Agregar</span>
                                                         </div>
-                                                    </a>
+                                                    </a> -->
                                                 </ng-template>
                                             </ng-container>
 
@@ -171,40 +173,33 @@
                                                 class="my-3 cp my-auto" (click)="productDetails(product.id)">
                                         </ng-container>
                                     </div>
-                                    <strong class="fs-12px text-uppercase">
+                                    <strong class="fs-12px text-uppercase text-secondary">
                                         {{ product.brand }}
                                     </strong>
-                                    <span class="nombre-producto mb-2 cp"
+                                    <span class="nombre-producto mb-1 cp"
                                         (click)="productDetails(product.id)">{{ product.name }}</span>
-                                    <span class="codigo-product">Sku: {{ product.sku }}</span>
+                                    <span class="codigo-product fs-12px">Sku: {{ product.sku }}</span>
                                     <span class="fs-12px">
                                         Stock:
-                                        <ng-container *ngIf="product.stock! < 1; else hayStock">
+                                        <ng-container *ngIf="product.stock! < 1; else inStock">
                                             <span class="text-red">
                                                 Agotado
                                             </span>
                                         </ng-container>
-                                        <ng-template #hayStock>
+                                        <ng-template #inStock>
                                             <span>
                                                 {{ product.stock! }}
                                             </span>
                                         </ng-template>
                                     </span>
                                     <ng-container *ngIf="product.discount; else normal">
-                                        <!-- <span class="fs-4 fw-bold precio-dscto-wts-parrilla">
-                                            <span class="badge bg-danger rounded-pill oferta1 bg-red text-wrap"
-                                                *ngIf="product.estadoDsctoProducto == 1">
-                                                {{ product.porcentajeDsctoProducto }}% DCTO
+                                        <span class="fs-4 fw-bold precio-dscto-wts-parrilla">
+                                            <span class="badge bg-danger rounded-pill oferta1 bg-red text-wrap">
+                                                {{ product.discount.percentage }}% DCTO
                                             </span>
-                                            <span class="badge bg-danger oferta2 bg-red text-wrap"
-                                                *ngIf="product.estadoDsctoProducto == 2">
-                                                S/{{ product.montoDsctoProducto }} DCTO
-                                            </span>
-                                            S/{{ product.precioProducto |
-                                            dscto:product.precioProducto:product.estadoDsctoProducto:product.porcentajeDsctoProducto:product.montoDsctoProducto
-                                            }}
+                                            S/{{ product.discount.priceWithDiscountApplied}}
                                         </span>
-                                        <span class="fs-12px">Normal S/{{ product.precioProducto }}</span> -->
+                                        <span class="fs-12px">Normal S/{{ product.price }}</span>
                                     </ng-container>
                                     <ng-template #normal>
                                         <span class="fs-4 fw-bold">S/{{ product.price }}</span>
@@ -230,8 +225,7 @@
                                                         *ngIf="product.cantidadProducto < product.stock!; else outOfStock"
                                                         (click)="aumentarCantidadProducto(product.id)"></i> -->
                                                     <ng-template #outOfStock>
-                                                        <img [src]="urlResources + 'img/' + 'logos/' + 'sin-stock-2.svg' "
-                                                            class="w-25px">
+                                                        <img src="https://picsum.photos/seed/picsum/500/500" class="w-25px">
                                                     </ng-template>
                                                 </div>
                                             </a>
@@ -269,7 +263,6 @@
                 <div class="row mt-3 justify-content-center">
                     <div class="col-auto">
                         <ul class="pagination pagination-sm">
-
                             <li class="page-item">
                                 <ng-container *ngIf="dataService.searchRequest.page!-1 > 0; else previusPageDisabled">
                                     <span class="page-link cp"
@@ -280,15 +273,20 @@
                                     <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
                                 </ng-template>
                             </li>
-                            <li *ngFor="let i of pages" class="page-item"
-                                [ngClass]="{'active': i==dataService.searchRequest.page}">
-                                <ng-container *ngIf="i != '...'; else noActivePage">
+                            <li *ngFor="let i of pagesUI" class="page-item" [ngClass]="{'active': i==dataService.searchRequest.page}">
+                                <ng-container *ngIf="i !== '-' else noPage">
+                                  <ng-container *ngIf="i !== '...' else fillerPage">
                                     <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
+                                  </ng-container>
                                 </ng-container>
-                                <ng-template #noActivePage>
-                                    <span class="page-link">...</span>
+                                <ng-template #noPage>
+                                  <span class="page-link">-</span>
                                 </ng-template>
-                            </li>
+                                <ng-template #fillerPage>
+                                  <span class="page-link">...</span>
+                                </ng-template>
+                              </li>
+                              
                             <li class="page-item">
                                 <!-- <ng-container
                                     *ngIf="dataService.searchRequest.page < dataService.searchRequest?.data.length; else nextPageDisabled">
@@ -304,7 +302,6 @@
                         </ul>
                     </div>
                 </div>
-                <!-- . -->
 
             </div>
         </div>
@@ -313,7 +310,7 @@
 
 <p-dialog #filtrosModal header="FILTERS" [(visible)]="displayFiltersModal" [baseZIndex]="1" [modal]="true"
     [style]="{width: '350px'}" [contentStyle]="{padding: '0'}" [draggable]="false" [resizable]="false">
-    <search-filters></search-filters>
+    <search-filters (clearFiltersEventEmitter)="clearFilters()" (applyFiltersEventEmitter)="applyFilters()"></search-filters>
 </p-dialog>
 
 

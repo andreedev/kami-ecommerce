@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models/product';
-import { AuthService, DataService, ProductService } from 'app/core/services';
+import { DataService, ProductService } from 'app/core/services';
 import * as moment from 'moment';
 
 @Component({
@@ -113,8 +113,9 @@ export class ProductCreateComponent{
         this.message = 'Percentage must be between 1 and 100';
         return false;
       }
-      this.product.discount.startDate = Utils.prepareDateTimeToSendBack(this.dateRange.startDate)
-      this.product.discount.endDate = Utils.prepareDateTimeToSendBack(this.dateRange.endDate)
+
+      this.product.discount.startDate = this.dateRange.startDate.format("YYYY-MM-DD HH:mm:ss");
+      this.product.discount.endDate = this.dateRange.endDate.format("YYYY-MM-DD HH:mm:ss")
     }
 
 
@@ -187,8 +188,9 @@ export class ProductCreateComponent{
 
 
   debug(): void {
-    console.log(this.product);
     console.log(this.dateRange);
+    console.log(this.product);
+    // console.log(momentTimezone.tz(this.product.discount!.startDate, 'US/Eastern'));
   }
 
 }

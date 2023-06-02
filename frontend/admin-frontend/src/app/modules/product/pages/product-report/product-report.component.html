@@ -64,7 +64,7 @@
                     <col style="width:70px">   <!-- price -->
                     <col style="width:160px">  <!-- discount-->
                     <col style="width:90px">   <!-- brand -->
-                    <col style="width:90px">   <!-- categories -->
+                    <col style="width:110px">   <!-- categories -->
                     <col style="width:110px">  <!-- specifications -->
                     <col style="width:80px">   <!-- media content-->
                     <col style="width:80px">   <!-- rating -->
@@ -123,15 +123,15 @@
                     <td>
                         <ng-container *ngIf="product.discount; else empty">
                             <div class="text-center fs-16px">{{product.discount.percentage}}%</div>
-                            <div class="text-center">{{product.discount.startDate | date: 'yyyy-MM-dd HH:mm'}}</div>
-                           <div class="text-center">{{product.discount.endDate | date: 'yyyy-MM-dd HH:mm'}}</div>
+                            <div class="text-center">{{product.discount.startDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                           <div class="text-center">{{product.discount.endDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
                         </ng-container>
                     </td>
 
                     <td>{{product.brand}}</td>
                     <ng-container *ngIf="product.categories.length!==0; else empty">
                         <td>
-                            <span *ngFor="let category of product.categories">{{category}}</span>
+                            <span *ngFor="let category of product.categories">{{category}}<br></span>
                         </td>
                     </ng-container>
                     <ng-container *ngIf="product.specifications.length!==0; else empty">

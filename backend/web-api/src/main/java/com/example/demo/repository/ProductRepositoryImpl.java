@@ -15,9 +15,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -65,8 +66,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             query.addCriteria(Criteria.where("price").lte(req.getMaxPriceFilter()));
         }
 
-        if (req.getInStockFilter() != null) {
-            query.addCriteria(Criteria.where("stock").gte(req.getInStockFilter() ? 1 : 0));
+        if (req.getInStockFilter() != null && req.getInStockFilter()){
+            query.addCriteria(Criteria.where("stock").gte( 1 ));
         }
 
         if (req.getBrandFilter() != null && !req.getBrandFilter().isEmpty()) {
@@ -90,15 +91,17 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
 
         if (req.getOnSaleFilter() != null && req.getOnSaleFilter()) {
-            LocalDate currentDate = LocalDate.now();
+            Instant now = Instant.now();
             Criteria discountExistsCriteria = Criteria.where("discount").exists(true);
-            Criteria startDateCriteria = Criteria.where("discount.startDate").lte(currentDate);
-            Criteria endDateCriteria = Criteria.where("discount.endDate").gte(currentDate);
+            Criteria startDateCriteria = Criteria.where("discount.startDate").lte(Date.from(now));
+            Criteria endDateCriteria = Criteria.where("discount.endDate").gte(Date.from(now));
 
             query.addCriteria(discountExistsCriteria);
             query.addCriteria(startDateCriteria);
             query.addCriteria(endDateCriteria);
         }
+
+        query.addCriteria(Criteria.where("status").is(Enums.ProductStatus.PUBLISHED.getCode()));
 
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
         long totalCustomers = mongoTemplate.count(query, Customer.class);

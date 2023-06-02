@@ -119,8 +119,8 @@ export class ProductUpdateComponent implements OnInit {
         this.message = 'Percentage must be between 1 and 100';
         return false;
       }
-      this.product.discount.startDate = Utils.prepareDateTimeToSendBack(this.dateRange.startDate)
-      this.product.discount.endDate = Utils.prepareDateTimeToSendBack(this.dateRange.endDate)
+      this.product.discount.startDate = this.dateRange.startDate.format("YYYY-MM-DD HH:mm:ss");
+      this.product.discount.endDate = this.dateRange.endDate.format("YYYY-MM-DD HH:mm:ss")  
     }
 
 
