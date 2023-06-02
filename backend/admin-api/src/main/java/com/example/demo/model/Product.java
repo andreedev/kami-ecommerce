@@ -56,6 +56,7 @@ public class Product {
         this.keywords = keywords;
         this.stock = stock;
         this.status = Enums.ProductStatus.CREATED.getCode();
+        this.rating = 0;
     }
 
     public Product(String id, Integer status, String name, String sku, BigDecimal price, Discount discount, String brand, List<String> categories, List<String> specifications, List<String> mediaUrls, String keywords, Integer stock) {

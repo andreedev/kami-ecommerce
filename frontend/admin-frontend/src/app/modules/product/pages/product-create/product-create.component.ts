@@ -140,8 +140,8 @@ export class ProductCreateComponent{
     }
 
 
-    if (!Utils.validateNumberIsPositive(this.product.stock)) {
-      this.message = 'The stock is required and must be at least 1';
+    if (!Utils.validateNumberIsGreaterOrEqualThan(this.product.stock, 0)) {
+      this.message = 'Invalid stock';
       return false;
     }
 

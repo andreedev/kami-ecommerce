@@ -50,7 +50,7 @@ public class SecurityConfig {
             .requestMatchers("/api/order/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
             .requestMatchers("/api/sales/**").hasAuthority(Enums.Roles.ROLE_SALES.getValue())
             .requestMatchers("/api/admin/**").hasAnyAuthority(Enums.Roles.ROLE_ADMIN.getValue())
-            .anyRequest().authenticated()
+            .anyRequest().anonymous()
             .and()
                 .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

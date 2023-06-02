@@ -65,9 +65,9 @@ export class SearchPageComponent {
     this.dataService.searchRequestLoading = true;
     const response: DynamicReport<Product> | null = await this.productService.search(this.dataService.searchRequest)
     console.log(response);
+    this.searchResults = response!;
+    this.pagesUI = Utils.generatePagesUIArray(this.searchResults!.totalPages, this.dataService.searchRequest.page!);
     if (response!.data.length !== 0) {
-      this.searchResults = response!;
-      this.pagesUI = Utils.generatePagesUIArray(this.searchResults!.totalPages, this.dataService.searchRequest.page!);
       // this.syncProductos();
     }
     this.dataService.searchRequestLoading = false;

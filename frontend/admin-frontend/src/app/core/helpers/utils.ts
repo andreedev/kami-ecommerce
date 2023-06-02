@@ -24,6 +24,14 @@ export class Utils {
         return false;
     }
 
+    static validateNumberIsGreaterOrEqualThan(number: any, comparator: number): boolean {
+        const re2 = /^\d+$/;
+        if (re2.test(String(number))) {
+            return parseInt(number) >= comparator;
+        }
+        return false;
+    }
+
     static validateIsEmail(email: string): boolean {
         const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
         return re.test(String(email).toLowerCase());
@@ -56,8 +64,8 @@ export class Utils {
     }
 
     public static validatePercentage(value: string): boolean {
-    const parsedValue = parseInt(value, 10);
-    return !isNaN(parsedValue) && Number.isInteger(parsedValue) && parsedValue >= 1 && parsedValue <= 100;
+        const parsedValue = parseInt(value, 10);
+        return !isNaN(parsedValue) && Number.isInteger(parsedValue) && parsedValue >= 1 && parsedValue <= 100;
     }
 
     static getURL(route: any): string {

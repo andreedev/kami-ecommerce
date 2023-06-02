@@ -53,7 +53,8 @@ public class ProductSaveRequest {
     private String keywords;
 
     @NotNull(message = "Stock is required")
-    @Positive(message = "Stock must be a positive number")
+    @Min(value = 0, message = "Stock cannot be negative")
+    @Digits(integer = 10, message = "Invalid stock", fraction = 0)
     private Integer stock;
     public Product toProduct() {
         return new Product(name, sku, price, discount ==  null ? null : discount.toDiscount(), brand, categories, specifications, mediaUrls, keywords, stock);

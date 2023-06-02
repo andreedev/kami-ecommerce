@@ -6,6 +6,7 @@ import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.utils.Enums;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +16,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -62,7 +65,8 @@ public class ProductRepositoryImpl implements ProductRepository {
             query.addCriteria(Criteria.where("categories").all(req.getCategoriesFilter()));
         }
 
-        if (req.getMaxPriceFilter() != null) {
+        if (req.getMaxPriceFilter() != null && req.getMaxPriceFilter().compareTo(BigDecimal.valueOf(1991))<=0) {
+            //Decimal128.parse( req.getMaxPriceFilter().toString()))
             query.addCriteria(Criteria.where("price").lte(req.getMaxPriceFilter()));
         }
 
@@ -91,10 +95,13 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
 
         if (req.getOnSaleFilter() != null && req.getOnSaleFilter()) {
-            Instant now = Instant.now();
+            LocalDateTime now = LocalDateTime.now();
+//            ZoneId universalZone = ZoneId.of("UTC");
+//            Instant currentInstant = now.atZone(universalZone).toInstant();
+
             Criteria discountExistsCriteria = Criteria.where("discount").exists(true);
-            Criteria startDateCriteria = Criteria.where("discount.startDate").lte(Date.from(now));
-            Criteria endDateCriteria = Criteria.where("discount.endDate").gte(Date.from(now));
+            Criteria startDateCriteria = Criteria.where("discount.startDate").lte(now);
+            Criteria endDateCriteria = Criteria.where("discount.endDate").gte(now);
 
             query.addCriteria(discountExistsCriteria);
             query.addCriteria(startDateCriteria);
