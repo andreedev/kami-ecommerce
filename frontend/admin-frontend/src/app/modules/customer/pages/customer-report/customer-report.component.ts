@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Utils } from 'app/core/helpers/utils';
-import { Employee } from 'app/core/models';
+import { DynamicReport, Employee } from 'app/core/models';
 import { Customer } from 'app/core/models/customer';
-import { DynamicReport } from 'app/core/models/dynamic-report';
 import { DataService } from 'app/core/services';
 import { CustomerService } from 'app/core/services/customer.service';
 import moment from 'moment';

@@ -24,16 +24,6 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
-
-    @Override
-    public Integer save(Product product) {
-        return productRepository.save(product);
-    }
-
-    @Override
     public DynamicReport<CustomProduct> search(SearchRequest req) {
         DynamicReport<Product> result = productRepository.search(req);
         List<CustomProduct> list = Utils.convertToCustomProductList(result.getData());

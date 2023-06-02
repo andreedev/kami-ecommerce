@@ -35,18 +35,19 @@
     background-color: var(--blue) !important;
 }
 
-.md-drppicker td.active, .md-drppicker td.active:hover {
+.md-drppicker td.active,
+.md-drppicker td.active:hover {
     background-color: var(--blue) !important;
 }
 
 /* Custom css btn upload */
 
-.p-fileupload-advanced .p-button{
+.p-fileupload-advanced .p-button {
     padding: 5px !important;
     margin-bottom: 10px !important;
 }
 
-.p-fileupload-buttonbar{
+.p-fileupload-buttonbar {
     padding: 10px !important;
 }
 
@@ -54,13 +55,13 @@
     margin-left: 0;
 }
 
-@media (min-width: 768px){
+@media (min-width: 768px) {
     .main-content {
         margin-left: 150px;
     }
 }
 
-.btnMenuMovil {
+.mobileMenuBtn {
     padding: 3px 9px;
 }
 
@@ -74,7 +75,7 @@
     }
 }
 
-.debugger{
+.debugger {
     width: 30px;
     height: 30px;
     position: absolute;
@@ -86,4 +87,17 @@
     border: 1px solid var(--blue);
     text-align: center;
     color: #ffffff;
+}
+
+.bg-color-1{
+    background-color: #FECCCB;
+}
+
+hr {
+    margin: 0;
+    opacity: 0.15;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    content: '';
 }

@@ -39,7 +39,7 @@ public class SecurityConfig {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.applyPermitDefaultValues();
             corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090","http://localhost:4200", "http://kamistore.com.s3-website-us-east-1.amazonaws.com"));
+            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090","http://localhost:4200","http://localhost:4201", "http://kamistore.com.s3-website-us-east-1.amazonaws.com"));
 //            corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
             return corsConfiguration;
         });
@@ -53,7 +53,7 @@ public class SecurityConfig {
             .requestMatchers("/api/order/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
             .requestMatchers("/api/sales/**").hasAuthority(Enums.Roles.ROLE_SALES.getValue())
             .requestMatchers("/api/admin/**").hasAuthority(Enums.Roles.ROLE_ADMIN.getValue())
-            .anyRequest().authenticated()
+            .anyRequest().anonymous()
             .and()
                 .authenticationProvider(authenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

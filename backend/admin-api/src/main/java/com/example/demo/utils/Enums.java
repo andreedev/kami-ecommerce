@@ -45,4 +45,26 @@ public class Enums {
         private final String value;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public enum SearchRequestOrderFilter {
+        DEFAULT(1, "default"),
+        LOWEST_PRICE(2, "lowest price"),
+        HIGHEST_PRICE(3, "highest price"),
+        RECOMMENDED(4, "recommended"),
+        ALPHABETICAL(5, "alphabetical"),
+        ;
+        private final int code;
+        private final String value;
+
+        public static boolean isValid(int code) {
+            for (SearchRequestOrderFilter filter : values()) {
+                if (filter.getCode() == code) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
 }

@@ -39,6 +39,7 @@ public class Product {
     private Integer rating;
     private String keywords;
     private Integer stock;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

@@ -36,18 +36,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findAll() {
-        return mongoTemplate.findAll(Product.class,"products");
-    }
-
-    @Override
-    public Integer save(Product product) {
-        log.info("save");
-        Product result = mongoTemplate.save(product, "products");
-        return 1;
-    }
-
-    @Override
     public DynamicReport<Product> search(SearchRequest req) {
         Query query = new Query();
 

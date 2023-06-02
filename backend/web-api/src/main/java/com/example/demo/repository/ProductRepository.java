@@ -8,7 +8,5 @@ import com.example.demo.model.validation.SearchRequest;
 import java.util.List;
 
 public interface ProductRepository {
-    List<Product> findAll();
-    Integer save(Product product);
     DynamicReport<Product> search(SearchRequest req);
 }

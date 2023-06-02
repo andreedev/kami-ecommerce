@@ -32,7 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        logger.info("request "+ request.getServletPath());
+        //logger.info("request "+ request.getServletPath());
         return new AntPathMatcher().match("/api/auth/**", request.getServletPath())
             || new AntPathMatcher().match("/api/product/**", request.getServletPath())
             || new AntPathMatcher().match("/api/category/**", request.getServletPath())
@@ -51,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 username = jwtUtil.getUsernameFromToken(token);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             } catch (ExpiredJwtException e) {
                 System.out.println("JWT Token has expired");
@@ -60,7 +60,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         } else {
             System.out.println("Bearer String not found in token");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
         if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {

@@ -6,8 +6,8 @@ import { Endpoints } from '../constants';
 import { Constants } from '../constants/constants';
 import { Utils } from '../helpers/utils';
 import { Employee } from '../models';
-import { LoginResponse } from '../models/login-response';
 import { DataService } from './data.service';
+import { LoginResponse } from '../models/rest/login-response';
 
 @Injectable({
   providedIn: 'root'

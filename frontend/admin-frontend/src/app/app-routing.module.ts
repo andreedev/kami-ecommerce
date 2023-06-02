@@ -13,11 +13,6 @@ const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       {
-        path: AppRoutes.HOME_MODULE_NAME,
-        loadChildren: () =>
-          import('app/modules/home/home.module').then(m => m.HomeModule)
-      },
-      {
         path: AppRoutes.CUSTOMER_MODULE_NAME,
         loadChildren: () =>
           import('app/modules/customer/customer.module').then(m => m.CustomerModule)
@@ -26,6 +21,11 @@ const routes: Routes = [
         path: AppRoutes.PRODUCT_MODULE_NAME,
         loadChildren: () =>
           import('app/modules/product/product.module').then(m => m.ProductModule)
+      },
+      {
+        path: AppRoutes.HOME_MODULE_NAME,
+        loadChildren: () =>
+          import('app/modules/home/home.module').then(m => m.HomeModule)
       },
       { path: '', pathMatch: "full", redirectTo: AppRoutes.HOME_MODULE_NAME }
     ],

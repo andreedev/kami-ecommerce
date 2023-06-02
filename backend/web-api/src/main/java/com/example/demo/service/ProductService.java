@@ -9,7 +9,5 @@ import java.util.List;
 
 
 public interface ProductService {
-    List<Product> findAll();
-    Integer save(Product product);
     DynamicReport<CustomProduct> search(SearchRequest req);
 }

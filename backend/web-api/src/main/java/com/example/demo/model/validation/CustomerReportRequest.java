@@ -13,7 +13,7 @@ import jakarta.validation.constraints.*;
 public class CustomerReportRequest {
     private String query;
     private Integer page;
-    private String statusFilter;
+    private Integer statusFilter;
     @NotNull(message = "dateFilter must not be null")
     @Valid
     private DateFilter dateFilter;

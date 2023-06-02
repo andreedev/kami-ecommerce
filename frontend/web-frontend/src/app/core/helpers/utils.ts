@@ -1,4 +1,3 @@
-import { HttpHeaders } from "@angular/common/http";
 import { environment } from "assets/environments/environment";
 
 export class Utils {
@@ -20,6 +19,14 @@ export class Utils {
         const re2 = /^\d+$/;
         if (re2.test(String(number))) {
             return parseInt(number) > 0;
+        }
+        return false;
+    }
+
+    static validateNumberIsGreaterOrEqualThan(number: any, comparator: number): boolean {
+        const re2 = /^\d+$/;
+        if (re2.test(String(number))) {
+            return parseInt(number) >= comparator;
         }
         return false;
     }
@@ -56,8 +63,8 @@ export class Utils {
     }
 
     public static validatePercentage(value: string): boolean {
-    const parsedValue = parseInt(value, 10);
-    return !isNaN(parsedValue) && Number.isInteger(parsedValue) && parsedValue >= 1 && parsedValue <= 100;
+        const parsedValue = parseInt(value, 10);
+        return !isNaN(parsedValue) && Number.isInteger(parsedValue) && parsedValue >= 1 && parsedValue <= 100;
     }
 
     static getURL(route: any): string {

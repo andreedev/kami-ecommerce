@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Endpoints } from '../constants';
 import { Utils } from '../helpers/utils';
-import { DynamicReport } from '../models/dynamic-report';
 import { Product } from '../models/product';
 import { AuthService } from './auth.service';
 import { DataService } from './data.service';
+import { DynamicReport } from '../models';
 
 @Injectable({
   providedIn: 'root'

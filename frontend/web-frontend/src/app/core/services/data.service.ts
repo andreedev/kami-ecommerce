@@ -17,7 +17,7 @@ export class DataService {
 
   displayMobileMenu: boolean = false
 
-  loggedInEmployee: Employee | null = null;
+  loggedInCustomer: Customer | null = null;
 
   selectedProduct: Product | undefined;
 
@@ -34,8 +34,6 @@ export class DataService {
 
   searchRequestLoading: boolean = false
 
-
-
   displayCart: boolean = false
 
   cart: any = {
@@ -43,9 +41,9 @@ export class DataService {
     subtotal : null
   }
 
-  categories: string[] = []
+  categories: string[] = []//to do
 
-  loggedInCustomer: Customer | null = null;
+
 
   constructor(
     private cookieService: CookieService,
@@ -67,9 +65,8 @@ export class DataService {
   }
 
   clearData():void{
-    this.loggedInEmployee=null
+    this.loggedInCustomer=null
     this.displayMobileMenu=false
-    
   }
 
 }

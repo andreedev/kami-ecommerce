@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = AllowedRolesValidator.class)
 public @interface AllowedRoles {
-    String message() default "Invalid role. Allowed roles are: ROLE_ADMIN, ROLE_OPERATOR, ROLE_SPECTATOR, ROLE_CLIENT";
+    String message() default "Invalid role. Allowed roles are: ROLE_ADMIN, ROLE_SALES, ROLE_CUSTOMER";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

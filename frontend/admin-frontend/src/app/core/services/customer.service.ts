@@ -3,11 +3,9 @@ import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Endpoints } from '../constants';
 import { Utils } from '../helpers/utils';
-import { Employee } from '../models';
+import { DynamicReport, Employee } from '../models';
 import { AuthService } from './auth.service';
 import { DataService } from './data.service';
-import { Customer } from '../models/customer';
-import { DynamicReport } from '../models/dynamic-report';
 
 @Injectable({
   providedIn: 'root'

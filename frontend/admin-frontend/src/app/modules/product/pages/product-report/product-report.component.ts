@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { DynamicReport } from 'app/core/models/dynamic-report';
+import { DynamicReport } from 'app/core/models';
 import { Product } from 'app/core/models/product';
 import { DataService, ProductService } from 'app/core/services';
 import moment from 'moment';

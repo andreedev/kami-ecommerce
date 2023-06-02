@@ -49,7 +49,7 @@ public class SecurityConfig {
             .requestMatchers("/api/customer/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
             .requestMatchers("/api/order/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
             .requestMatchers("/api/sales/**").hasAuthority(Enums.Roles.ROLE_SALES.getValue())
-            .requestMatchers("/api/admin/**").hasAnyAuthority(Enums.Roles.ROLE_ADMIN.getValue())
+            .requestMatchers("/api/admin/**").hasAuthority(Enums.Roles.ROLE_ADMIN.getValue())
             .anyRequest().anonymous()
             .and()
                 .authenticationProvider(authenticationProvider)
