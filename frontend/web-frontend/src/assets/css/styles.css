@@ -88,6 +88,10 @@
     color: #ffffff;
 }
 
+:root{
+    --color-1: #FECCCB;
+}
+
 .bg-color-1{
     background-color: #FECCCB;
 }
@@ -247,3 +251,326 @@ hr {
     padding: 0px !important;
 }
 
+.orden {
+    width: 143px;
+}
+
+.way-to-show:hover {
+    color: var(--color-1) !important;
+}
+
+.way-to-show:hover {
+    background-color: #fff;
+}
+
+.nombre-producto, .nombre-producto-wts-lista {
+    font-size: 14px;
+    font-weight: 600;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 42px !important;
+}
+
+@media (min-width: 480px) {
+    .nombre-producto-wts-lista {
+        height: auto !important;
+        font-size: 17px;
+    }
+}
+
+.btn-agregar-producto {
+    text-decoration: none;
+    background-color: var(--color-1);
+    color: #222222;
+    text-align: center;
+    border-radius: 10px;
+    padding: 14px 5px;
+    cursor: pointer;
+    margin: 10px 0px 0px 0px;
+    transition: all 300ms;
+}
+
+@media (min-width: 720px) {
+    .btn-agregar-producto {
+        margin: 10px 25px;
+        padding: 10px 5px;
+    }
+}
+
+.btn-agregar-producto-wts-lista {
+    text-decoration: none;
+    background-color: var(--color-1);
+    color: #333;
+    text-align: center;
+    padding: 8px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: all 300ms;
+    border-radius: 10px;
+    width: 90px;
+}
+
+@media (min-width: 480px) {
+    .btn-agregar-producto-wts-lista {
+        width: 120px;
+    }
+}
+
+.btn-agregar-producto:hover, .btn-agregar-producto-wts-lista:hover {
+    transition: all 300ms;
+    background-color: #222;
+    color: #fff;
+}
+
+.text-agregar {
+    font-size: 14px;
+}
+
+@media (min-width: 920px) {
+    .text-agregar {
+        font-size: 17px;
+    }
+}
+
+.precio {
+    font-size: 21px;
+}
+
+@media (min-width: 410px) {
+    .precio {
+        font-size: 25px;
+    }
+}
+
+.precio-dscto-wts-lista {
+    color: red;
+    font-size: 21px;
+}
+
+
+@media (min-width: 410px) {
+    .precio-dscto-wts-lista {
+        font-size: 25px;
+    }
+}
+
+.bg-red {
+    background-color: red !important;
+}
+
+.oferta1 {
+    font-size: 12px !important;
+    width: 40px !important;
+}
+
+.oferta1-wts-lista {
+    font-size: 10px !important;
+    width: 40px !important;
+}
+
+@media (min-width: 350px) {
+    .oferta1-wts-lista {
+        font-size: 11px !important;
+        width: 50px !important;
+    }
+}
+
+.oferta2 {
+    font-size: 12px !important;
+    width: 70px !important;
+}
+
+/* .container-img-producto-wts-lista{
+    max-width: 300px;
+} */
+
+/* .container-img-producto-wts-parrilla {
+    height: 145px;
+}
+
+@media (min-width: 350px) {
+    .container-img-producto-wts-parrilla {
+        height: 180px;
+    }
+}
+
+@media (min-width: 400px) {
+    .container-img-producto-wts-parrilla {
+        height: 200px;
+    }
+}
+
+@media (min-width: 430px) {
+    .container-img-producto-wts-parrilla {
+        height: 230px;
+    }
+}
+
+@media (min-width: 460px) {
+    .container-img-producto-wts-parrilla {
+        height: 240px;
+    }
+}
+
+@media (min-width: 480px) {
+    .container-img-producto-wts-parrilla {
+        height: 250px;
+    }
+}
+
+@media (min-width: 520px) {
+    .container-img-producto-wts-parrilla {
+        height: 270px;
+    }
+}
+
+@media (min-width: 570px) {
+    .container-img-producto-wts-parrilla {
+        height: 290px;
+    }
+}
+
+@media (min-width: 576px) {
+    .container-img-producto-wts-parrilla {
+        height: 190px;
+    }
+}
+
+@media (min-width: 650px) {
+    .container-img-producto-wts-parrilla {
+        height: 220px;
+    }
+}
+
+@media (min-width: 720px) {
+    .container-img-producto-wts-parrilla {
+        height: 230px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container-img-producto-wts-parrilla {
+        height: 190px;
+    }
+}
+
+@media (min-width: 830px) {
+    .container-img-producto-wts-parrilla {
+        height: 210px;
+    }
+}
+
+@media (min-width: 900px) {
+    .container-img-producto-wts-parrilla {
+        height: 230px;
+    }
+}
+
+@media (min-width: 960px) {
+    .container-img-producto-wts-parrilla {
+        height: 250px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container-img-producto-wts-parrilla {
+        height: 180px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .container-img-producto-wts-parrilla {
+        height: 200px;
+    }
+}
+
+@media (min-width: 1080px) {
+    .container-img-producto-wts-parrilla {
+        height: 220px;
+    }
+}
+
+@media (min-width: 1170px) {
+    .container-img-producto-wts-parrilla {
+        height: 230px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container-img-producto-wts-parrilla {
+        height: 260px;
+    }
+} */
+
+.codigo-producto {
+    font-size: 10px;
+}
+
+@media (min-width: 380px) {
+    .codigo-producto {
+        font-size: 12px;
+    }
+}
+
+.h-max-content {
+    height: max-content !important;
+}
+
+.btn-interact-producto-carrito {
+    text-decoration: none;
+    background-color: #fff;
+    color: #222;
+    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.11);
+    text-align: center;
+    padding: 8px 10px;
+    margin: 16px 0;
+    transition: all 300ms;
+    border-radius: 10px;
+    width: 105px;
+}
+
+@media (min-width: 420px) {
+    .btn-interact-producto-carrito {
+        width: 125px;
+    }
+}
+
+@media (min-width: 720px) {
+    .btn-interact-producto-carrito {
+        margin: 10px 0;
+        padding: 10px 5px;
+    }
+}
+
+.btn-interact-producto-carrito-wts-lista {
+    text-decoration: none;
+    background-color: #fff;
+    color: #222;
+    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.11);
+    text-align: center;
+    padding: 8px 10px;
+    margin-top: 5px;
+    transition: all 300ms;
+    border-radius: 10px;
+    width: 125px;
+}
+
+@media (min-width: 720px) {
+    .btn-interact-producto-carrito-wts-lista {
+        /* margin: 0px 0px; */
+        padding: 10px 5px;
+    }
+}
+
+.btn-filtros {
+    text-decoration: none;
+    background-color: #fff;
+}
+
+.containerFiltrosMarca, .containerFiltrosCategoria {
+    width: 100% !important;
+    height: 200px !important;
+}

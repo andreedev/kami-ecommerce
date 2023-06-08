@@ -39,14 +39,11 @@ public class ProductSaveRequest {
     @Valid
     private List<@URL(message = "Each mediaUrl must be a valid URL") String> mediaUrls;
     @NotNull(message = "Rating is required")
-    @Min(value = 1, message = "Rating must be greater than or equal to 1")
-    @Max(value = 5, message = "Rating must be less than or equal to 5")
-    private Integer rating;
     private String keywords;
     @NotNull(message = "Stock is required")
     @Positive(message = "Stock must be a positive number")
     private Integer stock;
     public Product toProduct() {
-        return new Product(name, sku, price, discount ==  null ? null : discount.toDiscount(), brand, categories, specifications, mediaUrls, rating, keywords, stock);
+        return new Product(name, sku, price, discount ==  null ? null : discount.toDiscount(), brand, categories, specifications, mediaUrls, keywords, stock);
     }
 }

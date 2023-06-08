@@ -113,12 +113,7 @@ export class SearchPageComponent {
     }
   }
 
-  agregarProducto(idProducto: any): void {
-    // if (this.authService.verifyUserIsAuthenticated()) {
-    //   console.log(1);
-    // } else {
-    //   this.dataService.go(AppRoutes.LOGIN);
-
-    // }
+  addToCart(idProducto: string): void {
+    
   }
 }

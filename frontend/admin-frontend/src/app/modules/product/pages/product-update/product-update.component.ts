@@ -114,7 +114,7 @@ export class ProductUpdateComponent implements OnInit {
       return false;
     }
 
-    if (this.product.discount !== undefined) {
+    if (this.product.discount !== undefined && this.product.discount !== null) {
       if (!Utils.validatePercentage(this.product.discount!.percentage!)) {
         this.message = 'Percentage must be between 1 and 100';
         return false;
