@@ -48,8 +48,11 @@
                     <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
                 </ng-template>
                 <span>{{ product.amount }}</span>
-                <i class="fa fa-plus cp mx-2" *ngIf="product.amount! < product.stock!; else outOfStock"
-                    (click)="increaseQuantity(product.id!)"></i>
+                <i 
+                    *ngIf="product.amount! < product.stock!; else outOfStock"
+                    class="fa fa-plus cp mx-2" 
+                    (click)="increaseQuantity(product.id!)"
+                ></i>
                 <ng-template #outOfStock>
                     <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/out-of-stock.png" class="w-24px">
                 </ng-template>

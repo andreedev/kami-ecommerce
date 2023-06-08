@@ -11,7 +11,7 @@ export class CartComponent {
   readonly resourcesUrl: string = environment.resourcesUrl;
 
   constructor(
-    public dataService: DataService,
-    private router: Router
+    public dataService: DataService
   ) { }
+
 }
