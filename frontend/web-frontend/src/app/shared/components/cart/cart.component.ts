@@ -5,8 +5,7 @@ import { environment } from 'assets/environments/environment';
 
 @Component({
   selector: 'cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  templateUrl: './cart.component.html'
 })
 export class CartComponent {
   readonly resourcesUrl: string = environment.resourcesUrl;

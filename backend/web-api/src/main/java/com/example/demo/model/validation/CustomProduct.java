@@ -26,4 +26,7 @@ public class CustomProduct {
     private List<String> mediaUrls;
     private Integer rating;
     private Integer stock;
+
+    /* doesn't persist */
+    private Integer amount;
 }

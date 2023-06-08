@@ -102,9 +102,7 @@ export class SearchPageComponent {
   //   this.dataService.searchRequest.filtroIdSubcategoria = -1;
   // }
 
-  productDetails(id: any): void {
-    //open product details modal
-  }
+  
 
   updatePage(page: number): void {
     if (page != this.dataService.searchRequest.page) {
@@ -113,7 +111,5 @@ export class SearchPageComponent {
     }
   }
 
-  addToCart(idProducto: string): void {
-    
-  }
+ 
 }

@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppRoutes, Constants } from 'app/core/constants';
+import { AppRoutes } from 'app/core/constants';
 import { AuthService, DataService } from 'app/core/services';
 import { environment } from 'assets/environments/environment';
 
 @Component({
   selector: 'main-header',
-  templateUrl: './main-header.component.html',
-  styleUrls: ['./main-header.component.css']
+  templateUrl: './main-header.component.html'
 })
 export class MainHeaderComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;

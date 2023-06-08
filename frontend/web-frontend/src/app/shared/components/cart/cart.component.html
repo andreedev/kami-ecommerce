@@ -6,9 +6,9 @@
                 <span><i class="fa-solid fa-cart-shopping mx-3 text-gray-80"></i></span>
                 <span class="text-mi-carrito">
                     Mi carrito
-                    <ng-container *ngIf="dataService.cart.products.length > 0">
+                    <ng-container *ngIf="dataService.cart.products!.length > 0">
                         <span>
-                            ({{ dataService.cart.products.length }})
+                            ({{ dataService.cart.products!.length }})
                         </span>
                     </ng-container>
                 </span>
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <ng-container *ngIf="dataService.cart.products.length <= 0; else carrito">
+    <ng-container *ngIf="dataService.cart.products!.length <= 0; else carrito">
         <div class="mt-4 row justify-content-center align-items-center">
             <div class="col">
                 <p class="px-3 mb-1 fw-bold text-center">
@@ -32,27 +32,26 @@
 
     <ng-template #carrito>
         <p-scrollPanel styleClass="containerProductosCarrito">
-            <ng-container *ngFor="let producto of dataService.cart.products">
+            <ng-container *ngFor="let product of dataService.cart.products">
                 <div class="d-flex flex-row mx-0 my-1 justify-content-start border-bottom">
                     <div class="d-flex px-0 py-0 p-sm-1">
-                        <img [src]="resourcesUrl + 'img/productos/' + producto.imagenesProducto[0]"
-                            class="my-auto img-producto">
+                        <img  [src]="product.mediaUrls![0]"  class="my-auto img-producto">
                     </div>
                     <div class="px-2 py-0 p-sm-1">
                         <div class="d-flex flex-column">
                             <span class="nombre-producto cp transition-300ms" (click)="dataService.displayMobileMenu = false"
-                               >{{ producto.nombreProducto }}</span>
-                            <span class="fs-10px">Stock: {{ producto.stockProducto }}</span>
-                            <ng-container *ngIf="producto.estadoDsctoProducto > 0; else normal">
+                               >{{ product.name }}</span>
+                            <span class="fs-10px">Stock: {{ product.stock }}</span>
+                            <ng-container *ngIf="product.discount; else normal">
                                 <div>
                                     <span class="precio fw-bold">
-                                        S/{{ producto.precioProducto | dscto:producto.precioProducto:producto.estadoDsctoProducto:producto.porcentajeDsctoProducto:producto.montoDsctoProducto  }}
+                                        S/{{ product.discount.priceWithDiscountApplied}}
                                     </span>
                                     <span class="text-red">(Oferta)</span>
                                 </div>
                             </ng-container>
                             <ng-template #normal>
-                                <span class="precio fw-bold">S/{{ producto.precioProducto }}</span>
+                                <span class="precio fw-bold">S/{{ product.price }}</span>
                             </ng-template>
 
                             <a class="btn-interact-producto-carrito">

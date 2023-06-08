@@ -166,84 +166,7 @@
 
                             <!-- Grid display mode -->
                             <ng-template #grid>
-                                <div class="d-flex flex-column">
-                                    <div class="d-flex container-img-producto-wts-parrilla">
-                                        <ng-container *ngIf="product.mediaUrls; else sinImagen">
-                                            <img [src]="product.mediaUrls[0]"
-                                                class="my-3 cp my-auto" (click)="productDetails(product.id)">
-                                        </ng-container>
-                                    </div>
-                                    <strong class="fs-12px text-uppercase text-secondary">
-                                        {{ product.brand }}
-                                    </strong>
-                                    <span class="nombre-producto mb-1 cp"
-                                        (click)="productDetails(product.id)">{{ product.name }}</span>
-                                    <span class="codigo-product fs-12px">Sku: {{ product.sku }}</span>
-                                    <span class="fs-12px">
-                                        Stock:
-                                        <ng-container *ngIf="product.stock! < 1; else inStock">
-                                            <span class="text-red">
-                                                Agotado
-                                            </span>
-                                        </ng-container>
-                                        <ng-template #inStock>
-                                            <span>
-                                                {{ product.stock! }}
-                                            </span>
-                                        </ng-template>
-                                    </span>
-                                    <ng-container *ngIf="product.discount; else normal">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <div class="fs-4 fw-bold text-red">
-                                                S/{{ product.discount.priceWithDiscountApplied}}
-                                            </div>
-                                            <div class="badge bg-danger fs-12px w-40px bg-red text-wrap h-fit-content">
-                                                -{{ product.discount.percentage }}%
-                                            </div>
-                                        </div>
-                                        <span class="fs-12px">Normal S/{{ product.price }}</span>
-                                    </ng-container>
-                                    <ng-template #normal>
-                                        <span class="fs-4 fw-bold">S/{{ product.price }}</span>
-                                        <span class="fs-12px invisible">-</span>
-                                    </ng-template>
-                                    <!-- <span class="fs-10px text-muted">IGV incl. 18%, gastos de envío no incluidos.</span> -->
-
-                                    <ng-container *ngIf="product.stock! > 0">
-                                        <ng-container *ngIf="product.amount! > 0; else productoCarrito">
-                                            <a class="btn-interact-product-carrito align-self-center">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <!-- <ng-container
-                                                        *ngIf="product.cantidadProducto==1; else disminuirProducto">
-                                                        <i class="fa fa-trash cp mx-2"
-                                                            (click)="eliminarProducto(product.id)"></i>
-                                                    </ng-container>
-                                                    <ng-template #disminuirProducto>
-                                                        <i class="fa fa-minus cp mx-2"
-                                                    f        (click)="disminuirCantidadProducto(product.id)"></i>
-                                                    </ng-template>
-                                                    <span class="mx-1 mx-md-3">{{ product.cantidadProducto }}</span>
-                                                    <i class="fa fa-plus cp mx-2"
-                                                        *ngIf="product.cantidadProducto < product.stock!; else outOfStock"
-                                                        (click)="aumentarCantidadProducto(product.id)"></i> -->
-                                                    <ng-template #outOfStock>
-                                                        <img src="https://picsum.photos/seed/picsum/500/500" class="w-25px">
-                                                    </ng-template>
-                                                </div>
-                                            </a>
-                                        </ng-container>
-                                        <ng-template #productoCarrito>
-                                            <a class="btn bg-green-with-hover text-white"
-                                                (click)="addToCart(product.id!)">
-                                                <div class="d-inline-flex align-items-center">
-                                                    <i class="fas fa-cart-plus fs-18px"></i>
-                                                    <span class="d-none d-lg-block ms-2 text-agregar">Agregar</span>
-                                                </div>
-                                            </a>
-                                        </ng-template>
-                                    </ng-container>
-
-                                </div>
+                                <product-grid-card class="d-flex flex-column" [product]="product"></product-grid-card>
                             </ng-template>
                         </div>
                     </ng-container>
@@ -314,8 +237,3 @@
     [style]="{width: '350px'}" [contentStyle]="{padding: '0'}" [draggable]="false" [resizable]="false">
     <search-filters (clearFiltersEventEmitter)="clearFilters()" (applyFiltersEventEmitter)="applyFilters()"></search-filters>
 </p-dialog>
-
-
-<ng-template #sinImagen>
-    <img src="https://picsum.photos/seed/picsum/500/500" class="my-3 cp my-auto">
-</ng-template>

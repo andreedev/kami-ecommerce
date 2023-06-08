@@ -33,7 +33,9 @@ public class Utils {
                         product.getSpecifications(),
                         product.getMediaUrls(),
                         product.getRating(),
-                        product.getStock())
+                        product.getStock(),
+                        0
+                    )
                 )
                 .collect(Collectors.toList());
     }

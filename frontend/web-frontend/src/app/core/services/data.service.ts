@@ -4,6 +4,7 @@ import { DynamicReport, Employee, Product, SearchRequest } from 'app/core/models
 import { CookieService } from 'ngx-cookie-service';
 import { Constants } from '../constants';
 import { Customer } from '../models/customer';
+import { Cart } from '../models/cart';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +37,9 @@ export class DataService {
 
   displayCart: boolean = false
 
-  cart: any = {
+  cart: Cart = {
     products: [],
-    subtotal : null
+    subtotal : 0.00
   }
 
   categories: string[] = []//to do
