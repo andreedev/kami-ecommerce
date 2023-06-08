@@ -1,19 +1,19 @@
-<p-sidebar [(visible)]="dataService.displayCart" styleClass="p-0 bg-light" position="right"
-    [showCloseIcon]="false">
+<p-sidebar [(visible)]="dataService.displayCart" styleClass="p-0 bg-light" position="right" [showCloseIcon]="false">
     <div class="border-bottom p-2">
         <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
             <div>
                 <span><i class="fa-solid fa-cart-shopping mx-3 text-gray-80"></i></span>
                 <span class="text-mi-carrito">
                     Mi carrito
-                    <ng-container *ngIf="dataService.cart.products!.length > 0">
+                    <ng-container *ngIf="dataService.cart.totalAmount > 0">
                         <span>
-                            ({{ dataService.cart.products!.length }})
+                            ({{ dataService.cart.totalAmount }})
                         </span>
                     </ng-container>
                 </span>
             </div>
-            <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px" (click)="dataService.displayMobileMenu = false"></i>
+            <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px"
+                (click)="dataService.displayMobileMenu = false"></i>
         </div>
     </div>
 
@@ -35,12 +35,12 @@
             <ng-container *ngFor="let product of dataService.cart.products">
                 <div class="d-flex flex-row mx-0 my-1 justify-content-start border-bottom">
                     <div class="d-flex px-0 py-0 p-sm-1">
-                        <img  [src]="product.mediaUrls![0]"  class="my-auto img-producto">
+                        <img [src]="product.mediaUrls![0]" class="my-auto img-producto">
                     </div>
                     <div class="px-2 py-0 p-sm-1">
                         <div class="d-flex flex-column">
-                            <span class="nombre-producto cp transition-300ms" (click)="dataService.displayMobileMenu = false"
-                               >{{ product.name }}</span>
+                            <span class="nombre-producto cp transition-300ms"
+                                (click)="dataService.displayMobileMenu = false">{{ product.name }}</span>
                             <span class="fs-10px">Stock: {{ product.stock }}</span>
                             <ng-container *ngIf="product.discount; else normal">
                                 <div>
@@ -54,7 +54,7 @@
                                 <span class="precio fw-bold">S/{{ product.price }}</span>
                             </ng-template>
 
-                            <a class="btn-interact-producto-carrito">
+                            <a class="product-operation-btn">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <!-- <ng-container *ngIf="producto.cantidadProductoCarrito==1; else disminuirProducto">
                                         <i class="fa fa-trash cp mx-2"

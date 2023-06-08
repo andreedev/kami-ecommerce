@@ -39,7 +39,8 @@ export class DataService {
 
   cart: Cart = {
     products: [],
-    subtotal : 0.00
+    subtotal : 0.00,
+    totalAmount : 0
   }
 
   categories: string[] = []//to do

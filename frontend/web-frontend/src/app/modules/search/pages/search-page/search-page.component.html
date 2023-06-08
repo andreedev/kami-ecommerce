@@ -20,17 +20,20 @@
     <div class="container-fluid container-xl my-3 px-0">
         <div class="row justify-content-between m-0-force grid gx-5">
             <div class="d-none d-xl-block h-max-content bg-light col-2 px-0-force px-md-2 px-lg-3">
-                <search-filters (clearFiltersEventEmitter)="clearFilters()" (applyFiltersEventEmitter)="applyFilters()"></search-filters>
+                <search-filters (clearFiltersEventEmitter)="clearFilters()"
+                    (applyFiltersEventEmitter)="applyFilters()"></search-filters>
             </div>
 
             <div class="col-12 col-xl-10 px-0 px-md-3 px-xl-4">
-                
+
                 <!-- Adicional search filters -->
-                <div class="row justify-content-evenly justify-content-sm-between align-items-center bg-light px-2 py-2 mx-0 mx-md-3 mb-3">
+                <div
+                    class="row justify-content-evenly justify-content-sm-between align-items-center bg-light px-2 py-2 mx-0 mx-md-3 mb-3">
                     <div class="col-12 col-sm-auto px-0 px-sm-2">
                         <div class="d-flex flex-row justify-content-center align-items-center">
                             <span class="fs-12px p-2 white-space-nowrap">Ordenar por</span>
-                            <select class="form-select form-select-sm orden w-auto" [(ngModel)]="dataService.searchRequest.orderFilter" (change)="search()">
+                            <select class="form-select form-select-sm orden w-auto"
+                                [(ngModel)]="dataService.searchRequest.orderFilter" (change)="search()">
                                 <option value="1">Default</option>
                                 <option value="2">Lowest price</option>
                                 <option value="3">Highest price</option>
@@ -125,7 +128,7 @@
 
                                             <ng-container *ngIf="product.stock! > 0">
                                                 <ng-container *ngIf="product.amount; else productoCarrito">
-                                                    <a class="btn-interact-producto-carrito-wts-lista">
+                                                    <a class="product-operation-btn-wts-lista">
                                                         <div class="d-flex align-items-center justify-content-between">
                                                             <!-- <ng-container
                                                                 *ngIf="product.cantidadProducto==1; else disminuirProducto">
@@ -198,20 +201,21 @@
                                     <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
                                 </ng-template>
                             </li>
-                            <li *ngFor="let i of pagesUI" class="page-item" [ngClass]="{'active': i==dataService.searchRequest.page}">
+                            <li *ngFor="let i of pagesUI" class="page-item"
+                                [ngClass]="{'active': i==dataService.searchRequest.page}">
                                 <ng-container *ngIf="i !== '-' else noPage">
-                                  <ng-container *ngIf="i !== '...' else fillerPage">
-                                    <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
-                                  </ng-container>
+                                    <ng-container *ngIf="i !== '...' else fillerPage">
+                                        <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
+                                    </ng-container>
                                 </ng-container>
                                 <ng-template #noPage>
-                                  <span class="page-link">-</span>
+                                    <span class="page-link">-</span>
                                 </ng-template>
                                 <ng-template #fillerPage>
-                                  <span class="page-link">...</span>
+                                    <span class="page-link">...</span>
                                 </ng-template>
-                              </li>
-                              
+                            </li>
+
                             <li class="page-item">
                                 <!-- <ng-container
                                     *ngIf="dataService.searchRequest.page < dataService.searchRequest?.data.length; else nextPageDisabled">
@@ -235,5 +239,6 @@
 
 <p-dialog #filtrosModal header="FILTERS" [(visible)]="displayFiltersModal" [baseZIndex]="1" [modal]="true"
     [style]="{width: '350px'}" [contentStyle]="{padding: '0'}" [draggable]="false" [resizable]="false">
-    <search-filters (clearFiltersEventEmitter)="clearFilters()" (applyFiltersEventEmitter)="applyFilters()"></search-filters>
+    <search-filters (clearFiltersEventEmitter)="clearFilters()"
+        (applyFiltersEventEmitter)="applyFilters()"></search-filters>
 </p-dialog>

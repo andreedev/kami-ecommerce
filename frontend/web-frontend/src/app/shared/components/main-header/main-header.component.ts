@@ -30,4 +30,5 @@ export class MainHeaderComponent {
     this.authService.logout()
     this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
   }
+
 }

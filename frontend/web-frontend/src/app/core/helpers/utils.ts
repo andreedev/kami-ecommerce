@@ -93,6 +93,15 @@ export class Utils {
         return arr;
     }
 
+    static updateByAttr(arr: any[], attr: string, value: any, updatedAttr: string, updatedValue: any): any[] {
+        return arr.map((element) => {
+            if (element && element.hasOwnProperty(attr) && element[attr] === value) {
+            return { ...element, [updatedAttr]: updatedValue };
+            }
+            return element;
+        });
+    }
+
     static removeBy4Attributes(arrayX: any[], atributos: any[], values: any[]) {
         let i = arrayX.length;
         while (i--) {

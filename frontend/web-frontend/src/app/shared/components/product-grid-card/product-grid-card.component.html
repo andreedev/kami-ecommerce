@@ -6,8 +6,7 @@
 <strong class="fs-12px text-uppercase text-secondary">
     {{ product.brand }}
 </strong>
-<span class="nombre-producto mb-1 cp"
-    (click)="productDetails(product.id)">{{ product.name }}</span>
+<span class="nombre-producto mb-1 cp" (click)="productDetails(product.id)">{{ product.name }}</span>
 <span class="codigo-product fs-12px">Sku: {{ product.sku }}</span>
 <span class="fs-12px">
     Stock:
@@ -40,30 +39,25 @@
 
 <ng-container *ngIf="product.stock! > 0">
     <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
-        <a class="btn-interact-product-carrito align-self-center">
+        <a class="product-operation-btn align-self-center">
             <div class="d-flex align-items-center justify-content-between">
-                <ng-container
-                    *ngIf="product.amount==1; else decreaseProduct">
-                    <i class="fa fa-trash cp mx-2"
-                        (click)="removeFromCart(product.id!)"></i>
+                <ng-container *ngIf="product.amount==1; else decreaseProduct">
+                    <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
                 </ng-container>
                 <ng-template #decreaseProduct>
-                    <i class="fa fa-minus cp mx-2"
-                f        (click)="decreaseQuantity(product.id!)"></i>
+                    <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
                 </ng-template>
-                <span class="mx-1 mx-md-3">{{ product.amount }}</span>
-                <i class="fa fa-plus cp mx-2"
-                    *ngIf="product.amount! < product.stock!; else outOfStock"
+                <span>{{ product.amount }}</span>
+                <i class="fa fa-plus cp mx-2" *ngIf="product.amount! < product.stock!; else outOfStock"
                     (click)="increaseQuantity(product.id!)"></i>
                 <ng-template #outOfStock>
-                    <img src="https://picsum.photos/seed/picsum/25/25" class="w-25px">
+                    <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/out-of-stock.png" class="w-24px">
                 </ng-template>
             </div>
         </a>
     </ng-container>
     <ng-template #neverAddedToCart>
-        <a class="btn bg-green-with-hover text-white"
-            (click)="addToCart(product.id!)">
+        <a class="btn bg-green-with-hover text-white" (click)="addToCart(product)">
             <div class="d-inline-flex align-items-center">
                 <i class="fas fa-cart-plus fs-18px"></i>
                 <span class="d-none d-lg-block ms-2 text-agregar">Agregar</span>

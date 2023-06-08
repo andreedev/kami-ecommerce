@@ -45,9 +45,12 @@
             <div class="d-flex pe-2 pe-md-3 ps-md-3" (click)="dataService.displayCart = true">
                 <a role="button" class="fs-22px text-dark">
                     <i class="fa-solid fa-cart-shopping position-relative text-gray-80">
-                        <span class="amount-items-shopcart position-absolute top-0 start-100 translate-middle bg-green">
-                            {{ dataService.cart.products!.length }}
-                        </span>
+                        <ng-container *ngIf="dataService.cart.totalAmount > 0">
+                            <span class="amount-items-shopcart position-absolute top-0 start-100 translate-middle bg-green">
+                                {{ dataService.cart.totalAmount }}
+                            </span>
+                        </ng-container>
+                       
                     </i>
                 </a>
             </div>

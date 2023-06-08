@@ -67,12 +67,20 @@ img {
     width: 10px;
 }
 
+.w-14px {
+    width: 14px;
+}
+
 .w-15px {
     width: 15px;
 }
 
 .w-20px {
     width: 20px;
+}
+
+.w-24px {
+    width: 24px;
 }
 
 .w-25px {
