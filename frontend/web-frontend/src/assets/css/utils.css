@@ -538,6 +538,10 @@ img {
     color: var(--white) !important;
 }
 
+.text-gray-30 {
+    color: var(--gray-30) !important;
+}
+
 .text-gray {
     color: var(--gray-50) !important;
 }

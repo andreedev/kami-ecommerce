@@ -18,9 +18,14 @@ export class CartComponent {
 
   clear():void{
     this.dataService.cart.products = []
+    this.dataService.cart.totalAmount = 0
+    this.dataService.cart.subtotal = 0.00
     Utils.deleteInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
     this.dataService.searchResults.data.forEach((p)=>{
       p.amount = 0
     })
   }
+  
+
+
 }

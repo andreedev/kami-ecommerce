@@ -13,7 +13,8 @@ npm install primeicons --save
 npm i moment
 npm i moment-timezone
 npm install @types/moment-timezone --save-dev
-npm install ngx-daterangepicker-material --save
+npm install ngx-daterangepicker-material --saves
+
 
 - Auxiliary libraries
 npm install @angular/cdk --save

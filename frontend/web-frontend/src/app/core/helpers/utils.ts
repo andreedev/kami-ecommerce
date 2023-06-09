@@ -183,6 +183,17 @@ export class Utils {
     static getByAttr(arr: any[], attr: string, value: any): any {
         return arr.find((element) => element[attr] === value);
     }
+
+    static multiply(a: number, b: number): number {
+        if (isNaN(a) || isNaN(b)) {
+          throw new Error('Invalid operands. Both operands must be valid numbers.');
+        }
+      
+        const result = a * b;
+        const roundedResult = Math.round(result * 100) / 100; // Round to 2 decimal places
+        return roundedResult;
+      }
+      
     
     
 

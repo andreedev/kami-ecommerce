@@ -36,8 +36,6 @@ public class ProductServiceImpl implements ProductService{
         for (CustomProduct product : list) {
             Discount discount = product.getDiscount();
             if (discount!=null && discount.getStartDate().isBefore(currentDate) && discount.getEndDate().isAfter(currentDate)){
-                log.info("start date "+String.valueOf(product.getDiscount().getStartDate()));
-                log.info("end date "+String.valueOf(product.getDiscount().getEndDate()));
                 BigDecimal price = product.getPrice();
                 Integer discountPercentage = product.getDiscount().getPercentage();
                 BigDecimal discountAmount = price.multiply(BigDecimal.valueOf(discountPercentage)).divide(BigDecimal.valueOf(100));

@@ -106,5 +106,7 @@ export class SearchPageComponent {
     }
   }
 
+
+
  
 }
