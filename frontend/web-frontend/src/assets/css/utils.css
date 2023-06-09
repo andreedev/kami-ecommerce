@@ -2777,8 +2777,15 @@ color: var(--gray-70) !important;
 
 .bg-gray-30, .bg-gray-30-with-hover {	
     background-color: var(--gray-30) !important;	
+}
+
+.bg-gray-10-with-hover:hover {	
+    background-color: var(--gray-10-hover) !important;	
 }	
 
+.bg-gray-10, .bg-gray-10-with-hover {	
+    background-color: var(--gray-10) !important;	
+}	
 
 .bg-black, .bg-black-with-hover {
     background-color: var(--black) !important;
@@ -2854,4 +2861,12 @@ color: var(--gray-70) !important;
 
 .white-space-nowrap{
     white-space: nowrap;
+}
+
+.text-overflow-ellipsis{
+    text-overflow: ellipsis;
+}
+
+.text-decoration-line-through-v2-force{
+    text-decoration: line-through 1px solid rgb(106, 105, 110) !important;
 }

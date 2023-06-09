@@ -1,93 +1,52 @@
-<p-sidebar [(visible)]="dataService.displayCart" styleClass="p-0 bg-light" position="right" [showCloseIcon]="false">
-    <div class="border-bottom p-2">
-        <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
-            <div>
-                <span><i class="fa-solid fa-cart-shopping mx-3 text-gray-80"></i></span>
-                <span class="text-mi-carrito">
-                    Mi carrito
-                    <ng-container *ngIf="dataService.cart.totalAmount > 0">
-                        <span>
-                            ({{ dataService.cart.totalAmount }})
-                        </span>
-                    </ng-container>
-                </span>
-            </div>
-            <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px"
-                (click)="dataService.displayMobileMenu = false"></i>
-        </div>
-    </div>
-
-    <ng-container *ngIf="dataService.cart.products!.length <= 0; else carrito">
-        <div class="mt-4 row justify-content-center align-items-center">
-            <div class="col">
-                <p class="px-3 mb-1 fw-bold text-center">
-                    Tu carrito está vacío.
-                </p>
-                <p class="px-3 text-center">
-                    Te invitamos a volver a nuestro catálogo y agregar productos a tu carrito.
-                </p>
-            </div>
-        </div>
-    </ng-container>
-
-    <ng-template #carrito>
-        <p-scrollPanel styleClass="containerProductosCarrito">
-            <ng-container *ngFor="let product of dataService.cart.products">
-                <div class="d-flex flex-row mx-0 my-1 justify-content-start border-bottom">
-                    <div class="d-flex px-0 py-0 p-sm-1">
-                        <img [src]="product.mediaUrls![0]" class="my-auto img-producto">
-                    </div>
-                    <div class="px-2 py-0 p-sm-1">
-                        <div class="d-flex flex-column">
-                            <span class="nombre-producto cp transition-300ms"
-                                (click)="dataService.displayMobileMenu = false">{{ product.name }}</span>
-                            <span class="fs-10px">Stock: {{ product.stock }}</span>
-                            <ng-container *ngIf="product.discount; else normal">
-                                <div>
-                                    <span class="precio fw-bold">
-                                        S/{{ product.discount.priceWithDiscountApplied}}
-                                    </span>
-                                    <span class="text-red">(Oferta)</span>
-                                </div>
-                            </ng-container>
-                            <ng-template #normal>
-                                <span class="precio fw-bold">S/{{ product.price }}</span>
-                            </ng-template>
-
-                            <a class="product-operation-btn">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <!-- <ng-container *ngIf="producto.cantidadProductoCarrito==1; else disminuirProducto">
-                                        <i class="fa fa-trash cp mx-2"
-                                            (click)="dataService.eliminarProducto(producto.idProducto)"></i>
-                                    </ng-container>
-                                    <ng-template #disminuirProducto>
-                                        <i class="fa fa-minus cp mx-2"
-                                            (click)="dataService.disminuirCantidadProducto(producto.idProducto)"></i>
-                                    </ng-template>
-                                    <span class="mx-1">{{ producto.cantidadProductoCarrito }}</span>
-                                    <i class="fa fa-plus cp mx-2"
-                                        *ngIf="producto.cantidadProductoCarrito < producto.stockProducto; else outOfStock"
-                                        (click)="dataService.aumentarCantidadProducto(producto.idProducto)"></i>
-                                    <ng-template #outOfStock>
-                                        <img [src]="resourcesUrl + 'img/' + 'logos/' + 'sin-stock-2.svg' "
-                                            class="w-25px">
-                                    </ng-template> -->
-                                </div>
-                            </a>
-
-                        </div>
-                    </div>
+<p-sidebar [(visible)]="dataService.displayCart" [fullScreen]="dataService.screenWidth>=400?false:true" styleClass="p-0 bg-light" position="right" [showCloseIcon]="false">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="border-bottom p-2">
+            <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
+                <div>
+                    <span><i class="fa-solid fa-cart-shopping mx-3 text-gray-80"></i></span>
+                    <span class="text-mi-carrito">
+                        Mi carrito
+                        <ng-container *ngIf="dataService.cart.totalAmount > 0">
+                            <span>
+                                ({{ dataService.cart.totalAmount }})
+                            </span>
+                        </ng-container>
+                    </span>
                 </div>
-            </ng-container>
-        </p-scrollPanel>
-        <div class="d-flex flex-column flex-sm-row justify-content-evenly align-items-center border-top border-2">
-            <!-- <a class="mt-2 mt-sm-3 btn-vaciar-carrito transition-300ms cp" (click)="vaciarCarrito()">Vaciar carrito</a> -->
-            <a
-                class="mt-2 mt-sm-3 btn-pagar transition-300ms d-flex flex-row justify-content-between align-items-center cp">
-                <span class="me-1 me-sm-2 me-md-3">Ir a pagar</span>
-                <span class="ms-1">S/{{ dataService.cart.subtotal }}</span>
-                <!-- <span class="ms-1">S/1000.50</span> -->
-            </a>
+                <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px"
+                    (click)="dataService.displayCart = false"></i>
+            </div>
         </div>
-    </ng-template>
+    
+        <ng-container *ngIf="dataService.cart.products!.length <= 0; else carrito">
+            <div class="mt-4 row justify-content-center align-items-center">
+                <div class="col">
+                    <p class="px-3 mb-1 fw-bold text-center">
+                        Tu carrito está vacío.
+                    </p>
+                    <p class="px-3 text-center">
+                        Te invitamos a volver a nuestro catálogo y agregar productos a tu carrito.
+                    </p>
+                </div>
+            </div>
+        </ng-container>
+    
+        <ng-template #carrito>
+            <div class="overflow-y-auto">
+                <ng-container *ngFor="let product of dataService.cart.products">
+                    <product-card [product]="product" [type]="'cart-product-list-card'"></product-card>
+                </ng-container>
+                <div class="d-flex flex-column flex-sm-row justify-content-evenly align-items-center">
+                    <span class="mt-2 mt-sm-3 btn bg-gray-10-with-hover fs-14px transition-300ms cp" (click)="clear()">
+                        <i class="fa fa-trash cp mx-2"></i> Vaciar carrito
+                    </span>
+                    <span
+                        class="mt-2 mt-sm-3 btn bg-green-with-hover text-white transition-300ms d-flex flex-row justify-content-between align-items-center cp">
+                        <span class="me-1 me-sm-2 me-md-3">Ir a pagar</span>
+                        <span class="ms-1">S/{{ dataService.cart.subtotal }}</span>
+                    </span>
+                </div>
+            </div>
+        </ng-template>
+    </div>
 </p-sidebar>

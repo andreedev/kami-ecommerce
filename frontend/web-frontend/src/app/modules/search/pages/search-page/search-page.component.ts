@@ -20,10 +20,6 @@ export class SearchPageComponent {
   displayFiltersModal: boolean = false;
   pagesUI: any[] = [];
   queryCopy: string = '';
-  searchResults: DynamicReport<Product> = {
-    data: [],
-    totalPages: 0
-  }
 
   constructor(
     private titleService: Title,
@@ -64,8 +60,8 @@ export class SearchPageComponent {
     this.dataService.enableLoading();
     this.dataService.searchRequestLoading = true;
     const response: DynamicReport<Product> | null = await this.productService.search(this.dataService.searchRequest)
-    this.searchResults = response!;
-    this.pagesUI = Utils.generatePagesUIArray(this.searchResults!.totalPages, this.dataService.searchRequest.page!);
+    this.dataService.searchResults = response!;
+    this.pagesUI = Utils.generatePagesUIArray(this.dataService.searchResults!.totalPages, this.dataService.searchRequest.page!);
     if (response!.data.length !== 0) {
       // this.syncProductos();
     }

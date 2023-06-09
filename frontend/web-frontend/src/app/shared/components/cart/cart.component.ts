@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Constants } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
 import { DataService } from 'app/core/services';
 import { environment } from 'assets/environments/environment';
 
 @Component({
   selector: 'cart',
-  templateUrl: './cart.component.html'
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.css']
 })
 export class CartComponent {
   readonly resourcesUrl: string = environment.resourcesUrl;
@@ -14,4 +16,11 @@ export class CartComponent {
     public dataService: DataService
   ) { }
 
+  clear():void{
+    this.dataService.cart.products = []
+    Utils.deleteInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
+    this.dataService.searchResults.data.forEach((p)=>{
+      p.amount = 0
+    })
+  }
 }

@@ -1,15 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models';
 import { DataService } from 'app/core/services';
 
 @Component({
-  selector: 'product-grid-card',
-  templateUrl: './product-grid-card.component.html'
+  selector: 'product-card',
+  templateUrl: './product-card.component.html',
+  styleUrls: ['./product-card.component.css']
 })
-export class ProductGridCardComponent implements OnInit {
+export class ProductCardComponent {
   @Input() product!: Product;
+  @Input() type!: string;
 
   constructor(
     public dataService: DataService,

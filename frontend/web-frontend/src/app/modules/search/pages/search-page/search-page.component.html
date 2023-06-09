@@ -64,8 +64,8 @@
 
                 <!-- Search results -->
                 <div class="row p-2 bg-light mx-0 mx-md-3">
-                    <ng-container *ngIf="searchResults!.data.length!==0; else emptyProducts">
-                        <div *ngFor="let product of searchResults!.data"
+                    <ng-container *ngIf="this.dataService.searchResults!.data.length!==0; else emptyProducts">
+                        <div *ngFor="let product of this.dataService.searchResults!.data"
                             [ngClass]="viewDesign=='list' ? 'col-12' : 'col-6 col-sm-4 col-lg-3'"
                             class="mb-3 px-1 px-sm-2">
 
@@ -169,7 +169,7 @@
 
                             <!-- Grid display mode -->
                             <ng-template #grid>
-                                <product-grid-card class="d-flex flex-column" [product]="product"></product-grid-card>
+                                <product-card class="d-flex flex-column" [product]="product" [type]="'product-grid-card'"></product-card>
                             </ng-template>
                         </div>
                     </ng-container>

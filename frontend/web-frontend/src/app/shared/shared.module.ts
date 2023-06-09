@@ -15,7 +15,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
-import { OverlayPanelModule } from 'primeng/overlaypanel';;
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   //Components

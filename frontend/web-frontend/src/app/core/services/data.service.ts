@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Product, SearchRequest } from 'app/core/models';
+import { DynamicReport, Product, SearchRequest } from 'app/core/models';
 import { CookieService } from 'ngx-cookie-service';
 import { Constants } from '../constants';
 import { Cart } from '../models/cart';
@@ -32,6 +32,11 @@ export class DataService {
     inStockFilter: false,
     brand: undefined,
     maxPriceFilter: Constants.PRODUCT_MAX_PRICE
+  }
+
+  searchResults: DynamicReport<Product> = {
+    data: [],
+    totalPages: 0
   }
 
   searchRequestLoading: boolean = false

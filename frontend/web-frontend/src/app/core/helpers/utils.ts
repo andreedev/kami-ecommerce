@@ -176,6 +176,10 @@ export class Utils {
         localStorage.setItem(name, JSON.stringify(value));
     }
 
+    static deleteInLocalStorage(name: string): void {
+        localStorage.removeItem(name);
+    }
+
     static getByAttr(arr: any[], attr: string, value: any): any {
         return arr.find((element) => element[attr] === value);
     }
