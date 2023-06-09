@@ -24,7 +24,7 @@
     --white: #ffffff;
     --white-hover: #d6d6d6;
     --gray-10: #f8f9fa;
-    --gray-10-hover: #dededf;
+    --gray-10-hover: #ffffff;
     --gray-20: #e9ecef;
     --gray-20-hover: #cccdce;
     --gray-30: #dee2e6;
@@ -2782,6 +2782,14 @@ color: var(--gray-70) !important;
 .bg-gray-30, .bg-gray-30-with-hover {	
     background-color: var(--gray-30) !important;	
 }
+
+.bg-gray-20-with-hover:hover {	
+    background-color: var(--gray-20-hover) !important;	
+}	
+
+.bg-gray-20, .bg-gray-20-with-hover {	
+    background-color: var(--gray-20) !important;	
+}	
 
 .bg-gray-10-with-hover:hover {	
     background-color: var(--gray-10-hover) !important;	
