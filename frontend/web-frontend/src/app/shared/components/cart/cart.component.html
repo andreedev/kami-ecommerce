@@ -1,4 +1,4 @@
-<p-sidebar [(visible)]="dataService.displayCart" [fullScreen]="dataService.screenWidth>=400?false:true" styleClass="p-0 bg-light" position="right" [showCloseIcon]="false">
+<p-sidebar [(visible)]="cartDataService.displayCart" [fullScreen]="dataService.screenWidth>=400?false:true" styleClass="p-0 bg-light" position="right" [showCloseIcon]="false">
     <div class="d-flex flex-column justify-content-center">
         <div class="border-bottom p-2">
             <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
@@ -6,19 +6,19 @@
                     <span><i class="fa-solid fa-cart-shopping mx-3 text-gray-80"></i></span>
                     <span class="text-mi-carrito">
                         Mi carrito
-                        <ng-container *ngIf="dataService.cart.totalAmount > 0">
+                        <ng-container *ngIf="cartDataService.cart.totalAmount > 0">
                             <span>
-                                ({{ dataService.cart.totalAmount }})
+                                ({{ cartDataService.cart.totalAmount }})
                             </span>
                         </ng-container>
                     </span>
                 </div>
-                <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px"
-                    (click)="dataService.displayCart = false"></i>
+                <i class="fa-regular fa-circl-xmark cursor-pointer fs-20px"
+                    (click)="cartDataService.displayCart = false"></i>
             </div>
         </div>
     
-        <ng-container *ngIf="dataService.cart.products!.length <= 0; else carrito">
+        <ng-container *ngIf="cartDataService.cart.products!.length <= 0; else carrito">
             <div class="mt-4 row justify-content-center align-items-center">
                 <div class="col">
                     <p class="px-3 mb-1 fw-bold text-center">
@@ -33,14 +33,16 @@
     
         <ng-template #carrito>
             <div class="overflow-y-auto">
-                <ng-container *ngFor="let product of dataService.cart.products">
-                    <product-card [product]="product" [type]="'cart-product-list-card'"></product-card>
+                <ng-container *ngIf="!cartDataService.loadingCart">
+                    <ng-container *ngFor="let product of cartDataService.cart.products">
+                        <product-card [product]="product" [type]="'cart-product-list-card'"></product-card>
+                    </ng-container>
                 </ng-container>
                 <hr>
                 <div class="d-flex flex-column justify-content-evenly align-items-center px-3">
                     <span class="mt-2 mt-sm-3 btn bg-green-with-hover text-white transition-300ms d-flex flex-row justify-content-between align-items-center cp w-100">
                         <span class="fw-bold">Ir a pagar</span>
-                        <span>S/{{ dataService.cart.subtotal }}</span>
+                        <span>S/{{ cartDataService.cart.subtotal }}</span>
                     </span>
                     <span class="mt-2 mt-sm-3 btn bg-gray-10-with-hover text-gray fs-14px transition-300ms cp w-100" (click)="clear()">
                         <i class="fa fa-trash cp mx-2"></i> Vaciar carrito

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Cart;
 import com.example.demo.model.Discount;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
@@ -31,6 +32,37 @@ public class ProductServiceImpl implements ProductService{
     public DynamicReport<CustomProduct> search(SearchRequest req) {
         DynamicReport<Product> result = productRepository.search(req);
         List<CustomProduct> list = Utils.convertToCustomProductList(result.getData());
+        setupProductDiscount(list);
+        DynamicReport<CustomProduct> result2 = new DynamicReport<CustomProduct>(list, result.getTotalPages());
+        return result2;
+    }
+
+    @Override
+    public Cart loadGuestCart(List<CustomProduct> req) {
+        List<Product> result = productRepository.findByListId(req);
+        List<CustomProduct> list = Utils.convertToCustomProductList(result);
+        setupProductDiscount(list);
+        recoverGuestCartProductsAmount(req, list);
+        Cart cart = Cart.builder()
+                .products(list)
+                .subtotal(Utils.calculateCartSubtotal(list))
+                .totalAmount(Utils.countCartTotalAmount(list))
+                .build();
+        return cart;
+    }
+
+    private void recoverGuestCartProductsAmount(List<CustomProduct> req, List<CustomProduct> list) {
+        for (CustomProduct reqProduct : req) {
+            for (CustomProduct listProduct : list) {
+                if (reqProduct.getId().equals(listProduct.getId())) {
+                    listProduct.setAmount(reqProduct.getAmount());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setupProductDiscount(List<CustomProduct> list){
         LocalDateTime currentDate = LocalDateTime.now();
 
         for (CustomProduct product : list) {
@@ -46,9 +78,5 @@ public class ProductServiceImpl implements ProductService{
                 product.setDiscount(null);
             }
         }
-
-        DynamicReport<CustomProduct> result2 = new DynamicReport<CustomProduct>(list, result.getTotalPages());
-
-        return result2;
     }
 }

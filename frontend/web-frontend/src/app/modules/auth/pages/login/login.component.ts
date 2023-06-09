@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { AuthService } from 'app/core/services';
-import { DataService } from 'app/core/services/data.service';
+import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
   selector: 'app-login',

@@ -10,9 +10,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart {
+public class CustomerCart {
     private List<CustomProduct> products;
-    // doesn't persist
-    private Integer subtotal;
-    private Integer totalAmount;
 }

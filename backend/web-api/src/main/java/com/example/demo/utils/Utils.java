@@ -3,6 +3,7 @@ package com.example.demo.utils;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.CustomProduct;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Random;
@@ -38,5 +39,23 @@ public class Utils {
                     )
                 )
                 .collect(Collectors.toList());
+    }
+
+    public static BigDecimal calculateCartSubtotal(List<CustomProduct> list) {
+        BigDecimal subtotal = BigDecimal.ZERO;
+        for (CustomProduct product : list) {
+            BigDecimal price = (product.getDiscount() != null) ? product.getDiscount().getPriceWithDiscountApplied() : product.getPrice();
+            BigDecimal amount = new BigDecimal(product.getAmount());
+            BigDecimal productSubtotal = price.multiply(amount);
+            subtotal = subtotal.add(productSubtotal);
+        }
+        return subtotal.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+    public static int countCartTotalAmount(List<CustomProduct> list){
+        int totalAmount = 0;
+        for (CustomProduct product : list) {
+            totalAmount += product.getAmount();
+        }
+        return totalAmount;
     }
 }

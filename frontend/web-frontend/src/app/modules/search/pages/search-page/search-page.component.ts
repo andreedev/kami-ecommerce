@@ -5,6 +5,7 @@ import { AppRoutes, Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { DynamicReport, Product } from 'app/core/models';
 import { AuthService, DataService, ProductService } from 'app/core/services';
+import { SearchDataService } from 'app/core/services/data/search-data.service';
 import { environment } from 'assets/environments/environment';
 
 @Component({
@@ -26,6 +27,7 @@ export class SearchPageComponent {
     private authService: AuthService,
     private productService: ProductService,
     public dataService: DataService,
+    public searchDataService: SearchDataService,
     private activatedRoute: ActivatedRoute,
     private router: Router
   ) { }
@@ -43,7 +45,7 @@ export class SearchPageComponent {
         //   return this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
         // }
         this.queryCopy = query;
-        this.dataService.searchRequest.query = query;
+        this.searchDataService.searchRequest.query = query;
         this.search();
         return
       },
@@ -58,14 +60,14 @@ export class SearchPageComponent {
 
   async search(): Promise<void> {
     this.dataService.enableLoading();
-    this.dataService.searchRequestLoading = true;
-    const response: DynamicReport<Product> | null = await this.productService.search(this.dataService.searchRequest)
-    this.dataService.searchResults = response!;
-    this.pagesUI = Utils.generatePagesUIArray(this.dataService.searchResults!.totalPages, this.dataService.searchRequest.page!);
+    this.searchDataService.searchRequestLoading = true;
+    const response: DynamicReport<Product> | null = await this.productService.search(this.searchDataService.searchRequest)
+    this.searchDataService.searchResults = response!;
+    this.pagesUI = Utils.generatePagesUIArray(this.searchDataService.searchResults!.totalPages, this.searchDataService.searchRequest.page!);
     if (response!.data.length !== 0) {
       // this.syncProductos();
     }
-    this.dataService.searchRequestLoading = false;
+    this.searchDataService.searchRequestLoading = false;
     this.dataService.disableLoading();
   }
 
@@ -75,7 +77,7 @@ export class SearchPageComponent {
   }
 
   clearFilters(): void {
-    this.dataService.searchRequest = {
+    this.searchDataService.searchRequest = {
       query: this.queryCopy,
       onSaleFilter : false,
       page: 1,
@@ -100,8 +102,8 @@ export class SearchPageComponent {
   
 
   updatePage(page: number): void {
-    if (page != this.dataService.searchRequest.page) {
-      this.dataService.searchRequest.page = page;
+    if (page != this.searchDataService.searchRequest.page) {
+      this.searchDataService.searchRequest.page = page;
       this.search();
     }
   }

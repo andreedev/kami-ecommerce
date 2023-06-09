@@ -17,7 +17,7 @@
         <div class="form-check">
             <input class="form-check-input" type="radio" name="marcaProd" id="marcaProdAll"
                 (change)="filtrarMarcaProducto(-1)"
-                [checked]="dataService.searchRequest.filtroIdMarcaProducto == -1">
+                [checked]="searchDataService.searchRequest.filtroIdMarcaProducto == -1">
             <label class="form-check-label" for="marcaProdAll">
                 Todas
             </label>
@@ -27,7 +27,7 @@
             <input class="form-check-input" type="radio" name="marcaProd"
                 id="marcaProd{{ marcaProd.idMarcaProducto }}"
                 (change)="filtrarMarcaProducto(marcaProd.idMarcaProducto)"
-                [checked]="dataService.searchRequest.filtroIdMarcaProducto == marcaProd.idMarcaProducto">
+                [checked]="searchDataService.searchRequest.filtroIdMarcaProducto == marcaProd.idMarcaProducto">
             <label class="form-check-label" for="marcaProd{{ marcaProd.idMarcaProducto }}">
                 {{ marcaProd.nombreMarcaProducto }}
             </label>
@@ -38,12 +38,12 @@
         <span class="fw-bold">Price</span>
     </div>
 
-    <input [(ngModel)]="dataService.searchRequest.maxPriceFilter"
+    <input [(ngModel)]="searchDataService.searchRequest.maxPriceFilter"
         [min]="constants.PRODUCT_MIN_PRICE"
         [max]="constants.PRODUCT_MAX_PRICE" step="10" type="range" class="form-range">
     <span class="text-center">
         From S/{{ constants.PRODUCT_MIN_PRICE }}
-        to S/{{ dataService.searchRequest.maxPriceFilter }}
+        to S/{{ searchDataService.searchRequest.maxPriceFilter }}
     </span>
 
     <!-- <div class="mt-4">
@@ -55,7 +55,7 @@
             <div class="form-check">
                 <input class="form-check-input" type="radio" name="categoria" id="categoriaAll"
                     (change)="filtrarPorCategoria(-1)"
-                    [checked]="dataService.searchRequest.filtroIdCategoria == -1">
+                    [checked]="searchDataService.searchRequest.filtroIdCategoria == -1">
                 <label class="form-check-label" for="categoriaAll">
                     Todas
                 </label>
@@ -63,7 +63,7 @@
             <div class="form-check" *ngFor="let cat of dataService.resourcesClasificaciones[0].categorias">
                 <input class="form-check-input" type="radio" name="categoria" value="idCategoria"
                     id="cat{{ cat.idCategoria }}" (change)="filtrarPorCategoria(cat.idCategoria)"
-                    [checked]="dataService.searchRequest.filtroIdCategoria == cat.idCategoria">
+                    [checked]="searchDataService.searchRequest.filtroIdCategoria == cat.idCategoria">
                 <label class="form-check-label" for="cat{{ cat.idCategoria }}">
                     {{ cat.nombreCategoria }}
                 </label>
@@ -77,7 +77,7 @@
         <span class="fw-bold">Offers</span>
     </div>
     <div class="form-check">
-        <input [(ngModel)]="dataService.searchRequest.onSaleFilter" class="form-check-input" type="checkbox"
+        <input [(ngModel)]="searchDataService.searchRequest.onSaleFilter" class="form-check-input" type="checkbox"
             value="true" id="filtroOferta">
         <label class="form-check-label" for="filtroOferta">
             Discounts
@@ -88,7 +88,7 @@
         <span class="fw-bold">Stock</span>
     </div>
     <div class="form-check">
-        <input [(ngModel)]="dataService.searchRequest.inStockFilter" class="form-check-input"
+        <input [(ngModel)]="searchDataService.searchRequest.inStockFilter" class="form-check-input"
             type="checkbox" id="ofertas">
         <label class="form-check-label" for="ofertas">
             Con stock

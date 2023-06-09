@@ -1,4 +1,4 @@
-<ng-container *ngIf="dataService.searchRequestLoading; else content">
+<ng-container *ngIf="searchDataService.searchRequestLoading; else content">
     <div class="h-100vh"></div>
 </ng-container>
 
@@ -33,7 +33,7 @@
                         <div class="d-flex flex-row justify-content-center align-items-center">
                             <span class="fs-12px p-2 white-space-nowrap">Ordenar por</span>
                             <select class="form-select form-select-sm orden w-auto"
-                                [(ngModel)]="dataService.searchRequest.orderFilter" (change)="search()">
+                                [(ngModel)]="searchDataService.searchRequest.orderFilter" (change)="search()">
                                 <option value="1">Default</option>
                                 <option value="2">Lowest price</option>
                                 <option value="3">Highest price</option>
@@ -64,8 +64,8 @@
 
                 <!-- Search results -->
                 <div class="row p-2 bg-light mx-0 mx-md-3">
-                    <ng-container *ngIf="this.dataService.searchResults!.data.length!==0; else emptyProducts">
-                        <div *ngFor="let product of this.dataService.searchResults!.data"
+                    <ng-container *ngIf="this.searchDataService.searchResults!.data.length!==0; else emptyProducts">
+                        <div *ngFor="let product of this.searchDataService.searchResults!.data"
                             [ngClass]="viewDesign=='list' ? 'col-12' : 'col-6 col-sm-4 col-lg-3'"
                             class="mb-3 px-1 px-sm-2">
 
@@ -192,9 +192,9 @@
                     <div class="col-auto">
                         <ul class="pagination pagination-sm">
                             <li class="page-item">
-                                <ng-container *ngIf="dataService.searchRequest.page!-1 > 0; else previusPageDisabled">
+                                <ng-container *ngIf="searchDataService.searchRequest.page!-1 > 0; else previusPageDisabled">
                                     <span class="page-link cp"
-                                        (click)="updatePage(dataService.searchRequest.page!-1)"><i
+                                        (click)="updatePage(searchDataService.searchRequest.page!-1)"><i
                                             class="fas fa-angle-left"></i></span>
                                 </ng-container>
                                 <ng-template #previusPageDisabled>
@@ -202,7 +202,7 @@
                                 </ng-template>
                             </li>
                             <li *ngFor="let i of pagesUI" class="page-item"
-                                [ngClass]="{'active': i==dataService.searchRequest.page}">
+                                [ngClass]="{'active': i==searchDataService.searchRequest.page}">
                                 <ng-container *ngIf="i !== '-' else noPage">
                                     <ng-container *ngIf="i !== '...' else fillerPage">
                                         <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
@@ -218,9 +218,9 @@
 
                             <li class="page-item">
                                 <!-- <ng-container
-                                    *ngIf="dataService.searchRequest.page < dataService.searchRequest?.data.length; else nextPageDisabled">
+                                    *ngIf="searchDataService.searchRequest.page < searchDataService.searchRequest?.data.length; else nextPageDisabled">
                                     <span class="page-link cp"
-                                        (click)="updatePage(dataService.searchRequest.page+1)"><i
+                                        (click)="updatePage(searchDataService.searchRequest.page+1)"><i
                                             class="fas fa-angle-right"></i></span>
                                 </ng-container> -->
                                 <ng-template #nextPageDisabled>

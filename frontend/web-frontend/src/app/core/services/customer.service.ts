@@ -6,7 +6,7 @@ import { Utils } from '../helpers/utils';
 import { Employee } from '../models';
 import { DynamicReport } from '../models/rest/dynamic-report';
 import { AuthService } from './auth.service';
-import { DataService } from './data.service';
+import { DataService } from './data/data.service';
 
 @Injectable({
   providedIn: 'root'

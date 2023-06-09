@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { CartDataService, SearchDataService } from 'app/core/services';
 
-import { DataService } from 'app/core/services/data.service';
+import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -10,6 +11,8 @@ export class MainLayoutComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
+    private cartDataService: CartDataService,
+    private searchDataService: SearchDataService,
   ) { }
 
   ngOnInit(): void {
@@ -22,5 +25,7 @@ export class MainLayoutComponent implements OnInit {
 
   debug(): void {
     console.log(this.dataService);
+    console.log(this.cartDataService);
+    console.log(this.searchDataService);
   }
 }

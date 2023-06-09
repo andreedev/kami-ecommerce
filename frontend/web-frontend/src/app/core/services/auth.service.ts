@@ -7,7 +7,7 @@ import { Constants } from '../constants/constants';
 import { Utils } from '../helpers/utils';
 import { Employee } from '../models';
 import { LoginResponse } from '../models/rest/login-response';
-import { DataService } from './data.service';
+import { DataService } from './data/data.service';
 
 @Injectable({
   providedIn: 'root'

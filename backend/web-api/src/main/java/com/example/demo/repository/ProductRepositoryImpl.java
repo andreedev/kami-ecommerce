@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.model.Customer;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
+import com.example.demo.model.validation.CustomProduct;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.utils.Enums;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -108,4 +110,16 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .totalPages(totalPages)
                 .build();
     }
+
+    @Override
+    public List<Product> findByListId(List<CustomProduct> req) {
+        List<String> productIds = req.stream()
+                .map(CustomProduct::getId)
+                .collect(Collectors.toList());
+
+        Query query = Query.query(Criteria.where("id").in(productIds));
+        List<Product> productList = mongoTemplate.find(query, Product.class, "products");
+        return productList;
+    }
+
 }

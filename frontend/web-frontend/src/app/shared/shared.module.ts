@@ -16,11 +16,13 @@ import { TableModule } from 'primeng/table';
 import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ProductModalComponent } from './components/product-modal/product-modal.component';
 
 @NgModule({
   //Components
   declarations: [
     ...index.components,
+    ProductModalComponent,
   ],
 
   //Modules imports

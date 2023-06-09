@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Constants } from 'app/core/constants';
 import { DataService } from 'app/core/services';
+import { SearchDataService } from 'app/core/services/data/search-data.service';
 
 @Component({
   selector: 'search-filters',
@@ -12,6 +13,7 @@ export class SearchFiltersComponent {
   @Output() applyFiltersEventEmitter = new EventEmitter();
 
   constructor(
-    public dataService: DataService
+    public dataService: DataService,
+    public searchDataService: SearchDataService,
   ) { }
 }

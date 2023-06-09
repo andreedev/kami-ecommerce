@@ -43,7 +43,7 @@ public class Customer {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
-    private Cart cart;
+    private CustomerCart cart;
 
     public Customer(String name, String username, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
         this.name = name;
