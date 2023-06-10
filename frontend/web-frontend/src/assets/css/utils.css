@@ -2811,6 +2811,18 @@ color: var(--gray-70) !important;
     background-color: transparent !important;
 }
 
+.bg-black-transparent-10{
+    background-color:  rgba(0, 0, 0, 0.1);
+}
+
+.bg-black-transparent-20{
+    background-color:  rgba(0, 0, 0, 0.2);
+}
+
+.bg-black-transparent-30{
+    background-color:  rgba(0, 0, 0, 0.3);
+}
+
 /*overflows*/
 .overflow-auto{
     overflow: auto !important;

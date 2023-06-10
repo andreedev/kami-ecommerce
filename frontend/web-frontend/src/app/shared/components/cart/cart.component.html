@@ -13,7 +13,7 @@
                         </ng-container>
                     </span>
                 </div>
-                <i class="fa-regular fa-circl-xmark cursor-pointer fs-20px"
+                <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px text-gray-70"
                     (click)="cartDataService.displayCart = false"></i>
             </div>
         </div>
@@ -44,7 +44,7 @@
                         <span class="fw-bold">Ir a pagar</span>
                         <span>S/{{ cartDataService.cart.subtotal }}</span>
                     </span>
-                    <span class="mt-2 mt-sm-3 btn bg-gray-10-with-hover text-gray fs-14px transition-300ms cp w-100" (click)="clear()">
+                    <span class="mt-2 mt-sm-3 btn bg-gray-10-with-hover text-gray fs-14px transition-300ms cp w-100 " (click)="clear()">
                         <i class="fa fa-trash cp mx-2"></i> Vaciar carrito
                     </span>
                 </div>

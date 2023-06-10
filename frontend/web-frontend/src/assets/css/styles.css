@@ -201,6 +201,14 @@ hr {
     padding: 0px !important;
 }
 
+.p-dialog .p-dialog-header {
+    padding: 0.5rem;
+}
+
+.p-sidebar .p-sidebar-footer {
+    padding: 0;
+}
+
 .orden {
     width: 143px;
 }

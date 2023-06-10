@@ -76,7 +76,7 @@
                                         <div class="d-flex container-img-product-wts-lista">
                                             <ng-container *ngIf="product.mediaUrls; else sinImagen">
                                                 <img [src]="product.mediaUrls[0]" class="cp img-fluid mx-auto"
-                                                    (click)="productDetails(product.id)">
+                                                    (click)="productDetails(product)">
                                             </ng-container>
                                         </div>
                                     </div> -->
@@ -86,7 +86,7 @@
                                                 {{ product.brand }}
                                             </span>
                                             <span class="nombre-product-wts-lista cp"
-                                                (click)="productDetails(product.id)">{{ product.name }}</span>
+                                                (click)="productDetails(product)">{{ product.name }}</span>
                                             <span class="codigo-producto">Sku: {{ product.sku }}</span>
                                             <span class="fs-12px">
                                                 Stock:

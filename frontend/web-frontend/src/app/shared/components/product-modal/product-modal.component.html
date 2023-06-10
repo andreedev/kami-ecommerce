@@ -1,1 +1,27 @@
-<p>product-modal works!</p>
+<ng-container *ngIf="dataService.screenWidth>700; else fullScreen">
+    <p-dialog [(visible)]="productModalDataService.display" [modal]="true" [style]="{ width: '600px' }" [draggable]="false" [resizable]="false" [dismissableMask]="true" [maskStyleClass]="'bg-black-transparent-20'" contentStyleClass="p-0" >
+        <p class="m-0">
+            <ng-container *ngTemplateOutlet="productCardTemplate"></ng-container>
+        </p>
+    </p-dialog>
+</ng-container>
+
+<ng-template #fullScreen>
+    <p-sidebar [(visible)]="productModalDataService.display" [fullScreen]="true" [showCloseIcon]="false" styleClass="p-0"  [blockScroll]="true">
+        <div class="d-flex flex-column justify-content-center">
+            <div class="border-bottom p-2">
+                <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
+                    <div class="invisible">-</div>
+                    <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px text-gray-70"
+                        (click)="productModalDataService.display = false"></i>
+                </div>
+            </div>
+            <ng-container *ngTemplateOutlet="productCardTemplate"></ng-container>
+        </div>
+    </p-sidebar>
+</ng-template>
+
+<ng-template #productCardTemplate>
+    <!-- Render your "product-card" component here -->
+    <product-card *ngIf="productModalDataService.display" [product]="productModalDataService.productModal!" type="product-page"></product-card>
+</ng-template>

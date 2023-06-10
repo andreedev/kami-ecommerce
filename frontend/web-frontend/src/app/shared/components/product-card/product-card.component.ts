@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { Constants } from 'app/core/constants';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models';
 import { DataService } from 'app/core/services';
 import { CartDataService } from 'app/core/services/data/cart-data.service';
+import { ProductModalDataService } from 'app/core/services/data/product-modal-data.service';
 import { SearchDataService } from 'app/core/services/data/search-data.service';
 
 @Component({
@@ -18,26 +18,26 @@ export class ProductCardComponent implements OnChanges {
   constructor(
     public dataService: DataService,
     public cartDataService: CartDataService,
-    public searchDataService: SearchDataService
+    public searchDataService: SearchDataService,
+    public productModalDataService: ProductModalDataService,
   ) { }
 
-  ngOnInit(): void {
-    const loadedProduct: Product = Utils.getByAttr(this.cartDataService.cart.products, "id", this.product.id)
-    if (loadedProduct) this.product.amount = loadedProduct.amount
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['product']) {
-      this.product = changes['product'].currentValue;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['product'] && !changes['product'].firstChange) {
+      // if (Utils.validatePrice(this.product.price!)){
+        const loadedProduct: Product = Utils.getByAttr(this.cartDataService.cart.products, "id", this.product.id)
+        if (loadedProduct) this.product.amount = loadedProduct.amount
+      // }
     }
   }
 
-  updateProduct() {
-    // this.productChange.emit(this.product);
+  ngOnInit(): void {
+    
   }
 
-  productDetails(id: any): void {
-    //open product details modal
+  productDetails(product: Product): void {
+    this.productModalDataService.display = true
+    this.productModalDataService.productModal = product
   }
 
   addToCart(product: Product): void {
@@ -94,4 +94,6 @@ export class ProductCardComponent implements OnChanges {
     subtotal = Math.round(subtotal * 100) / 100;
     this.cartDataService.cart.subtotal = subtotal
   }
+
+  
 }

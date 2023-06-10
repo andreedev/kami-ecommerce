@@ -21,8 +21,6 @@ export class DataService {
 
   loggedInCustomer: Customer | null = null;
 
-  selectedProduct: Product | undefined;
-
   constructor(
     private cookieService: CookieService,
   ) {

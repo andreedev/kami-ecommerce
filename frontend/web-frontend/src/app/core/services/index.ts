@@ -1,3 +1,4 @@
+export { ProductModalDataService } from './data/product-modal-data.service';
 export { AuthService } from './auth.service';
 export { CustomerService } from './customer.service';
 export { CartDataService } from './data/cart-data.service';
