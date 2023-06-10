@@ -93,8 +93,12 @@
     --color-1: #FECCCB;
 }
 
-.bg-color-1 {
+.bg-color-1, .bg-color-1-with-hover {
     background-color: #FECCCB;
+}
+
+.bg-color-1-with-hover:hover {
+    background-color: #e2b4b3;
 }
 
 hr {
@@ -209,6 +213,10 @@ hr {
     padding: 0;
 }
 
+.p-galleria .p-galleria-indicators .p-galleria-indicator button {
+    border-radius: 8px;
+}
+
 .orden {
     width: 143px;
 }
@@ -306,6 +314,18 @@ hr {
 
 .h-max-content {
     height: max-content !important;
+}
+
+.product-operation-btn-2 {
+    text-decoration: none;
+    background-color: #fff;
+    color: #222;
+    box-shadow: 1px 1px 10px 3px rgba(0, 0, 0, 0.11);
+    text-align: center;
+    padding: 8px 10px;
+    transition: all 300ms;
+    border-radius: 10px;
+    width: 100%;
 }
 
 .product-operation-btn {

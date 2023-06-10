@@ -16,6 +16,7 @@ import { TableModule } from 'primeng/table';
 import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { GalleriaModule } from 'primeng/galleria';
 
 @NgModule({
   //Components
@@ -41,6 +42,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
     DialogModule,
     ChipsModule,
     OverlayPanelModule,
+    GalleriaModule,
 
     SharedRoutingModule
   ],
@@ -62,7 +64,8 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
     ScrollPanelModule,
     DialogModule,
     ChipsModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    GalleriaModule
   ]
 })
 export class SharedModule { }

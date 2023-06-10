@@ -15,6 +15,15 @@ export class ProductCardComponent implements OnChanges {
   @Input() product!: Product;
   @Input() type!: string;
 
+  images: any[] = [];
+
+  responsiveOptions: any[] = [
+    {
+          breakpoint: '768px',
+          numVisible: 5
+      },
+  ];
+
   constructor(
     public dataService: DataService,
     public cartDataService: CartDataService,
@@ -23,11 +32,12 @@ export class ProductCardComponent implements OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['product'] && !changes['product'].firstChange) {
-      // if (Utils.validatePrice(this.product.price!)){
+    if (changes['product']) {
         const loadedProduct: Product = Utils.getByAttr(this.cartDataService.cart.products, "id", this.product.id)
         if (loadedProduct) this.product.amount = loadedProduct.amount
-      // }
+        this.product.mediaUrls!.forEach((m)=>{
+          this.images.push({src:m})
+        })
     }
   }
 

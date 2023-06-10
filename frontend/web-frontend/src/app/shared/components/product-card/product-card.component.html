@@ -136,16 +136,29 @@
 <ng-container *ngIf="type==='product-page'">
     <div class="py-3 px-4">
         <div class="d-flex justify-content-center">
-            <ng-container *ngIf="product.mediaUrls; else sinImagen">
-                <img [src]="product.mediaUrls[0]" class="my-3 cp my-auto w-auto h-200px" (click)="productDetails(product)">
+            <ng-container *ngIf="images; else sinImagen">
+                <p-galleria [value]="images" [showIndicators]="true" [showThumbnails]="false" 
+                [showItemNavigators]="dataService.screenWidth>=700?true:false" [showItemNavigatorsOnHover]="true" 
+                [responsiveOptions]="responsiveOptions" [changeItemOnIndicatorHover]="true" [containerStyle]="{ 'width': 'auto' }"
+                [circular]="true">
+                    <ng-template pTemplate="item" let-item>
+                        <img [src]="item.src" class="w-100 max-h-300px d-block" />
+                    </ng-template>
+                    <ng-template pTemplate="thumbnail" let-item>
+                        <div class="grid grid-nogutter justify-content-center">
+                            <img [src]="item.src" class="d-block w-60px" />
+                        </div>
+                    </ng-template>
+                </p-galleria>
+                <!-- <img [src]="product.mediaUrls[0]" class="my-3 cp my-auto w-auto h-200px"> -->
             </ng-container>
         </div>
         <strong class="fs-12px text-uppercase text-secondary">
             {{ product.brand }}
         </strong>
         <div class="fs-20px fw-bold mb-1 cp" (click)="productDetails(product)">{{ product.name }}</div>
-        <span class="codigo-product fs-12px">Sku: {{ product.sku }}</span>
-        <span class="fs-12px">
+        <div class="codigo-product fs-16px">Sku: {{ product.sku }}</div>
+        <span class="fs-16px">
             Stock:
             <ng-container *ngIf="product.stock! < 1; else inStock">
                 <span class="text-red">
@@ -161,52 +174,77 @@
         <div class="h-55px">
             <ng-container *ngIf="product.discount; else normal">
                 <div class="d-flex flex-row align-items-center">
-                    <div class="fs-18px fw-bold text-red">
+                    <div class="fs-22px fw-bold text-red">
                         S/{{ product.discount.priceWithDiscountApplied}}
                     </div>
                     <div class="badge bg-danger fs-12px w-40px bg-red text-wrap h-fit-content">
                         -{{ product.discount.percentage }}%
                     </div>
                 </div>
-                <span class="fs-12px">Normal S/{{ product.price }}</span>
+                <span class="fs-14px">Normal S/{{ product.price }}</span>
             </ng-container>
             <ng-template #normal>
-                <div class="fs-18px fw-bold">S/{{ product.price }}</div>
-                <div class="fs-12px invisible">-</div>
+                <div class="fs-22px fw-bold">S/{{ product.price }}</div>
+                <div class="fs-14px invisible">-</div>
             </ng-template>
         </div>
-        
-        <ng-container *ngIf="product.stock! > 0">
-            <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
-                <a class="product-operation-btn align-self-center">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <ng-container *ngIf="product.amount==1; else decreaseProduct">
-                            <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
-                        </ng-container>
-                        <ng-template #decreaseProduct>
-                            <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
-                        </ng-template>
-                        <span>{{ product.amount }}</span>
-                        <i 
-                            *ngIf="product.amount! < product.stock!; else outOfStock"
-                            class="fa fa-plus cp mx-2" 
-                            (click)="increaseQuantity(product.id!)"
-                        ></i>
-                        <ng-template #outOfStock>
-                            <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/out-of-stock.png" class="w-24px">
-                        </ng-template>
-                    </div>
-                </a>
+        <hr class="my-3">
+        <div class="fs-18px mb-3">
+            <span>Especificaciones del producto</span>
+            <ul class="list-group list-group-flush fs-14px" *ngFor="let item of product.specifications">
+                <li class="list-group-item"> {{ item }}</li>
+              </ul>
+            <ng-container >
+                <div class="d-flex">
+                   
+                </div>
             </ng-container>
-            <ng-template #neverAddedToCart>
-                <a class="btn bg-green-with-hover text-white" (click)="addToCart(product)">
+        </div>
+        <div class="row m-0 p-0 justify-content-center mt-3">
+            <div class="col-6 px-1 px-sm-2">
+                <ng-container *ngIf="product.stock! > 0">
+                    <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
+                        <a class="product-operation-btn-2 align-self-center d-inline-block">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <ng-container *ngIf="product.amount==1; else decreaseProduct">
+                                    <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
+                                </ng-container>
+                                <ng-template #decreaseProduct>
+                                    <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
+                                </ng-template>
+                                <span>{{ product.amount }}</span>
+                                <i 
+                                    *ngIf="product.amount! < product.stock!; else outOfStock"
+                                    class="fa fa-plus cp mx-2" 
+                                    (click)="increaseQuantity(product.id!)"
+                                ></i>
+                                <ng-template #outOfStock>
+                                    <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/out-of-stock.png" class="w-24px">
+                                </ng-template>
+                            </div>
+                        </a>
+                    </ng-container>
+                    <ng-template #neverAddedToCart>
+                        <a class="btn bg-green-with-hover text-white w-100" (click)="addToCart(product)">
+                            <div class="d-inline-flex align-items-center">
+                                <i class="fas fa-cart-plus fs-18px"></i>
+                                <span class="d-block ms-2 text-agregar">Agregar</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </ng-container>
+            </div>
+            <div class="col-6 px-1 px-sm-2">
+                <a class="btn bg-color-1-with-hover text-white w-100" (click)="cartDataService.displayCart = false">
                     <div class="d-inline-flex align-items-center">
-                        <i class="fas fa-cart-plus fs-18px"></i>
-                        <span class="d-block ms-2 text-agregar">Agregar</span>
+                        <i class="fa-solid fa-check fs-18px"></i>
+                        <span class="d-block ms-2 text-agregar">Confirmar</span>
                     </div>
                 </a>
-            </ng-template>
-        </ng-container>
+            </div>
+        </div>
+        
+        
     </div>
 </ng-container>
 
