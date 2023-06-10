@@ -193,12 +193,7 @@
             <span>Especificaciones del producto</span>
             <ul class="list-group list-group-flush fs-14px" *ngFor="let item of product.specifications">
                 <li class="list-group-item"> {{ item }}</li>
-              </ul>
-            <ng-container >
-                <div class="d-flex">
-                   
-                </div>
-            </ng-container>
+            </ul>
         </div>
         <div class="row m-0 p-0 justify-content-center mt-3">
             <div class="col-6 px-1 px-sm-2">
@@ -235,7 +230,7 @@
                 </ng-container>
             </div>
             <div class="col-6 px-1 px-sm-2">
-                <a class="btn bg-color-1-with-hover text-white w-100" (click)="cartDataService.displayCart = false">
+                <a class="btn bg-color-1-with-hover text-white w-100" (click)="productModalDataService.display = false">
                     <div class="d-inline-flex align-items-center">
                         <i class="fa-solid fa-check fs-18px"></i>
                         <span class="d-block ms-2 text-agregar">Confirmar</span>

@@ -2,14 +2,12 @@ package com.example.demo.model.validation;
 
 import com.example.demo.utils.validators.AllowedSearchRequestOrderFilter;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Builder
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor

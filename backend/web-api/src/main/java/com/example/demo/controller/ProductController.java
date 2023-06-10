@@ -38,6 +38,11 @@ public class ProductController {
         return productService.loadGuestCart(req);
     }
 
+    @GetMapping("featured")
+    public List<CustomProduct> featured(){
+        return productService.getFeaturedProducts();
+    }
+
     /*@GetMapping("getSearchRequestOrderFilter")
     public List<EnumResponse> getSearchRequestOrderFilter() {
         List<EnumResponse> response = new ArrayList<>();

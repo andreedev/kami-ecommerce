@@ -51,6 +51,29 @@ public class ProductServiceImpl implements ProductService{
         return cart;
     }
 
+    @Override
+    public List<CustomProduct> getFeaturedProducts() {
+        SearchRequest req = SearchRequest.builder()
+                .query("")
+                .orderFilter(Enums.SearchRequestOrderFilter.RECOMMENDED.getCode())
+                .onSaleFilter(true)
+                .page(1)
+                .pageSize(8)
+                .build();
+        List<CustomProduct> featuredProducts = Utils.convertToCustomProductList(productRepository.search(req).getData());
+        if (featuredProducts.size() < 8){
+            int missing = 8 - featuredProducts.size();
+            SearchRequest fallbackReq  = SearchRequest.builder()
+                    .query("")
+                    .orderFilter(Enums.SearchRequestOrderFilter.RECOMMENDED.getCode())
+                    .page(1)
+                    .pageSize(missing)
+                    .build();
+            featuredProducts.addAll(Utils.convertToCustomProductList(productRepository.search(fallbackReq).getData()));
+        }
+        return featuredProducts;
+    }
+
     private void recoverGuestCartProductsAmount(List<CustomProduct> req, List<CustomProduct> list) {
         for (CustomProduct reqProduct : req) {
             for (CustomProduct listProduct : list) {

@@ -12,4 +12,5 @@ import java.util.List;
 public interface ProductService {
     DynamicReport<CustomProduct> search(SearchRequest req);
     Cart loadGuestCart(List<CustomProduct> req);
+    List<CustomProduct> getFeaturedProducts();
 }

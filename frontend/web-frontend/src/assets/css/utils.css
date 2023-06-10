@@ -517,10 +517,6 @@ img {
     color: var(--red) !important;
 }
 
-.text-red:hover {	
-    color: var(--red-hover) !important;	
-}
-
 .text-red-30 {
     color: var(--red-30) !important;
 }
