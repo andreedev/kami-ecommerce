@@ -44,4 +44,15 @@ export class ProductService {
     }
   }
 
+  async getFeaturedProducts(): Promise<Product[] | null> {
+    try {
+      const response: any = await firstValueFrom(
+        this.http.get(Utils.getURL(Endpoints.FEATURED))
+      );
+      return response;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
 }

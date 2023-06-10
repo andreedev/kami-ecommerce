@@ -17,6 +17,8 @@ import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { GalleriaModule } from 'primeng/galleria';
+import { CarouselModule } from 'primeng/carousel';
+
 
 @NgModule({
   //Components
@@ -43,8 +45,9 @@ import { GalleriaModule } from 'primeng/galleria';
     ChipsModule,
     OverlayPanelModule,
     GalleriaModule,
+    CarouselModule
 
-    SharedRoutingModule
+    ,SharedRoutingModule
   ],
 
   //Components and modules exports
@@ -65,7 +68,8 @@ import { GalleriaModule } from 'primeng/galleria';
     DialogModule,
     ChipsModule,
     OverlayPanelModule,
-    GalleriaModule
+    GalleriaModule,
+    CarouselModule
   ]
 })
 export class SharedModule { }

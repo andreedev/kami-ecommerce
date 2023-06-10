@@ -1,5 +1,41 @@
 <main-banner></main-banner>
 
-<div class="container-fluid px-4">
-    <p class="fs-5">Novedades</p>
+<div class="container-fluid container-lg px-4 mb-3">
+    <p class="fs-3">Novedades</p>
+    <div class="row p-2 mx-0 mx-md-3">
+        <ng-container *ngIf="!loadingFeaturesProducts; else skeleton">
+            <!-- <p-carousel [value]="featuredProducts" [numVisible]="5" [circular]="true" [numScroll]="1" [responsiveOptions]="responsiveOptions" contentClass="p-3">
+                <ng-template let-product pTemplate="item">
+                    <product-card class="d-flex flex-column p-3"  [product]="product" [type]="'product-grid-card'"></product-card>
+                </ng-template>
+            </p-carousel>
+            <p-carousel [value]="[0, 1, 2, 3, 4]" [numVisible]="5" [circular]="true" [numScroll]="1" [responsiveOptions]="responsiveOptions" contentClass="p-3">
+                <ng-template let-product pTemplate="item">
+                    <p class="placeholder-glow p-3">
+                        <span class="placeholder placeholder-lg col-12 mb-2 h-100px"></span>
+                        <span class="placeholder placeholder-lg col-12 mb-2"></span>
+                        <span class="placeholder placeholder-lg col-12 mb-2"></span>
+                        <span class="placeholder placeholder-lg col-12 mb-2"></span>
+                    </p>  
+                </ng-template>
+            </p-carousel> -->
+            <div class="row p-2 bg-light mx-0 mx-md-3">
+                <div *ngFor="let product of featuredProducts" class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2" >
+                    <product-card class="d-flex flex-column"  [product]="product" [type]="'product-grid-card'"></product-card>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #skeleton>
+            <ng-container *ngFor="let _ of [1, 2, 3, 4, 5,6]">
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2">
+                        <p class="placeholder-glow">
+                            <span class="placeholder placeholder-lg col-12 mb-2 h-100px"></span>
+                            <span class="placeholder placeholder-lg col-12 mb-2"></span>
+                            <span class="placeholder placeholder-lg col-12 mb-2"></span>
+                            <span class="placeholder placeholder-lg col-12 mb-2"></span>
+                        </p>  
+                    </div>
+            </ng-container>
+        </ng-template>
+    </div>
 </div>

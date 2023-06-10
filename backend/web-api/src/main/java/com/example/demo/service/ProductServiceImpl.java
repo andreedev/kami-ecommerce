@@ -71,6 +71,7 @@ public class ProductServiceImpl implements ProductService{
                     .build();
             featuredProducts.addAll(Utils.convertToCustomProductList(productRepository.search(fallbackReq).getData()));
         }
+        setupProductDiscount(featuredProducts);
         return featuredProducts;
     }
 

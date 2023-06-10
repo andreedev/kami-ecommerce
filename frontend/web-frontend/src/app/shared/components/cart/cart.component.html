@@ -35,7 +35,7 @@
             <div class="overflow-y-auto">
                 <ng-container *ngIf="!cartDataService.loadingCart">
                     <ng-container *ngFor="let product of cartDataService.cart.products">
-                        <product-card [product]="product" [type]="'cart-product-list-card'"></product-card>
+                        <product-card [displayCartInteractionBtn]="true" [product]="product" [type]="'cart-product-list-card'"></product-card>
                     </ng-container>
                 </ng-container>
                 <hr>

@@ -23,5 +23,5 @@
 
 <ng-template #productCardTemplate>
     <!-- Render your "product-card" component here -->
-    <product-card *ngIf="productModalDataService.display" [product]="productModalDataService.productModal!" type="product-page"></product-card>
+    <product-card [displayCartInteractionBtn]="true" class="d-flex flex-column" *ngIf="productModalDataService.display" [product]="productModalDataService.productModal!" type="product-page"></product-card>
 </ng-template>

@@ -40,37 +40,40 @@
         </ng-template>
     </div>
     
-    <ng-container *ngIf="product.stock! > 0">
-        <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
-            <a class="product-operation-btn align-self-center">
-                <div class="d-flex align-items-center justify-content-between">
-                    <ng-container *ngIf="product.amount==1; else decreaseProduct">
-                        <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
-                    </ng-container>
-                    <ng-template #decreaseProduct>
-                        <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
-                    </ng-template>
-                    <span>{{ product.amount }}</span>
-                    <i 
-                        *ngIf="product.amount! < product.stock!; else outOfStock"
-                        class="fa fa-plus cp mx-2" 
-                        (click)="increaseQuantity(product.id!)"
-                    ></i>
-                    <ng-template #outOfStock>
-                        <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/out-of-stock.png" class="w-24px">
-                    </ng-template>
-                </div>
-            </a>
+    <ng-container *ngIf="displayCartInteractionBtn">
+        <ng-container *ngIf="product.stock! > 0">
+            <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
+                <a class="product-operation-btn align-self-center">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <ng-container *ngIf="product.amount==1; else decreaseProduct">
+                            <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
+                        </ng-container>
+                        <ng-template #decreaseProduct>
+                            <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
+                        </ng-template>
+                        <span>{{ product.amount }}</span>
+                        <i 
+                            *ngIf="product.amount! < product.stock!; else outOfStock"
+                            class="fa fa-plus cp mx-2" 
+                            (click)="increaseQuantity(product.id!)"
+                        ></i>
+                        <ng-template #outOfStock>
+                            <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/out-of-stock.png" class="w-24px">
+                        </ng-template>
+                    </div>
+                </a>
+            </ng-container>
+            <ng-template #neverAddedToCart>
+                <a class="btn bg-green-with-hover text-white" (click)="addToCart(product)">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="fas fa-cart-plus fs-18px"></i>
+                        <span class="d-none d-lg-block ms-2 text-agregar">Agregar</span>
+                    </div>
+                </a>
+            </ng-template>
         </ng-container>
-        <ng-template #neverAddedToCart>
-            <a class="btn bg-green-with-hover text-white" (click)="addToCart(product)">
-                <div class="d-inline-flex align-items-center">
-                    <i class="fas fa-cart-plus fs-18px"></i>
-                    <span class="d-none d-lg-block ms-2 text-agregar">Agregar</span>
-                </div>
-            </a>
-        </ng-template>
     </ng-container>
+    
     
 </ng-container>
 

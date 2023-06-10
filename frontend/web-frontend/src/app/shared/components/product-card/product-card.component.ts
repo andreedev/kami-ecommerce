@@ -14,6 +14,7 @@ import { SearchDataService } from 'app/core/services/data/search-data.service';
 export class ProductCardComponent implements OnChanges {
   @Input() product!: Product;
   @Input() type!: string;
+  @Input() displayCartInteractionBtn: boolean = false;
 
   images: any[] = [];
 
