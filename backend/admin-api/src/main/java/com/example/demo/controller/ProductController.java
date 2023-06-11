@@ -27,7 +27,7 @@ public class ProductController {
     }
 
     @PostMapping("report")
-    public DynamicReport<Product> getCustomerReport(@Valid @RequestBody ProductReportRequest req) throws ParseException {
+    public DynamicReport<Product> report(@Valid @RequestBody ProductReportRequest req) throws ParseException {
         log.info("report");
         return productService.getProductReport(req);
     }

@@ -1,4 +1,5 @@
 export { Product } from './product';
+export { Category } from './category';
 export { Address } from './address';
 export { Customer } from './customer';
 export { Discount } from './discount';

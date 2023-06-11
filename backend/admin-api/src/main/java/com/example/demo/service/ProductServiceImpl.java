@@ -1,8 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Category;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
+import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,8 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Integer createProduct(Product product) {
-        return productRepository.createProduct(product);
+        Product result = productRepository.createProduct(product);
+        return 1;
     }
 
     @Override

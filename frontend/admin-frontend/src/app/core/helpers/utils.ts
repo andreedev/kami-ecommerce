@@ -93,6 +93,15 @@ export class Utils {
         return arr;
     }
 
+    static updateByAttr(arr: any[], attr: string, value: any, updatedAttr: string, updatedValue: any): any[] {
+        return arr.map((element) => {
+            if (element && element.hasOwnProperty(attr) && element[attr] === value) {
+                return { ...element, [updatedAttr]: updatedValue };
+            }
+            return element;
+        });
+    }
+
     static removeBy4Attributes(arrayX: any[], atributos: any[], values: any[]) {
         let i = arrayX.length;
         while (i--) {
@@ -157,4 +166,35 @@ export class Utils {
     static parseNumberTo2Decimals(n: number): number {
         return parseFloat(parseFloat(`${n}`).toFixed(2))
     }
+
+    static loadFromLocalStorage(name: string): any {
+        const storedCart = localStorage.getItem(name);
+        if (storedCart) return JSON.parse(storedCart)
+    }
+
+    static updateInLocalStorage(name: string, value: any): void {
+        localStorage.setItem(name, JSON.stringify(value));
+    }
+
+    static deleteInLocalStorage(name: string): void {
+        localStorage.removeItem(name);
+    }
+
+    static getByAttr(arr: any[], attr: string, value: any): any {
+        return arr.find((element) => element[attr] === value);
+    }
+
+    static multiply(a: number, b: number): number {
+        if (isNaN(a) || isNaN(b)) {
+          throw new Error('Invalid operands. Both operands must be valid numbers.');
+        }
+
+        const result = a * b;
+        const roundedResult = Math.round(result * 100) / 100; // Round to 2 decimal places
+        return roundedResult;
+    }
+
+
+
+
 }

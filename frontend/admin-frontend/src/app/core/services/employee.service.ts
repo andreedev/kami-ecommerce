@@ -5,7 +5,7 @@ import { Endpoints } from '../constants';
 import { Utils } from '../helpers/utils';
 import { Employee } from '../models';
 import { AuthService } from './auth.service';
-import { DataService } from './data.service';
+import { DataService } from './data/data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class EmployeeService {
         this.http.get(Utils.getURL(Endpoints.GET_EMPLOYEE), { headers })
       );
       return response;
-  
+
     } catch (error: any) {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();

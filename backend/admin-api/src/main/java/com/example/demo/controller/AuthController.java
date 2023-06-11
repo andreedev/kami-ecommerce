@@ -7,6 +7,7 @@ import com.example.demo.config.jwt.model.JwtResponse;
 import com.example.demo.config.jwt.model.JwtTokenRefreshRequest;
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,6 +74,9 @@ public class AuthController {
             String jwtToken = jwtUtil.generateJwtToken(employee.getUsername(), new ArrayList<>(employee.getRoles()));
             log.info("User: "+username+ " refreshed token successfully");
             return ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken));
+        } catch (ExpiredJwtException e) {
+            log.info(e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (Exception e) {
             log.info(e.getMessage());
             return ResponseEntity.badRequest().build();

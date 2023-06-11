@@ -15,4 +15,7 @@ export interface Product {
     stock?: number
     createdAt?: string;
     updatedAt?: string;
+
+    //doesn't persist
+    amount?: number;
 }

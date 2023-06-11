@@ -72,6 +72,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public Product getById(String id) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
+        return mongoTemplate.findOne(query, Product.class, "products");
+    }
+
+    @Override
     public boolean existsById(String id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
@@ -101,10 +108,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Integer createProduct(Product product) {
+    public Product createProduct(Product product) {
         log.info("create");
         Product result = mongoTemplate.save(product, "products");
-        return 1;
+        return result;
     }
 
     @Override

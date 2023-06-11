@@ -5,7 +5,7 @@ import { Endpoints } from '../constants';
 import { Utils } from '../helpers/utils';
 import { Product } from '../models/product';
 import { AuthService } from './auth.service';
-import { DataService } from './data.service';
+import { DataService } from './data/data.service';
 import { DynamicReport } from '../models';
 
 @Injectable({
@@ -22,12 +22,12 @@ export class ProductService {
   async productReport(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Product> | null> {
     try {
       const headers = this.dataService.getAuthHeaders();
-      const body = { query, page, statusFilter, dateFilter}
+      const body = { query, page, statusFilter, dateFilter }
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.PRODUCT_REPORT), body, { headers })
       );
       return response;
-  
+
     } catch (error: any) {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();

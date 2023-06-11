@@ -19,7 +19,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping("report")
-    public DynamicReport<Customer> getCustomerReport(@Valid @RequestBody CustomerReportRequest req) throws ParseException {
+    public DynamicReport<Customer> report(@Valid @RequestBody CustomerReportRequest req) throws ParseException {
         log.info("report");
         return customerService.getCustomerReport(req);
     }

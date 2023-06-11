@@ -192,7 +192,7 @@ export class Utils {
         const result = a * b;
         const roundedResult = Math.round(result * 100) / 100; // Round to 2 decimal places
         return roundedResult;
-      }
+    }
       
     
     

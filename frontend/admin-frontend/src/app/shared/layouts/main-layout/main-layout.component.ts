@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { AppRoutes } from 'app/core/constants';
 
 import { AuthService } from 'app/core/services/auth.service';
-import { DataService } from 'app/core/services/data.service';
+import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
   selector: 'app-main-layout',

@@ -45,7 +45,7 @@ export class CustomerReportComponent implements OnInit {
     }
     this.dataService.enableLoading();
     this.loading=true;
-    const response: DynamicReport<Employee> | null = await this.customerService.customerReport(this.query, this.currentPage, this.statusFilter, dateFilter);
+    const response: DynamicReport<Customer> | null = await this.customerService.customerReport(this.query, this.currentPage, this.statusFilter, dateFilter);
     if (response!.data.length!==0) {
       this.customersList=response!.data;
       this.loading=false;

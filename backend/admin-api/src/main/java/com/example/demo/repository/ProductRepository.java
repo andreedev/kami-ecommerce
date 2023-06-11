@@ -8,10 +8,11 @@ import java.text.ParseException;
 
 public interface ProductRepository {
     DynamicReport<Product> getProductReport(ProductReportRequest req) throws ParseException;
+    Product getById(String id);
     boolean existsById(String id);
     boolean existsByName(String name);
     boolean existsBySku(String sku);
-    Integer createProduct(Product product);
+    Product createProduct(Product product);
     Integer updateProduct(Product product);
 
 }

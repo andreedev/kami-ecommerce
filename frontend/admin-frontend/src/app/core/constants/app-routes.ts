@@ -25,4 +25,11 @@ export abstract class AppRoutes {
     static readonly PRODUCT_UPDATE_COMPONENT_NAME: string = `update`
     static readonly PRODUCT_UPDATE_COMPONENT_ROUTE_NAME: string = `${AppRoutes.PRODUCT_MODULE_ROUTE_NAME}${AppRoutes.PRODUCT_UPDATE_COMPONENT_NAME}`
 
+
+    static readonly CATEGORY_MODULE_NAME: string = `category`
+    static readonly CATEGORY_MODULE_ROUTE_NAME: string = `/${AppRoutes.CATEGORY_MODULE_NAME}/`
+
+    static readonly CATEGORY_REPORT_COMPONENT_NAME: string = `report`
+    static readonly CATEGORY_REPORT_COMPONENT_ROUTE_NAME: string = `${AppRoutes.CATEGORY_MODULE_ROUTE_NAME}${AppRoutes.CATEGORY_REPORT_COMPONENT_NAME}`
+
 }

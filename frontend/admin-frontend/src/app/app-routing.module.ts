@@ -23,6 +23,11 @@ const routes: Routes = [
           import('app/modules/product/product.module').then(m => m.ProductModule)
       },
       {
+        path: AppRoutes.CATEGORY_MODULE_NAME,
+        loadChildren: () =>
+          import('app/modules/category/category.module').then(m => m.CategoryModule)
+      },
+      {
         path: AppRoutes.HOME_MODULE_NAME,
         loadChildren: () =>
           import('app/modules/home/home.module').then(m => m.HomeModule)
