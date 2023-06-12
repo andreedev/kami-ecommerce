@@ -370,12 +370,6 @@ hr {
     background-color: #fff;
 }
 
-.containerFiltrosMarca,
-.containerFiltrosCategoria {
-    width: 100% !important;
-    height: 200px !important;
-}
-
 .cart-product-list-container {
     width: 100% !important;
     height: 100vh;

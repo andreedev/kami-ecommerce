@@ -68,9 +68,6 @@ export class SearchPageComponent {
     const response: DynamicReport<Product> | null = await this.productService.search(this.searchDataService.searchRequest)
     this.searchDataService.searchResults = response!;
     this.pagesUI = Utils.generatePagesUIArray(this.searchDataService.searchResults!.totalPages, this.searchDataService.searchRequest.page!);
-    if (response!.data.length !== 0) {
-      // this.syncProductos();
-    }
     this.searchDataService.searchRequestLoading = false;
     this.dataService.disableLoading();
   }
@@ -93,16 +90,6 @@ export class SearchPageComponent {
     }
     this.search();
   }
-
-  // filtrarMarcaProducto(idMarcaProducto: number): void {
-  //   this.dataService.searchRequest.filtroIdMarcaProducto = idMarcaProducto;
-  // }
-
-  // filtrarPorCategoria(idCategoria: number): void {
-  //   this.dataService.searchRequest.filtroIdCategoria = idCategoria;
-  //   this.dataService.searchRequest.filtroIdSubcategoria = -1;
-  // }
-
   
 
   updatePage(page: number): void {

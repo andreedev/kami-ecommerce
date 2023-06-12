@@ -3,9 +3,9 @@
 <div class="container container-lg px-1 px-md-4">
     <!-- <p class="fs-3 ms-2">Categorias</p> -->
     <div class="row p-0 p-md-2 mx-0 mx-md-3">
-        <ng-container *ngIf="!loadingCategories; else skeleton1">
+        <ng-container *ngIf="!categoryDataService.loadingCategories; else skeleton1">
             <div class="row justify-content-center p-0 p-md-2 mx-0 mx-md-3">
-                <div *ngFor="let item of categories" class="col-6 col-sm-3 col-md-auto mb-2 mb-md-0">
+                <div *ngFor="let item of categoryDataService.categories" class="col-6 col-sm-3 col-md-auto mb-2 mb-md-0">
                     <category-card [category]="item"></category-card>
                 </div>
             </div>

@@ -26,4 +26,12 @@ export class SearchDataService {
   searchRequestLoading: boolean = false
 
   constructor() { }
+
+  applyCategoryFilter(categoryName: string | undefined, event?: any):void{
+    if (!categoryName){
+      this.searchRequest.categoriesFilter = []
+      return;
+    }
+    this.searchRequest.categoriesFilter = [categoryName]
+  }
 }

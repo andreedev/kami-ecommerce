@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { CartDataService, SearchDataService } from 'app/core/services';
+import { CategoryDataService } from 'app/core/services/data/category-data.service';
 
 import { DataService } from 'app/core/services/data/data.service';
 import { ProductModalDataService } from 'app/core/services/data/product-modal-data.service';
@@ -15,6 +16,7 @@ export class MainLayoutComponent implements OnInit {
     private cartDataService: CartDataService,
     private searchDataService: SearchDataService,
     private productModalDataService: ProductModalDataService,
+    private categoryDataService: CategoryDataService
   ) { }
 
   ngOnInit(): void {
@@ -30,5 +32,6 @@ export class MainLayoutComponent implements OnInit {
     console.log(this.cartDataService);
     console.log(this.searchDataService);
     console.log(this.productModalDataService);
+    console.log(this.categoryDataService);
   }
 }

@@ -11,6 +11,33 @@
             Apply filters
         </div>
     </div>
+    <div class="mt-3">
+        <span class="fw-bold">Categorías</span>
+    </div>
+    <p-scrollPanel styleClass="h-150px">
+        <ng-container *ngIf="!categoryDataService.loadingCategories">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" id="categoriaAll" name="category"
+                    (change)="searchDataService.applyCategoryFilter(undefined)"
+                    [checked]="searchDataService.searchRequest.categoriesFilter.length === 0">
+                <label class="form-check-label" for="categoriaAll">
+                    Todas
+                </label>
+            </div>
+            <div *ngFor="let item of categoryDataService.categories" class="form-check" >
+                <input class="form-check-input" type="radio" value="idCategoria" name="category"
+                    id="{{ item.name }}" (change)="searchDataService.applyCategoryFilter(item.name)"
+                    [checked]="searchDataService.searchRequest.categoriesFilter[0]===item.name"
+                    >
+                <label class="form-check-label" [for]="item.name">
+                    {{  item.name }}
+                </label>
+            </div>
+        </ng-container>
+    </p-scrollPanel>
+    <div *ngFor="let item of categoryDataService.categories">
+        
+    </div>
     <!-- <p-scrollPanel styleClass="containerFiltrosMarca">
         <span class="fw-bold">Marca</span>
 
@@ -35,7 +62,7 @@
 
     </p-scrollPanel> -->
     <div class="mt-4">
-        <span class="fw-bold">Price</span>
+        <span class="fw-bold">Precio</span>
     </div>
 
     <input [(ngModel)]="searchDataService.searchRequest.maxPriceFilter"
@@ -46,41 +73,16 @@
         to S/{{ searchDataService.searchRequest.maxPriceFilter }}
     </span>
 
-    <!-- <div class="mt-4">
-        <span class="fw-bold">Categoría</span>
-    </div> -->
-
-    <!-- <p-scrollPanel styleClass="containerFiltrosCategoria">
-        <ng-container *ngIf="!dataService.loadingClasificaciones">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="categoria" id="categoriaAll"
-                    (change)="filtrarPorCategoria(-1)"
-                    [checked]="searchDataService.searchRequest.filtroIdCategoria == -1">
-                <label class="form-check-label" for="categoriaAll">
-                    Todas
-                </label>
-            </div>
-            <div class="form-check" *ngFor="let cat of dataService.resourcesClasificaciones[0].categorias">
-                <input class="form-check-input" type="radio" name="categoria" value="idCategoria"
-                    id="cat{{ cat.idCategoria }}" (change)="filtrarPorCategoria(cat.idCategoria)"
-                    [checked]="searchDataService.searchRequest.filtroIdCategoria == cat.idCategoria">
-                <label class="form-check-label" for="cat{{ cat.idCategoria }}">
-                    {{ cat.nombreCategoria }}
-                </label>
-            </div>
-        </ng-container>
-    </p-scrollPanel> -->
-
     
 
     <div class="mt-4">
-        <span class="fw-bold">Offers</span>
+        <span class="fw-bold">Ofertas</span>
     </div>
     <div class="form-check">
         <input [(ngModel)]="searchDataService.searchRequest.onSaleFilter" class="form-check-input" type="checkbox"
             value="true" id="filtroOferta">
         <label class="form-check-label" for="filtroOferta">
-            Discounts
+            Con descuento
         </label>
     </div>
 
