@@ -15,7 +15,7 @@ import { environment } from 'assets/environments/environment';
 export class SearchPageComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
-  readonly urlResources: string = environment.resourcesUrl;
+  readonly resourcesUrl: string = environment.resourcesUrl;
 
   viewDesign: string = 'grid';
   displayFiltersModal: boolean = false;
