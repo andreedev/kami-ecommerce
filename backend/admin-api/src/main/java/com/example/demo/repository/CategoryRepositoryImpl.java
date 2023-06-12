@@ -70,7 +70,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public Integer update(Category category) {
         log.info("updateCategory");
-        Query query = new Query(Criteria.where("name").is(category.getName()));
+        Query query = new Query(Criteria.where("id").is(category.getId()));
         Update update = new Update();
         update.set("name", category.getName());
         update.set("mediaUrl", category.getMediaUrl());
@@ -81,7 +81,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     @Override
     public Integer delete(Category category) {
         log.info("deleteCategory");
-        Query query = new Query(Criteria.where("name").is(category.getName()));
+        Query query = new Query(Criteria.where("id").is(category.getId()));
         DeleteResult result = mongoTemplate.remove(query, Category.class);
         return (int) result.getDeletedCount();
     }

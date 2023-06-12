@@ -1,6 +1,8 @@
 package com.example.demo.utils;
 
+import com.example.demo.model.Category;
 import com.example.demo.model.Product;
+import com.example.demo.model.validation.CustomCategory;
 import com.example.demo.model.validation.CustomProduct;
 
 import java.math.BigDecimal;
@@ -36,6 +38,16 @@ public class Utils {
                         product.getRating(),
                         product.getStock(),
                         0
+                    )
+                )
+                .collect(Collectors.toList());
+    }
+
+    public static List<CustomCategory> convertToCustomCategoryList(List<Category> list) {
+        return list.stream()
+                .map(item -> new CustomCategory(
+                        item.getName(),
+                        item.getMediaUrl()
                     )
                 )
                 .collect(Collectors.toList());

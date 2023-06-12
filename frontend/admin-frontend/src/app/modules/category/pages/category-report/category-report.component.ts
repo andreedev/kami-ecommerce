@@ -3,6 +3,7 @@ import { Utils } from 'app/core/helpers/utils';
 import { Category, DynamicReport } from 'app/core/models';
 import { DataService } from 'app/core/services';
 import { CategoryService } from 'app/core/services/category.service';
+import { CategoryDataService } from 'app/core/services/data/category-data.service';
 
 @Component({
   selector: 'app-category-report',
@@ -13,7 +14,6 @@ export class CategoryReportComponent {
   loading: boolean = true;
 
   categoryList!: Category[];
-  selectedCategory: Category | undefined;
 
   currentPage: number = 1;
   totalPages: number = 1;
@@ -22,11 +22,15 @@ export class CategoryReportComponent {
 
   constructor(
     public dataService: DataService,
-    public categoryService: CategoryService
+    public categoryDataService: CategoryDataService,
+    private categoryService: CategoryService
   ) { }
 
   async ngOnInit() {
     this.getReport()
+    this.categoryDataService.dataUpdatedEvent.subscribe(() => {
+      this.getReport()
+    });
   }
 
   async getReport(e:any=null): Promise<void>{
@@ -40,7 +44,16 @@ export class CategoryReportComponent {
     }
     this.dataService.disableLoading();
   }
+
+  update(category: Category): void{
+    this.categoryDataService.selectedCategory = category
+    this.categoryDataService.displayCategoryUpdateModal = true
+  }
   
+  delete(category: Category): void{
+    this.categoryDataService.selectedCategory = category
+    this.categoryDataService.displayCategoryDeleteModal = true
+  }
 
   updatePage(page: number): void {
     this.currentPage = page;

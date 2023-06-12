@@ -1,0 +1,19 @@
+<p-dialog header="CREATE CATEGORY" [(visible)]="categoryDataService.displayCategoryCreateModal" [baseZIndex]="1" [modal]="true"
+           [draggable]="false" [resizable]="false" [closable]="true" [dismissableMask]="false">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input [(ngModel)]="category.name" class="form-control form-control-sm" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Image</label>
+            <input [(ngModel)]="category.mediaUrl" class="form-control form-control-sm" type="text">
+        </div>
+        <div class="text-center mb-3">
+            <span [class]="messageClass" [innerHTML]="message"></span>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-success" (click)="create()">Create</a>
+        </div>
+    </div>
+</p-dialog>

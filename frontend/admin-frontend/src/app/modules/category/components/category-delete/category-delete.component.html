@@ -1,0 +1,28 @@
+<ng-container *ngIf="categoryDataService.displayCategoryDeleteModal">
+    <p-dialog header="DELETE CATEGORY" [(visible)]="categoryDataService.displayCategoryDeleteModal" [baseZIndex]="1" [modal]="true"
+           [draggable]="false" [resizable]="false" [closable]="true" [dismissableMask]="true">
+    <div class="container-fluid">
+        <div class="mb-3" *ngIf="displayCategoryInfo">
+            <div>ID:</div>
+            <div class="form-label">
+                {{categoryDataService.selectedCategory!.id ? categoryDataService.selectedCategory!.id : ''}}
+            </div>
+        </div>
+        <div class="mb-3" *ngIf="displayCategoryInfo">
+            <div>Name:</div>
+            <div class="form-label">
+                {{categoryDataService.selectedCategory!.name ? categoryDataService.selectedCategory!.name : ''}}
+            </div>
+        </div>
+        <div class="mb-3" *ngIf="displayCategoryInfo">
+            <span class="text-red fs-10px">Are you sure you want to delete this category? This cannot be reverted.</span>
+        </div>
+        <div class="text-center mb-3">
+            <span [class]="messageClass" [innerHTML]="message"></span>
+        </div>
+        <div class="text-center">
+            <a class="btn bg-red-with-hover text-white" (click)="delete()">Delete</a>
+        </div>
+    </div>
+</p-dialog>
+</ng-container>

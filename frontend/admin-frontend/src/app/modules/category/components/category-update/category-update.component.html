@@ -1,0 +1,25 @@
+<ng-container *ngIf="categoryDataService.displayCategoryUpdateModal">
+    <p-dialog header="UPDATE CATEGORY" [(visible)]="categoryDataService.displayCategoryUpdateModal" [baseZIndex]="1" [modal]="true"
+           [draggable]="false" [resizable]="false" [closable]="true" [dismissableMask]="false">
+    <div class="container-fluid">
+        <div class="mb-3">
+            <div>ID:</div>
+            <div class="form-label">{{categoryDataService.selectedCategory!.id}}</div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input [(ngModel)]="categoryDataService.selectedCategory!.name" class="form-control form-control-sm" type="text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Image</label>
+            <input [(ngModel)]="categoryDataService.selectedCategory!.mediaUrl" class="form-control form-control-sm" type="text">
+        </div>
+        <div class="text-center mb-3">
+            <span [class]="messageClass" [innerHTML]="message"></span>
+        </div>
+        <div class="text-center">
+            <a class="btn btn-primary" (click)="update()">Update</a>
+        </div>
+    </div>
+</p-dialog>
+</ng-container>

@@ -38,6 +38,61 @@ export class CategoryService {
     }
   }
 
+  async createCategory(category: Category): Promise<any> {
+    try {
+      const headers = this.dataService.getAuthHeaders();
+      const response = await firstValueFrom(
+        this.http.post(Utils.getURL(Endpoints.CATEGORY_CREATE), category, { headers })
+      );
+      return response;
+    } catch (error: any) {
+      if (error.status === 401) {
+        const tokenRefreshed = await this.authService.refreshToken();
+        if (!tokenRefreshed) return null;
+        return await this.createCategory(category);
+      }
+      if (error.status === 400) return error;
+      throw error;
+    }
+  }
+
+  async updateCategory(category: Category): Promise<any> {
+    try {
+      const headers = this.dataService.getAuthHeaders();
+      const response = await firstValueFrom(
+        this.http.post(Utils.getURL(Endpoints.CATEGORY_UPDATE), category, { headers })
+      );
+      return response;
+    } catch (error: any) {
+      if (error.status === 401) {
+        const tokenRefreshed = await this.authService.refreshToken();
+        if (!tokenRefreshed) return null;
+        return await this.updateCategory(category);
+      }
+      if (error.status === 400) return error;
+      throw error;
+    }
+  }
+
+  async deleteCategory(category: Category): Promise<any> {
+    try {
+      const headers = this.dataService.getAuthHeaders();
+      const body = category;
+      const response = await firstValueFrom(
+        this.http.delete(Utils.getURL(Endpoints.CATEGORY_DELETE), { headers, body })
+      );
+      return response;
+    } catch (error: any) {
+      if (error.status === 401) {
+        const tokenRefreshed = await this.authService.refreshToken();
+        if (!tokenRefreshed) return null;
+        return await this.deleteCategory(category);
+      }
+      if (error.status === 400) return error;
+      throw error;
+    }
+  }
+
 
 
 }

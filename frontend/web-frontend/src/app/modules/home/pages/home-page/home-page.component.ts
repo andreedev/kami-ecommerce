@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from 'app/core/models';
+import { Category } from 'app/core/models/category';
 import { DataService, ProductService } from 'app/core/services';
+import { CategoryService } from 'app/core/services/category.service';
 
 @Component({
   selector: 'app-home-page',
@@ -8,8 +10,11 @@ import { DataService, ProductService } from 'app/core/services';
 })
 export class HomePageComponent implements OnInit {
 
-  loadingFeaturesProducts: boolean = true
+  loadingFeaturedProducts: boolean = true
   featuredProducts: Product[] = []
+
+  loadingCategories: boolean = true
+  categories: Category[] = []
 
   responsiveOptions: any[] = [
     {
@@ -20,9 +25,11 @@ export class HomePageComponent implements OnInit {
 
   constructor(
     public dataService: DataService,
-    private productService: ProductService
+    private productService: ProductService,
+    private categoryService: CategoryService,
   ) {
     this.loadFeaturedProducts()
+    this.loadCategories()
   }
 
   async loadFeaturedProducts(): Promise<any>{
@@ -30,9 +37,20 @@ export class HomePageComponent implements OnInit {
       const response: Product[] | null = await this.productService.getFeaturedProducts()
       if (response !== null) {
         this.featuredProducts = response;
-        this.loadingFeaturesProducts = false
+        this.loadingFeaturedProducts = false
       }
     }, 1000);
+    
+  }
+
+  async loadCategories(): Promise<any>{
+    setTimeout(async () => {
+      const response: Category[] | null = await this.categoryService.getCategories()
+      if (response !== null) {
+        this.categories = response;
+        this.loadingCategories = false
+      }
+    }, 500);
     
   }
   

@@ -48,7 +48,7 @@ public class CategoryController {
     @DeleteMapping("delete")
     ResponseEntity<?> delete(@Valid @RequestBody Category category) {
         log.info("delete");
-        return ResponseEntity.ok(categoryService.update(category));
+        return ResponseEntity.ok(categoryService.delete(category));
     }
 
 

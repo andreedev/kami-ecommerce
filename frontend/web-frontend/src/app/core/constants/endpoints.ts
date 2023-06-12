@@ -14,4 +14,7 @@ export abstract class Endpoints {
     static readonly SEARCH: string = `${Endpoints.PRODUCT}/search`
     static readonly LOAD_GUEST_CART: string = `${Endpoints.PRODUCT}/loadGuestCart`
     static readonly FEATURED: string = `${Endpoints.PRODUCT}/featured`
+
+    static readonly CATEGORY: string = 'category'
+    static readonly CATEGORIES: string = `${Endpoints.CATEGORY}/categories`
 }

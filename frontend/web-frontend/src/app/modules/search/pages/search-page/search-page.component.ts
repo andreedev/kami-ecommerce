@@ -40,6 +40,10 @@ export class SearchPageComponent {
   readQueryParams(): void {
     this.activatedRoute.queryParams.subscribe({
       next: (params: Params) => {
+        if (Object.keys(params).length === 0) {
+          this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
+          return;
+        }
         const query: string = params["query"];
         // if (!query || query.length < Constants.QUERY_SEARCH_MIN_LENGTH) {
         //   return this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
