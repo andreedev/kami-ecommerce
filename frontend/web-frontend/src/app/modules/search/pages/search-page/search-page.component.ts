@@ -24,7 +24,6 @@ export class SearchPageComponent {
 
   constructor(
     private titleService: Title,
-    private authService: AuthService,
     private productService: ProductService,
     public dataService: DataService,
     public searchDataService: SearchDataService,
@@ -50,6 +49,12 @@ export class SearchPageComponent {
         // }
         this.queryCopy = query;
         this.searchDataService.searchRequest.query = query;
+
+        const categoryFilter: string = params["categoryFilter"];
+        if(categoryFilter){
+          this.searchDataService.searchRequest.categoriesFilter = [categoryFilter];
+        }
+
         this.search();
         return
       },
@@ -77,6 +82,8 @@ export class SearchPageComponent {
     this.search();
   }
 
+  
+
   clearFilters(): void {
     this.searchDataService.searchRequest = {
       query: this.queryCopy,
@@ -88,9 +95,15 @@ export class SearchPageComponent {
       brand: undefined,
       maxPriceFilter: Constants.PRODUCT_MAX_PRICE
     }
+    this.removeQueryParam()
     this.search();
   }
-  
+
+  removeQueryParam() {
+    const queryParams = { ...this.activatedRoute.snapshot.queryParams };
+    queryParams["categoryFilter"] = null
+    this.router.navigate([], { queryParams: queryParams, queryParamsHandling: 'merge' });
+  }
 
   updatePage(page: number): void {
     if (page != this.searchDataService.searchRequest.page) {
@@ -102,4 +115,46 @@ export class SearchPageComponent {
 
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+  // clearFiltersFutureVersion(): void {
+  //   const queryParams = {
+  //     query: this.queryCopy,
+  //     onSaleFilter: undefined,
+  //     page: undefined,
+  //     orderFilter: undefined,
+  //     categoriesFilter: undefined,
+  //     inStockFilter: undefined,
+  //     brand: undefined,
+  //     maxPriceFilter: undefined
+  //   };
+  //   this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
+  // }
+
+  // applyFiltersFutureVersion(): void {
+  //   // if (this.dataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH)
+  //   if (this.searchDataService.searchRequest.inStockFilter){
+  //     const queryParams = {
+  //       inStockFilter : true
+  //     };
+  //     this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
+  //   } else {
+  //     const queryParams = {
+  //       inStockFilter : undefined
+  //     };
+  //     this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
+  //   }
+  //   // this.search();
+  // }
+
 }
