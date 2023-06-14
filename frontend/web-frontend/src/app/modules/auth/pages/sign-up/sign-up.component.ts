@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject } from '@angular/core';
+import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
@@ -14,12 +14,14 @@ import { AuthDataService } from 'app/core/services/data/auth-data.service';
   styles: [
   ]
 })
-export class SignUpComponent {
+export class SignUpComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
 
   //validation
   message: SafeHtml = '';
   messageClass: string = '';
+
+  isEmailPrefilled: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -28,6 +30,12 @@ export class SignUpComponent {
     private sanitizer: DomSanitizer,
     private router: Router
   ) { }
+
+  ngOnInit(): void {
+    if (!Utils.validateStringIsEmpty(this.authDataService.customerSignUpRequest.email!)){
+      this.isEmailPrefilled = true
+    }
+  }
 
   async signUp(): Promise<void> {
     if (!this.validate()) return;
@@ -59,6 +67,12 @@ export class SignUpComponent {
 
     this.message = '';
     return true;
+  }
+
+  resetSignUp(): void {
+
+    this.resetCustomerSignUpRequest()
+    this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
   }
 
   resetCustomerSignUpRequest(): void {

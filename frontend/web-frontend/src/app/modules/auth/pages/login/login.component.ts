@@ -1,5 +1,5 @@
 import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
 import { AuthStatus } from 'app/core/enums/auth-status';
@@ -12,7 +12,7 @@ import { DataService } from 'app/core/services/data/data.service';
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent  {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
 
@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit{
 
   emailAutofocus=true
   passwordAutofocus=false
-  
 
   constructor(
     private authService: AuthService,
@@ -34,8 +33,6 @@ export class LoginComponent implements OnInit{
     private dataService: DataService,
     private router: Router
   ) { }
-
-  ngOnInit(): void {}
 
   checkEmail(): void {
     if (!this.validate()) return;

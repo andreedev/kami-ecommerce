@@ -4,12 +4,18 @@
             <img src="https://picsum.photos/seed/picsum/75/50">
         </a>
     </div>
-    <div class="card text-dark bg-light mb-3 mx-3 my-5">
+    <div class="card text-dark bg-light mb-3 mx-3 max-w-350px">
         <div class="card-body">
             <div class="mb-2">
-                <div class="fs-22px">Registro</div>
+                <div class="fs-22px">Crear mi cuenta</div>
                 <div class="fs-12px">Completa tus datos</div>
             </div>
+            <ng-container *ngIf="isEmailPrefilled">
+                <div class="fs-14px">Registrarse como <span class="fw-bold text-gray-60">
+                    {{authDataService.customerSignUpRequest.email}}</span>
+                    (<a class="text-primary cursor-pointer" (click)="resetSignUp()">¿No eres tú?</a>)
+                </div>
+            </ng-container>
             <div class="mb-3">
                 <label class="fs-14px">Tipo documento</label>
                 <select [(ngModel)]="authDataService.customerSignUpRequest.documentType" class="form-select form-select-sm">
@@ -28,11 +34,14 @@
             <div class="mb-3">
                 <input type="text" class="form-control" placeholder="Apellido(s)" [(ngModel)]="authDataService.customerSignUpRequest.lastName">
             </div>
-            <div class="mb-3">
-                <input type="email" class="form-control" placeholder="Correo" [(ngModel)]="authDataService.customerSignUpRequest.email">
-            </div>
+            <ng-container *ngIf="!isEmailPrefilled">
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="Correo" [(ngModel)]="authDataService.customerSignUpRequest.email">
+                </div>
+            </ng-container>
             <div class="mb-3">
                 <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="authDataService.customerSignUpRequest.password">
+                <p class="fs-12px text-gray-60 ps-2">Utilice al menos 8 caracteres</p>
             </div>
             <div class="mb-3">
                 <input type="password" class="form-control" placeholder="Confirmar contraseña" [(ngModel)]="authDataService.customerSignUpRequest.passwordConfirm">
