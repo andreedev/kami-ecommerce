@@ -3,6 +3,7 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
 import { AppRoutes } from 'app/core/constants';
+import { AuthDataService } from '../services/data/auth-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +11,13 @@ import { AppRoutes } from 'app/core/constants';
 export class UnauthenticatedGuard implements CanActivate {
   constructor(
     public authService: AuthService,
+    private authDataService: AuthDataService,
     private router: Router,
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     //console.log('UnauthenticatedGuard')
-    if (this.authService.verifyUserIsAuthenticated()) {
+    if (this.authDataService.verifyUserIsAuthenticated()) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
       return false
     }

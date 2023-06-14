@@ -246,10 +246,18 @@ img {
 
 .fs-22px {	
     font-size: 22px;	
+}
+
+.fs-24px {	
+    font-size: 24px;	
 }	
 
 .fs-25px {	
     font-size: 25px;	
+}
+
+.fs-26px {	
+    font-size: 26px;	
 }
 
 .fs-28px {	
@@ -2784,6 +2792,14 @@ color: var(--gray-70) !important;
 
 .bg-gray-with-hover:hover {
     background-color: var(--gray-50-hover) !important;
+}
+
+.bg-gray-40-with-hover:hover {	
+    background-color: var(--gray-40-hover) !important;	
+}	
+
+.bg-gray-40, .bg-gray-40-with-hover {	
+    background-color: var(--gray-40) !important;	
 }
 
 .bg-gray-30-with-hover:hover {	

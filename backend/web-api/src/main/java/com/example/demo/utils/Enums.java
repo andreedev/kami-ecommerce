@@ -47,6 +47,18 @@ public class Enums {
 
     @Getter
     @AllArgsConstructor
+    public enum DocumentType {
+        DNI(1, "DNI"),
+        CE(4, "CARNET EXT."),
+        RUC(6, "RUC"),
+        PS(8, "PASAPORTE"),
+        ;
+        private final int code;
+        private final String value;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public enum SearchRequestOrderFilter {
         DEFAULT(1, "default"),
         LOWEST_PRICE(2, "lowest price"),

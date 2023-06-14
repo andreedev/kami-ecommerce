@@ -5,9 +5,11 @@ import { firstValueFrom } from 'rxjs';
 import { Endpoints } from '../constants';
 import { Constants } from '../constants/constants';
 import { Utils } from '../helpers/utils';
-import { Employee } from '../models';
+import { Customer, Employee } from '../models';
 import { LoginResponse } from '../models/rest/login-response';
 import { DataService } from './data/data.service';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { AuthDataService } from './data/auth-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +18,11 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private dataService: DataService,
     private cookieService: CookieService,
-    private dataService: DataService
+    private authDataService: AuthDataService
   ) { }
 
-  updateSession = (res: LoginResponse): void => {
-    this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.token!)
-    this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.refreshToken!)
-  }
-
-  logout(): void {
-    this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
-    this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
-  }
-
-  verifyUserIsAuthenticated(): boolean {
-    return this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)
-  }
 
   async refreshToken(): Promise<boolean> {
     try {
@@ -40,7 +30,7 @@ export class AuthService {
       const body = { refreshToken }
       const headers = this.dataService.getAuthHeaders()
       const response: LoginResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }))
-      this.updateSession(response)
+      this.authDataService.updateSession(response)
       return true
     } catch (error: any) {
       if (error.status === 401) return false
@@ -59,6 +49,15 @@ export class AuthService {
     }
   }
 
-
+  async signUp(email: string, password: string): Promise<LoginResponse | null> {
+    try {
+      const body: Customer = { email, password }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REGISTER), body))
+      return response
+    } catch (error: any) {
+      if (error.status === 401) return null
+      throw error
+    }
+  }
 
 }

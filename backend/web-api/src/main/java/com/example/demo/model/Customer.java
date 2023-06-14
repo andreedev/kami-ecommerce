@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,7 @@ public class Customer {
     @Id
     private String id;
     private String name;
+    private String lastName;
     private String username;
     private String password;
     private String email;
@@ -44,10 +46,15 @@ public class Customer {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     private CustomerCart cart;
+    private Boolean isLinkedToGoogleAccount;
+    private String googleAccountId;
 
-    public Customer(String name, String username, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
+    @Transient
+    private String passwordConfirm;
+
+    public Customer(String name, String lastName, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
         this.name = name;
-        this.username = username;
+        this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.documentType = documentType;
@@ -56,6 +63,7 @@ public class Customer {
         this.addresses=new ArrayList<>();
         this.roles = new ArrayList<>(Collections.singleton(Enums.Roles.ROLE_CUSTOMER.getValue()));
         this.status = Enums.CustomerStatus.REGISTERED.getCode();
+        this.isLinkedToGoogleAccount = false;
     }
 
     public Collection<GrantedAuthority> getAuthorities(){

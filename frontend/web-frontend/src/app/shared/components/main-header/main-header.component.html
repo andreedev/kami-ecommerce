@@ -25,7 +25,7 @@
            
 
             <div class="mx-3">
-                <ng-container *ngIf="authService.verifyUserIsAuthenticated(); else unathenticated">
+                <ng-container *ngIf="authDataService.verifyUserIsAuthenticated(); else unathenticated">
                     <i class="fa-solid fa-circle-user"></i>
                     <a role="button" class="ms-2" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME">USER</a>
                     <span class="mx-2">|</span>
@@ -72,9 +72,9 @@
         <div class="list-group list-group-flush">
             <a class="list-group-item list-group-item-action cursor-pointer" (click)="dataService.displayMobileMenu = false">
                 <div class="py-2 px-2">
-                    <ng-container *ngIf="authService.verifyUserIsAuthenticated() && dataService.loggedInCustomer; else unathenticated2">
+                    <ng-container *ngIf="authDataService.verifyUserIsAuthenticated() && authDataService.loggedInCustomer; else unathenticated2">
                         <i class="fa-solid fa-circle-user"></i>
-                        Hola {{dataService.loggedInCustomer.name}}
+                        Hola {{authDataService.loggedInCustomer!.name}}
                     </ng-container>
                     <ng-template #unathenticated2>
                         <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">

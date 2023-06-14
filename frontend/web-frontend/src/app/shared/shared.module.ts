@@ -18,7 +18,7 @@ import { ChipsModule } from 'primeng/chips';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { GalleriaModule } from 'primeng/galleria';
 import { CarouselModule } from 'primeng/carousel';
-
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   //Components
@@ -45,7 +45,8 @@ import { CarouselModule } from 'primeng/carousel';
     ChipsModule,
     OverlayPanelModule,
     GalleriaModule,
-    CarouselModule
+    CarouselModule,
+    DividerModule
 
     ,SharedRoutingModule
   ],
@@ -69,7 +70,8 @@ import { CarouselModule } from 'primeng/carousel';
     ChipsModule,
     OverlayPanelModule,
     GalleriaModule,
-    CarouselModule
+    CarouselModule,
+    DividerModule
   ]
 })
 export class SharedModule { }

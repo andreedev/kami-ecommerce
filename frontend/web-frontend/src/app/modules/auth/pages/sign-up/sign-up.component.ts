@@ -1,21 +1,28 @@
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
-import { AuthService } from 'app/core/services';
+import { Customer } from 'app/core/models';
+import { AuthService, DataService } from 'app/core/services';
 import { AuthDataService } from 'app/core/services/data/auth-data.service';
-import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html'
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.component.html',
+  styles: [
+  ]
 })
-export class LoginComponent implements OnInit{
+export class SignUpComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
 
-  email: string = ''
-  password: string = ''
-
+  customer: Customer = {
+    documentType: 1,
+    documentNumber: "",
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+    phoneNumber: ""
+  };
 
   message: string = ''
 
@@ -26,12 +33,10 @@ export class LoginComponent implements OnInit{
     private router: Router
   ) { }
 
-  ngOnInit(): void {}
-
-  login(): void {
+  signUp(): void {
     this.message = ''
     this.dataService.enableLoading()
-    this.authService.login(this.email, this.password).then(res => {
+    this.authService.login(this.customer.email!, this.customer.password!).then(res => {
       this.dataService.disableLoading()
       if (!res) {
         this.message = 'Correo o contraseña inválido'
@@ -39,7 +44,7 @@ export class LoginComponent implements OnInit{
       }
       this.authDataService.updateSession(res)
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
-    })
+    }
+    )
   }
-
 }

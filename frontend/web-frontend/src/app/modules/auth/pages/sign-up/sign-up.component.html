@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center align-items-center bg-dark">
+    <div class="card text-dark bg-light mb-3 mx-3 my-5">
+        <div class="card-header">
+            <div class="d-flex justify-content-center">
+                <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="">
+                    <img src="https://picsum.photos/seed/picsum/75/50">
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-2">
+                <div class="fs-22px">Registro</div>
+                <div class="fs-12px">Completa tus datos</div>
+            </div>
+            <div class="mb-3">
+                <label class="fs-14px">Tipo documento</label>
+                <select [(ngModel)]="customer.documentType" class="form-select form-select-sm">
+                    <option [value]="1">DNI</option>
+                    <option [value]="4">CARNET EXT.</option>
+                    <option [value]="6">RUC</option>
+                    <option [value]="8">PASAPORTE</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Nro documento" [(ngModel)]="customer.documentNumber">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Nombre" [(ngModel)]="customer.name">
+            </div>
+            <div class="mb-3">
+                <input type="email" class="form-control" placeholder="Correo" [(ngModel)]="customer.email">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="customer.password">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Confirmar contraseña" [(ngModel)]="customer.passwordConfirm">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Celular" [(ngModel)]="customer.phoneNumber">
+            </div>
+            <p class="text-danger text-center fs-12px">{{ message }}</p>
+            <div class="d-flex mb-2">
+                <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="signUp()">CONTINUAR</button>
+            </div>
+            <p-divider align="center">
+                <span class="p-tag bg-gray-40">También puedes</span>
+            </p-divider>
+            <div class="d-flex mb-3 justify-content-center">
+                <asl-google-signin-button type='standard' size='large' text="continue_with"></asl-google-signin-button>
+            </div>
+        </div>
+    </div>
+</div>

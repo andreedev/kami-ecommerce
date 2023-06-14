@@ -19,8 +19,6 @@ export class DataService {
 
   displayMobileMenu: boolean = false
 
-  loggedInCustomer: Customer | null = null;
-
   constructor(
     private cookieService: CookieService,
   ) {
@@ -38,11 +36,6 @@ export class DataService {
     return new HttpHeaders()
       .set('Authorization', `Bearer ${this.cookieService.get(Constants.SESSION_TOKEN_NAME)}`)
       .set('Content-Type', 'application/json')
-  }
-
-  clearData(): void {
-    this.loggedInCustomer = null
-    this.displayMobileMenu = false
   }
 
 }

@@ -74,7 +74,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             Update update = new Update().set("status", Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
             mongoTemplate.updateFirst(query2, update, Customer.class);
             mongoTemplate.remove(emailVerificationCodeDb, "emailVerificationCodes");
+            return 1;
         }
-        return 1;
+        return -1;
     }
 }

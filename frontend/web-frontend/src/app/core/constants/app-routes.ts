@@ -6,8 +6,8 @@ export abstract class AppRoutes {
     static readonly LOGIN_COMPONENT_NAME: string = `login`
     static readonly LOGIN_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}${AppRoutes.LOGIN_COMPONENT_NAME}`
 
-    static readonly REGISTRATION_COMPONENT_NAME: string = `registration`
-    static readonly REGISTRATION_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}${AppRoutes.REGISTRATION_COMPONENT_NAME}`
+    static readonly SIGN_UP_COMPONENT_NAME: string = `sign-up`
+    static readonly SIGN_UP_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}${AppRoutes.SIGN_UP_COMPONENT_NAME}`
 
     static readonly RESET_PASSWORD_COMPONENT_NAME: string = `reset-password`
     static readonly RESET_PASSWORD_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}${AppRoutes.RESET_PASSWORD_COMPONENT_NAME}`

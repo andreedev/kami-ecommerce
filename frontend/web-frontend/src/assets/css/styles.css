@@ -409,3 +409,7 @@ hr {
 .text-mi-carrito {
     font-weight: 500;
 }
+
+.p-divider .p-divider-content {
+    background-color: transparent;
+}

@@ -87,11 +87,11 @@ public class AuthController {
 
     @PostMapping("register")
     public Integer registerCustomer(@RequestBody @Valid CustomerRegistrationRequest req){
-        Boolean exists = customerService.customerExistsByUsernameOrEmailOrDocumentNumber(req);
+        Boolean exists = customerService.customerExistsByUsernameOrEmailOrDocumentNumber(req);//dividir esto
         if (exists) return -1;
         Customer customer = customerService.registerCustomer(req.toCustomer());
         String code = customerService.generateEmailVerificationCode(customer.getId());
-        emailService.sendEmail(req.getEmail(), "Welcome", "Welcome", "<p>Verification code: "+code+"</p>"+
+        emailService.sendEmail(req.getEmail(), "Welcome", "Welcome to Kami Ecommerce", "<p>Verification code: "+code+"</p>"+
                 "<p>Code is valid just for 10 minutes.</p>");
         return 1;
     }

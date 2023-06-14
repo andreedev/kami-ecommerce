@@ -14,6 +14,7 @@ npm i moment
 npm i moment-timezone
 npm install @types/moment-timezone --save-dev
 npm install ngx-daterangepicker-material --saves
+npm i @abacritt/angularx-social-login@1
 
 
 - Auxiliary libraries

@@ -1,16 +1,36 @@
 <div class="d-flex justify-content-center align-items-center bg-dark vh-100">
     <div class="card text-dark bg-light mb-3 mx-3 my-5 cardLogin">
-        <div class="card-header">Iniciar sesión</div>
+        <div class="card-header">
+            <div class="d-flex justify-content-center">
+                <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="">
+                    <img src="https://picsum.photos/seed/picsum/75/50">
+                </a>
+            </div>
+        </div>
         <div class="card-body">
             <div class="mb-3">
-                <input type="email" class="form-control" placeholder="username" [(ngModel)]="username">
+                <div class="fs-22px">Bienvenido de vuelta</div>
+                <div class="fs-12px">Ingresa tus datos</div>
             </div>
             <div class="mb-3">
-                <input type="password" class="form-control" placeholder="password" [(ngModel)]="password" (keyup.enter)="login()">
+                <input type="email" class="form-control" placeholder="Correo" [(ngModel)]="email">
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="password" (keyup.enter)="login()">
             </div>
             <p class="text-danger text-center fs-12px">{{ message }}</p>
-            <div class="d-grid gap-2">
-                <button class="btn btn-primary btn-block" (click)="login()">LOGIN</button>
+            <div class="d-flex mb-2">
+                <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="login()">INGRESAR</button>
+            </div>
+            <div class="d-flex flex-column">
+                <div class="fs-16px text-center mb-2">¿Aún no eres cliente?</div>
+                <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" [routerLink]="appRoutes.SIGN_UP_COMPONENT_ROUTE_NAME">REGÍSTRATE</button>
+            </div>
+            <p-divider align="center">
+                <span class="p-tag bg-gray-40">También puedes</span>
+            </p-divider>
+            <div class="d-flex mb-3 justify-content-center">
+                <asl-google-signin-button type='standard' size='large' text="continue_with"></asl-google-signin-button>
             </div>
         </div>
     </div>
