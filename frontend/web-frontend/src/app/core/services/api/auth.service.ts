@@ -63,9 +63,9 @@ export class AuthService {
     }
   }
 
-  async signUp(email: string, password: string): Promise<LoginResponse | null> {
+  async signUp(customerSignUpRequest: Customer): Promise<LoginResponse | null> {
     try {
-      const body: Customer = { email, password }
+      const body = customerSignUpRequest
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REGISTER), body))
       return response
     } catch (error: any) {

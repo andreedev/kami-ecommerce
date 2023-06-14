@@ -16,7 +16,6 @@ export class AuthenticatedGuard implements CanActivate {
   ) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    console.log('AuthenticatedGuard')
     if (this.authDataService.authStatus.value === AuthStatus.NONE.getName()) {
       this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
       return false

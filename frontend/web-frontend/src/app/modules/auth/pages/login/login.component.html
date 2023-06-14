@@ -21,7 +21,7 @@
                 </ng-container>
                 <div class="mb-3">
                     <input type="email" class="form-control" placeholder="Correo electrónico" [(ngModel)]="email" 
-                    (keyup.enter)="checkEmail()">
+                    (keyup.enter)="checkEmail()" [appFocus]="emailAutofocus">
                 </div>
                 <p class="text-danger text-center fs-12px">{{ message }}</p>
                 <div class="d-flex mb-2">
@@ -35,13 +35,14 @@
         <div class="card text-dark bg-white mb-3 mx-3 mb-5 cardLogin">
             <div class="card-body">
                 <div class="mb-3">
-                    <div class="fs-20px fw-bold">¡Bienvenido de nuevo!</div>
-                    <div class="fs-14px">Iniciar sesión como <span class="fw-bold text-gray-60">{{email}}</span> (
-                        <a class="text-primary cursor-pointer" (click)="reset()">¿No eres tú?</a>)
+                    <div class="fs-20px fw-bold mb-2">¡Bienvenido de nuevo!</div>
+                    <div class="fs-14px">Iniciar sesión como <span class="fw-bold text-gray-60">{{email}}</span>
+                        <br>
+                        (<a class="text-primary cursor-pointer" (click)="reset()">¿No eres tú?</a>)
                     </div>
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="password" (keyup.enter)="login()">
+                    <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="password" (keyup.enter)="login()" [appFocus]="passwordAutofocus">
                 </div>
                 <p class="text-danger text-center fs-12px">{{ message }}</p>
                 <div class="d-flex mb-2">

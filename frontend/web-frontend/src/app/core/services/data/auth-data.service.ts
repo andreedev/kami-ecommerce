@@ -16,6 +16,16 @@ export class AuthDataService {
   loggedInCustomer: Customer | undefined;
   authStatus: BehaviorSubject<string> = new BehaviorSubject<string>(AuthStatus.NONE.getName());
 
+  customerSignUpRequest: Customer = {
+    documentType: 1,
+    documentNumber: "",
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+    phoneNumber: ""
+  };
+
   constructor(
     private cookieService: CookieService,
     private socialAuthService: SocialAuthService,
@@ -46,8 +56,10 @@ export class AuthDataService {
   logout(): void {
     this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
     this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
-    this.socialAuthService.signOut();
     this.authStatus.next(AuthStatus.NONE.getName());
+    try {
+      this.socialAuthService.signOut();
+    } catch (error) { }
   }
 
   async loadProfile(): Promise<void> {
@@ -55,6 +67,7 @@ export class AuthDataService {
     if (!customer) return;
     this.loggedInCustomer = customer;
   }
+
 
 
 }

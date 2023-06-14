@@ -17,7 +17,7 @@ export class CategoryCreateComponent {
     mediaUrl: ""
   };
 
-  //validate
+  //validation
   message: SafeHtml = '';
   messageClass: string = '';
 

@@ -151,8 +151,14 @@ img {
     width: 2000px;
 }
 
+.max-w-100px {	
+    max-width: 100px;	
+}
 .max-w-195px {	
     max-width: 195px;	
+}
+.max-w-200px {	
+    max-width: 200px;	
 }	
 .max-w-225px {	
     max-width: 225px;	
@@ -160,6 +166,12 @@ img {
 .max-w-230px {	
     max-width: 230px;	
 }	
+.max-w-250px {	
+    max-width: 250px;	
+}
+.max-w-300px {	
+    max-width: 300px;	
+}
 .max-w-415px {	
     max-width: 415px;	
 }	

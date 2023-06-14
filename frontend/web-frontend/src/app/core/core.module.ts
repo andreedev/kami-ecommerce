@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { DsctoPipe } from './pipes/dscto.pipe';
+import { FocusDirective } from './directives/focus.directive';
 
 @NgModule({
   declarations: [
-    DsctoPipe
+    DsctoPipe,
+    FocusDirective
   ],
   imports: [
   ],
   exports: [
-    DsctoPipe
+    DsctoPipe,
+    FocusDirective
   ]
 })
 export class CoreModule {}
