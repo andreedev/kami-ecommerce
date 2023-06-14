@@ -1,12 +1,17 @@
 package com.example.demo.config.jwt.model;
 
+import jakarta.validation.constraints.NotEmpty;
+
 import java.io.Serializable;
 
 public class JwtRequest implements Serializable {
-
     private static final long serialVersionUID = 2636936156391265891L;
+    @NotEmpty
     private String username;
     private String password;
+    private Boolean googleLogin;
+    private String googleId;
+    private String googleIdToken;
     public JwtRequest() {
     }
     public JwtRequest(String username, String password) {

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Category } from 'app/core/models/category';
-import { CategoryService } from '../category.service';
+import { CategoryService } from '../api/category.service';
+import { Router } from '@angular/router';
+import { AppRoutes } from 'app/core/constants';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,8 @@ export class CategoryDataService {
   categories: Category[] = []
 
   constructor(
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   async loadCategories(): Promise<any>{
@@ -24,5 +27,13 @@ export class CategoryDataService {
         }
       }
     }, 500);
+  }
+
+  filterByCategory(categoryName: string):void{
+    const queryParams = {
+      query: "",
+      categoryFilter : categoryName
+    };
+    this.router.navigate([AppRoutes.SEARCH_MODULE_ROUTE_NAME], { queryParams, queryParamsHandling: "merge" });
   }
 }

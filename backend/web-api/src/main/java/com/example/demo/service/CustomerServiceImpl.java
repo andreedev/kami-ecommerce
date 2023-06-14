@@ -4,10 +4,8 @@ import com.example.demo.model.Customer;
 import com.example.demo.model.validation.CustomerRegistrationRequest;
 import com.example.demo.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Transient;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service()
 public class CustomerServiceImpl implements CustomerService{
@@ -28,6 +26,11 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public Customer findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
+    @Override
     public Customer registerCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerRepository.registerCustomer(customer);
@@ -39,8 +42,13 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Integer verifyEmail(String emailVerificationCode) {
-        return customerRepository.verifyEmail(emailVerificationCode);
+    public Integer verifyEmailCode(String emailVerificationCode) {
+        return customerRepository.verifyEmailCode(emailVerificationCode);
+    }
+
+    @Override
+    public Integer checkEmail(String email) {
+        return customerRepository.checkEmail(email);
     }
 
 }

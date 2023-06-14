@@ -30,8 +30,7 @@ const routes: Routes = [
       },
       {
         path: AppRoutes.SEARCH_MODULE_NAME,
-        loadChildren: () => import('./modules/search/search.module').then(m => m.SearchModule),
-        canActivate: [UnauthenticatedGuard]
+        loadChildren: () => import('./modules/search/search.module').then(m => m.SearchModule)
       },
       {
         path: AppRoutes.HOME_MODULE_NAME,

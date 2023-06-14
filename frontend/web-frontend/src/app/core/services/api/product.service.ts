@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { Endpoints } from '../constants';
-import { Utils } from '../helpers/utils';
-import { DynamicReport } from '../models/rest/dynamic-report';
+import { Endpoints } from '../../constants';
+import { Utils } from '../../helpers/utils';
+import { DynamicReport } from '../../models/rest/dynamic-report';
 import { AuthService } from './auth.service';
-import { DataService } from './data/data.service';
-import { Product, SearchRequest } from '../models';
+import { DataService } from '../data/data.service';
+import { Product, SearchRequest } from '../../models';
 import { Cart } from 'app/core/models/cart';
 
 @Injectable({

@@ -1,4 +1,4 @@
-<div class="bg-light py-0 border-bottom sticky-top z-index-2">
+<div class="bg-light py-0 border-bottom sticky-top" [ngClass]="{'z-index-0': dataService.loading, 'z-index-2': !dataService.loading}">
     <div class="container-fluid px-2 px-md-4">
 
         <div class="d-flex align-items-center justify-content-between py-3 py-md-0">
@@ -25,12 +25,18 @@
            
 
             <div class="mx-3">
-                <ng-container *ngIf="authDataService.verifyUserIsAuthenticated(); else unathenticated">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <a role="button" class="ms-2" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME">USER</a>
-                    <span class="mx-2">|</span>
-                    <i class="fas fa-sign-out-alt"></i>
-                    <a role="button" (click)="logout()" class="ms-2">Cerrar sesión</a>
+                <ng-container *ngIf="(authDataService.authStatus | async) as authStatus">
+                    <ng-container *ngIf="authStatus === AUTH_STATUS.LOGGED_IN.getName(); else unathenticated">
+                        <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.PROFILE_COMPONENT_ROUTE_NAME]">
+                            <div class="d-flex flex-row align-items-center justify-content-between">
+                                <i class="fa-solid fa-circle-user fs-22px text-gray-60"></i>
+                                <span class="d-none d-md-block ps-2">Mi cuenta</span>
+                            </div>
+                        </a>
+                        <!-- <span class="mx-2">|</span>
+                        <i class="fas fa-sign-out-alt"></i>
+                        <a role="button" (click)="logout()" class="ms-2">Cerrar sesión</a> -->
+                    </ng-container>
                 </ng-container>
                 <ng-template #unathenticated>
                     <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">
@@ -70,11 +76,12 @@
         </div>
         <hr>
         <div class="list-group list-group-flush">
-            <a class="list-group-item list-group-item-action cursor-pointer" (click)="dataService.displayMobileMenu = false">
+            <a class="list-group-item list-group-item-action">
                 <div class="py-2 px-2">
-                    <ng-container *ngIf="authDataService.verifyUserIsAuthenticated() && authDataService.loggedInCustomer; else unathenticated2">
-                        <i class="fa-solid fa-circle-user"></i>
-                        Hola {{authDataService.loggedInCustomer!.name}}
+                    <ng-container *ngIf="(authDataService.authStatus | async) as authStatus2">
+                        <ng-container *ngIf="authStatus2 === AUTH_STATUS.LOGGED_IN.getName() && authDataService.loggedInCustomer; else unathenticated2">
+                            <span class="fw-bold fs-18px text-color-1">¡Hola {{authDataService.loggedInCustomer!.name}}!</span>
+                        </ng-container>
                     </ng-container>
                     <ng-template #unathenticated2>
                         <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">
@@ -89,35 +96,23 @@
         </div>
         <hr class="m-0">
         <div class="ps-3 py-3">
-            <span class="fs-10px">CATEGORIES</span>
+            <span class="fs-10px">CATEGORÍAS</span>
         </div>
-        <div class="list-group list-group-flush mb-3">
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                Category 1
-            </a>
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                Category 2
-            </a>
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                Category 3
-            </a>
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                Category 4
-            </a>
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                Category 5
+        <div class="list-group list-group-flush mb-3" >
+            <a *ngFor="let item of categoryDataService.categories" class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false; categoryDataService.filterByCategory(item.name)">
+                {{item.name | uppercase}}
             </a>
         </div>
         <hr class="m-0">
         <div class="ps-3 py-3">
-            <span class="fs-10px">MY INFORMATION</span>
+            <span class="fs-10px">MI INFORMACIÓN</span>
         </div>  
         <div class="list-group list-group-flush mb-3">
             <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                My profile
+                Mi perfil
             </a>
             <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                My purchases
+                Mis órdenes
             </a>
         </div>
         <!-- <div class="d-flex flex-column container-fluid">
@@ -153,11 +148,16 @@
                 <i class="fab fa-cc-mastercard hover-transform-scale-125 transition-300ms"></i>
             </span>
         </div>
-        <div class="list-group list-group-flush mb-3">
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
-                Log out
-            </a>
-        </div>
+        <ng-container *ngIf="(authDataService.authStatus | async) as authStatus3">
+            <ng-container *ngIf="authStatus3 === AUTH_STATUS.LOGGED_IN.getName() && authDataService.loggedInCustomer">
+                <div class="list-group list-group-flush mb-3">
+                    <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false; logout()">
+                        Cerrar sesión
+                    </a>
+                </div>
+            </ng-container>
+        </ng-container>
+       
     </div>
 </p-sidebar>
 

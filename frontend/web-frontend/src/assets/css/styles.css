@@ -93,11 +93,27 @@
     --color-1: #FECCCB;
 }
 
+.text-color-1 {
+    color: #FECCCB;
+}
+
 .bg-color-1, .bg-color-1-with-hover {
     background-color: #FECCCB;
 }
 
 .bg-color-1-with-hover:hover {
+    background-color: #e2b4b3;
+}
+
+.bg-outline-color-1, .bg-outline-color-1-with-hover {
+    transition: all 300ms ease;
+    border: 1px solid #e2b4b3;
+    color: #e2b4b3;
+}
+
+.bg-outline-color-1-with-hover:hover {
+    transition: all 300ms ease;
+    color: #fff;
     background-color: #e2b4b3;
 }
 

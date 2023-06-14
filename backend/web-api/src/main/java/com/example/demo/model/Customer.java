@@ -47,7 +47,7 @@ public class Customer {
     private LocalDateTime updatedAt;
     private CustomerCart cart;
     private Boolean isLinkedToGoogleAccount;
-    private String googleAccountId;
+//    private String googleAccountId;
 
     @Transient
     private String passwordConfirm;

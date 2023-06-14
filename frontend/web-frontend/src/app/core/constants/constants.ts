@@ -8,4 +8,6 @@ export abstract class Constants {
 
     static readonly PRODUCT_MIN_PRICE: number = 1;
     static readonly PRODUCT_MAX_PRICE: number = 2001;
+    
+    static readonly LOGIN_WITH_GOOGLE_STATUS: boolean = true;
 }

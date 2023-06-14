@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Endpoints } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
+import { Category } from 'app/core/models/category';
 import { firstValueFrom } from 'rxjs';
-import { Endpoints } from '../constants';
-import { Utils } from '../helpers/utils';
-import { Category } from '../models/category';
 
 @Injectable({
   providedIn: 'root'

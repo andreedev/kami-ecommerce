@@ -20,7 +20,7 @@ export class DataService {
   displayMobileMenu: boolean = false
 
   constructor(
-    private cookieService: CookieService,
+    // private cookieService: CookieService,
   ) {
     this.screenWidth = window.innerWidth;
   }
@@ -30,12 +30,6 @@ export class DataService {
   }
   disableLoading(): void {
     setTimeout(() => { this.loading = false }, 0)
-  }
-
-  getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders()
-      .set('Authorization', `Bearer ${this.cookieService.get(Constants.SESSION_TOKEN_NAME)}`)
-      .set('Content-Type', 'application/json')
   }
 
 }

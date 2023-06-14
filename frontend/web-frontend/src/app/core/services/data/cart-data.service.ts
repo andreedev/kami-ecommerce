@@ -3,7 +3,7 @@ import { Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models';
 import { Cart } from 'app/core/models/cart';
-import { ProductService } from '../product.service';
+import { ProductService } from '../api/product.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +24,12 @@ export class CartDataService {
     this.loadCart()
   }
 
-  async loadCart(){
+  async loadCart() {
     this.loadingCart = true
     const loadedCart = Utils.loadFromLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
     if (loadedCart && typeof loadedCart === 'object' && 'products' in loadedCart) {
       this.cart = loadedCart as Cart;
-      if (this.cart.products.length >= 0){
+      if (this.cart.products.length >= 0) {
         const response: Cart | null = await this.productService.loadGuestCart(this.cart.products)
         if (response !== null) {
           this.cart = response;
@@ -51,7 +51,7 @@ export class CartDataService {
     this.updateCartInLocalStorage()
   }
 
-  updateCartInLocalStorage(): void{
+  updateCartInLocalStorage(): void {
     const cartCopy = { ...this.cart }
     cartCopy.products = cartCopy.products.map((product: Product) => {
       const { id, amount } = product;

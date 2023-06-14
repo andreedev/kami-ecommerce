@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,8 +19,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static java.rmi.server.LogStream.log;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
+@Slf4j
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
@@ -64,14 +67,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
-            Customer customer = applicationContext.getBean("customerService", CustomerService.class).findByUsername(username);
-            Customer safeCustomerObj = Customer.builder().username(customer.getUsername()).name(customer.getName()).email(customer.getEmail()).id(customer.getId()).roles(customer.getRoles()).status(customer.getStatus()).build();
+            Customer customer = applicationContext.getBean("customerService", CustomerService.class).findByEmail(username);
+            Customer safeCustomerObj = Customer.builder()
+//                    .username(customer.getEmail())
+                    .name(customer.getName())
+                    .lastName(customer.getLastName())
+                    .email(customer.getEmail())
+                    .id(customer.getId())
+                    .roles(customer.getRoles())
+                    .status(customer.getStatus())
+                    .cart(customer.getCart())
+                    .build();
 
-            if (jwtUtil.validateJwtToken(token, safeCustomerObj.getUsername())) {
+            if (jwtUtil.validateJwtToken(token, safeCustomerObj.getEmail())) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(safeCustomerObj, null, safeCustomerObj.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                log("JWT Token is invalid");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         }
         filterChain.doFilter(request, response);

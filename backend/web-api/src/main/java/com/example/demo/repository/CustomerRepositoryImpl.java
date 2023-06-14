@@ -31,7 +31,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         Query query = new Query();
         query.addCriteria(
             new Criteria().orOperator(
-                where("username").is(req.getUsername()),
+//                where("username").is(req.getUsername()),
                 where("email").regex(req.getEmail(), "i"),
                 where("documentNumber").is(req.getDocumentNumber())
             )
@@ -42,6 +42,12 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public Customer findByUsername(String username) {
         Query query = new Query(where("username").is(username));
+        return mongoTemplate.findOne(query, Customer.class, "customers");
+    }
+
+    @Override
+    public Customer findByEmail(String email) {
+        Query query = new Query(where("email").is(email));
         return mongoTemplate.findOne(query, Customer.class, "customers");
     }
 
@@ -62,7 +68,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
 //    @Transactional
-    public Integer verifyEmail(String emailVerificationCode) {
+    public Integer verifyEmailCode(String emailVerificationCode) {
         Query query = new Query(where("code").is(emailVerificationCode));
         EmailVerificationCode emailVerificationCodeDb = mongoTemplate.findOne(query, EmailVerificationCode.class, "emailVerificationCodes");
         if (emailVerificationCodeDb!= null && emailVerificationCodeDb.getCustomerId()!=null) {
@@ -77,5 +83,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             return 1;
         }
         return -1;
+    }
+
+    @Override
+    public Integer checkEmail(String email) {
+        Query query = new Query();
+        query.addCriteria(
+            new Criteria().orOperator(where("email").regex(email, "i"))
+        );
+        return mongoTemplate.exists(query, Customer.class) ? 1: -1;
     }
 }

@@ -6,8 +6,11 @@ import com.example.demo.model.validation.CustomerRegistrationRequest;
 public interface CustomerRepository {
     Boolean customerExistsByUsernameOrEmailOrDocumentNumber(CustomerRegistrationRequest req);
     Customer findByUsername(String username);
+    Customer findByEmail(String email);
     Customer registerCustomer(Customer customer);
     String generateEmailVerificationCode(String customerId);
-    Integer verifyEmail(String emailVerificationCode);
+    Integer verifyEmailCode(String emailVerificationCode);
+    Integer checkEmail(String email);
+
 
 }

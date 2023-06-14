@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 @RequestMapping("auth")
 public class AuthController {
 
-    private final JwtUserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final CustomerService customerService;
@@ -41,7 +40,6 @@ public class AuthController {
 
     @Autowired
     public AuthController(JwtUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, CustomerService customerService, EmailService emailService) {
-        this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.customerService = customerService;
@@ -49,7 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<Object> createToken(@RequestBody JwtRequest request) throws Exception {
+    public ResponseEntity<Object> createToken(@RequestBody @Valid JwtRequest request) throws Exception {
         try {
             UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -70,13 +68,16 @@ public class AuthController {
         try {
             String refreshToken = request.getRefreshToken();
             String username = jwtUtil.getUsernameFromToken(refreshToken);
-            Customer customer = customerService.findByUsername(username);
-            if (!jwtUtil.validateJwtToken(refreshToken, customer.getUsername())) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            Customer customer = customerService.findByEmail(username);
+            if (customer==null){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+            if (!jwtUtil.validateJwtToken(refreshToken, customer.getEmail())) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     customer, null, customer.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String jwtToken = jwtUtil.generateJwtToken(customer.getUsername(), new ArrayList<>(customer.getRoles()));
+            String jwtToken = jwtUtil.generateJwtToken(customer.getEmail(), new ArrayList<>(customer.getRoles()));
             log.info("User: "+username+ " refreshed token successfully");
             return ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken));
         } catch (Exception e) {
@@ -96,9 +97,15 @@ public class AuthController {
         return 1;
     }
 
-    @PostMapping("verifyEmail")
-    public ResponseEntity<Integer> verifyEmail(@RequestBody Map<String, Object> req){
+    @PostMapping("verifyEmailCode")
+    public ResponseEntity<Integer> verifyEmailCode(@RequestBody Map<String, Object> req){
         String code = req.get("emailVerificationCode").toString();
-        return ResponseEntity.ok(customerService.verifyEmail(code));
+        return ResponseEntity.ok(customerService.verifyEmailCode(code));
+    }
+
+    @PostMapping("checkEmail")
+    public ResponseEntity<Integer> checkEmail(@RequestBody Map<String, Object> req){
+        String code = req.get("email").toString();
+        return ResponseEntity.ok(customerService.checkEmail(code));
     }
 }

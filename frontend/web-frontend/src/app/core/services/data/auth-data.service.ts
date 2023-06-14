@@ -1,8 +1,12 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Injectable } from '@angular/core';
-import { Constants } from 'app/core/constants';
 import { Customer, LoginResponse } from 'app/core/models';
+import { AuthService } from '../api/auth.service';
+import { CustomerService } from 'app/core/services/api/customer.service'
+import { Constants } from 'app/core/constants';
 import { CookieService } from 'ngx-cookie-service';
+import { BehaviorSubject } from 'rxjs';
+import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Injectable({
   providedIn: 'root'
@@ -10,17 +14,31 @@ import { CookieService } from 'ngx-cookie-service';
 export class AuthDataService {
 
   loggedInCustomer: Customer | undefined;
+  authStatus: BehaviorSubject<string> = new BehaviorSubject<string>(AuthStatus.NONE.getName());
 
   constructor(
     private cookieService: CookieService,
-    public socialAuthService: SocialAuthService
-    ) {
+    private socialAuthService: SocialAuthService,
+    private customerService: CustomerService,
+    private authService: AuthService
+  ) {
     this.socialAuthService.authState.subscribe((user) => {
       console.log(user);
     });
+    this.checkAuthStatus();
   }
-  
-  updateSession = (res: LoginResponse): void => {
+
+  async checkAuthStatus(): Promise<void>{
+    if (this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)){
+      const response: boolean = await this.authService.refreshToken();
+      if (response){
+        this.authStatus.next(AuthStatus.LOGGED_IN.getName());
+        this.loadProfile()
+      }
+    }
+  }
+
+  updateSession(res: LoginResponse): void {
     this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.token!)
     this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.refreshToken!)
   }
@@ -29,9 +47,14 @@ export class AuthDataService {
     this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
     this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
     this.socialAuthService.signOut();
+    this.authStatus.next(AuthStatus.NONE.getName());
   }
 
-  verifyUserIsAuthenticated(): boolean {
-    return this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)
+  async loadProfile(): Promise<void> {
+    const customer: Customer | null = await this.customerService.getProfile();
+    if (!customer) return;
+    this.loggedInCustomer = customer;
   }
+
+
 }

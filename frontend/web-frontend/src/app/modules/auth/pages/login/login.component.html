@@ -1,37 +1,60 @@
-<div class="d-flex justify-content-center align-items-center bg-dark vh-100">
-    <div class="card text-dark bg-light mb-3 mx-3 my-5 cardLogin">
-        <div class="card-header">
-            <div class="d-flex justify-content-center">
-                <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="">
-                    <img src="https://picsum.photos/seed/picsum/75/50">
-                </a>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <div class="fs-22px">Bienvenido de vuelta</div>
-                <div class="fs-12px">Ingresa tus datos</div>
-            </div>
-            <div class="mb-3">
-                <input type="email" class="form-control" placeholder="Correo" [(ngModel)]="email">
-            </div>
-            <div class="mb-3">
-                <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="password" (keyup.enter)="login()">
-            </div>
-            <p class="text-danger text-center fs-12px">{{ message }}</p>
-            <div class="d-flex mb-2">
-                <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="login()">INGRESAR</button>
-            </div>
-            <div class="d-flex flex-column">
-                <div class="fs-16px text-center mb-2">¿Aún no eres cliente?</div>
-                <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" [routerLink]="appRoutes.SIGN_UP_COMPONENT_ROUTE_NAME">REGÍSTRATE</button>
-            </div>
-            <p-divider align="center">
-                <span class="p-tag bg-gray-40">También puedes</span>
-            </p-divider>
-            <div class="d-flex mb-3 justify-content-center">
-                <asl-google-signin-button type='standard' size='large' text="continue_with"></asl-google-signin-button>
-            </div>
-        </div>
+<div class="d-flex flex-column justify-content-center align-items-center bg-light vh-100">
+    <div class="d-flex justify-content-center mb-3">
+        <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="">
+            <img src="https://picsum.photos/seed/picsum/75/50">
+        </a>
     </div>
+    <ng-container *ngIf="step===1">
+        <div class="card text-dark bg-white mb-3 mx-3 mb-5 cardLogin">
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="fs-20px fw-bold">Bienvenido a Company Name</div>
+                    <div class="fs-14px">Crea una cuenta o inicia sesión.</div>
+                </div>
+                <ng-container *ngIf="constants.LOGIN_WITH_GOOGLE_STATUS">
+                    <div class="d-flex mb-3 justify-content-center">
+                        <asl-google-signin-button type='standard' size='large' text="continue_with" shape="rectangular"></asl-google-signin-button>
+                    </div>
+                    <p-divider align="center">
+                        <span class="px-2 fs-10px bg-white fw-normal">o</span>
+                    </p-divider>
+                </ng-container>
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="Correo electrónico" [(ngModel)]="email" 
+                    (keyup.enter)="checkEmail()">
+                </div>
+                <p class="text-danger text-center fs-12px">{{ message }}</p>
+                <div class="d-flex mb-2">
+                    <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="checkEmail()">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+   
+    <ng-container *ngIf="step===2">
+        <div class="card text-dark bg-white mb-3 mx-3 mb-5 cardLogin">
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="fs-20px fw-bold">¡Bienvenido de nuevo!</div>
+                    <div class="fs-14px">Iniciar sesión como <span class="fw-bold text-gray-60">{{email}}</span> (
+                        <a class="text-primary cursor-pointer" (click)="reset()">¿No eres tú?</a>)
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="password" (keyup.enter)="login()">
+                </div>
+                <p class="text-danger text-center fs-12px">{{ message }}</p>
+                <div class="d-flex mb-2">
+                    <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="login()">Iniciar sesión</button>
+                </div>
+                <div class="d-flex mb-2">
+                    <button class="btn bg-outline-color-1-with-hover fw-bold btn-block w-100" [routerLink]="appRoutes.RESET_PASSWORD_COMPONENT_ROUTE_NAME">¿Olvidó su contraseña?</button>
+                </div>
+                <!-- <div class="d-flex flex-column">
+                    <div class="fs-16px text-center mb-2">¿Aún no eres cliente?</div>
+                    <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" [routerLink]="appRoutes.SIGN_UP_COMPONENT_ROUTE_NAME">REGÍSTRATE</button>
+                </div> -->
+            </div>
+        </div>
+    </ng-container>
 </div>
