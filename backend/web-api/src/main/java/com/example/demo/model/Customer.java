@@ -63,6 +63,20 @@ public class Customer {
         this.isLinkedToGoogleAccount = false;
     }
 
+    public Customer(String name, String lastName, String password, String email, Integer documentType, String documentNumber, String phoneNumber, Boolean isLinkedToGoogleAccount) {
+        this.name = name;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.documentType = documentType;
+        this.documentNumber = documentNumber;
+        this.phoneNumber= phoneNumber;
+        this.addresses=new ArrayList<>();
+        this.roles = new ArrayList<>(Collections.singleton(Enums.Roles.ROLE_CUSTOMER.getValue()));
+        this.status = Enums.CustomerStatus.REGISTERED.getCode();
+        this.isLinkedToGoogleAccount = isLinkedToGoogleAccount;
+    }
+
     public Collection<GrantedAuthority> getAuthorities(){
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         this.getRoles().forEach(role -> { authorities.add(new SimpleGrantedAuthority(role)); });

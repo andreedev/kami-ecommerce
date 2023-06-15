@@ -1,3 +1,4 @@
+export { SessionResponse } from './rest/session-response';
 export { Product } from './product';
 export { Address } from './address';
 export { Customer } from './customer';

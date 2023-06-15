@@ -7,7 +7,6 @@ import { Utils } from 'app/core/helpers/utils';
 import { AuthService, DataService } from 'app/core/services';
 import { AuthDataService } from 'app/core/services/data/auth-data.service';
 import { DocumentType } from 'app/core/enums/document-type';
-import { VerifyEmailCodeResponse } from 'app/core/models/rest/verify-email-code-response';
 import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({

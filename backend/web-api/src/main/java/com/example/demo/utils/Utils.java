@@ -4,9 +4,13 @@ import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.CustomCategory;
 import com.example.demo.model.validation.CustomProduct;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -70,4 +74,18 @@ public class Utils {
         }
         return totalAmount;
     }
+
+    public static Collection<GrantedAuthority> parseToGrantedAuthorityCollection(List<String> roles){
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(role -> { authorities.add(new SimpleGrantedAuthority(role)); });
+        return authorities;
+    }
+
+    public static List<String> parseToStringList(Collection<? extends GrantedAuthority> authorities) {
+        List<String> roles = new ArrayList<>();
+        authorities.forEach(authority -> roles.add(authority.getAuthority()));
+        return roles;
+    }
+
+
 }

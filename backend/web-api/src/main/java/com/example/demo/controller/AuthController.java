@@ -7,10 +7,13 @@ import com.example.demo.config.jwt.model.JwtResponse;
 import com.example.demo.config.jwt.model.JwtTokenRefreshRequest;
 import com.example.demo.model.Customer;
 import com.example.demo.model.VerificationCode;
+import com.example.demo.model.googleapi.GoogleUser;
 import com.example.demo.model.validation.*;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.EmailService;
+import com.example.demo.service.GoogleApiClientService;
 import com.example.demo.utils.Enums;
+import com.example.demo.utils.Utils;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,28 +43,18 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final CustomerService customerService;
     private final EmailService emailService;
+    private final GoogleApiClientService googleApiClientService;
 
     @Autowired
-    public AuthController(JwtUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, CustomerService customerService, EmailService emailService) {
+    public AuthController(JwtUserDetailsService userDetailsService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, CustomerService customerService, EmailService emailService, GoogleApiClientService googleApiClientService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.customerService = customerService;
         this.emailService = emailService;
-    }
-
-    @PostMapping("resolveGoogleAuth")
-    public ResolveGoogleAuthResponse resolveGoogleAuth(@RequestBody @Valid ResolveGoogleAuthRequest req){
-        log.info("resolveGoogleAuth");
-        Customer customer = customerService.findByEmail(req.getEmail(), Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
-        if (customer==null)
-            return ResolveGoogleAuthResponse.builder().code(Enums.ResolveGoogleAuthCode.UNREGISTERED.getCode()).build();
-        if (!customer.getIsLinkedToGoogleAccount())
-            return ResolveGoogleAuthResponse.builder().code(Enums.ResolveGoogleAuthCode.ACCOUNT_NOT_LINKED_TO_GOOGLE.getCode()).build();
-
-        return null;
+        this.googleApiClientService = googleApiClientService;
     }
     @PostMapping("login")
-    public ResponseEntity<Object> createToken(@RequestBody @Valid JwtRequest request) throws Exception {
+    public ResponseEntity<Object> createToken(@RequestBody @Valid JwtRequest request) {
         try {
             UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -101,7 +94,7 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public Integer registerCustomer(@RequestBody @Valid CustomerRegistrationRequest req){
+    public Integer registerCustomer(@RequestBody @Valid CustomerSignUpRequest req){
         Customer customerWithStatusRegistered = customerService.findByEmail(req.getEmail());
         if (customerWithStatusRegistered!=null && customerWithStatusRegistered.getStatus().equals(Enums.CustomerStatus.REGISTERED.getCode())){
             customerService.deleteById(customerWithStatusRegistered.getId());
@@ -117,15 +110,15 @@ public class AuthController {
     }
 
     @PostMapping("verifyEmailCode")
-    public VerifyEmailCodeResponse verifyEmailCode(@RequestBody Map<String, Object> req){
+    public SessionResponse verifyEmailCode(@RequestBody Map<String, Object> req){
         String code = req.get("code").toString();
         VerifyEmailCodeServiceResult result = customerService.verifyEmailCode(code);
         if (result.getCode()==1) {
             Customer customer = customerService.findById(result.getVerificationCode().getCustomerId());
             JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
-            return VerifyEmailCodeResponse.builder().code(result.getCode()).data(jwtResponse).build();
+            return SessionResponse.builder().code(result.getCode()).data(jwtResponse).build();
         }
-        return VerifyEmailCodeResponse.builder().code(result.getCode()).build();
+        return SessionResponse.builder().code(result.getCode()).build();
     }
 
     @PostMapping("checkEmail")
@@ -148,12 +141,73 @@ public class AuthController {
         return ResponseEntity.ok(true);
     }
 
+
+
+    @PostMapping("resolveGoogleAuth")
+    public SessionResponse resolveGoogleAuth(@RequestBody @Valid ResolveGoogleAuthRequest req) {
+        log.info("resolveGoogleAuth");
+        Customer customer = customerService.findByEmail(req.getEmail(), Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
+        if (customer==null)
+            return SessionResponse.builder().code(Enums.GoogleAuthResolverCode.UNREGISTERED.getCode()).build();
+        if (!customer.getIsLinkedToGoogleAccount())
+            return SessionResponse.builder().code(Enums.GoogleAuthResolverCode.ACCOUNT_NOT_LINKED_TO_GOOGLE.getCode()).build();
+        GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(req.getGoogleIdToken());
+        if (googleUser == null)
+            return SessionResponse.builder().code(Enums.GoogleApiClientCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
+        if (!googleUser.getEmail().equals(req.getEmail()))
+            return SessionResponse.builder().code(Enums.GoogleApiClientCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
+
+        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
+        return SessionResponse.builder()
+                .data(jwtResponse)
+                .code(Enums.GoogleAuthResolverCode.SUCCESSFUL_GOOGLE_LOGIN.getCode()).build();
+    }
+
+    @PostMapping("linkToGoogleAccount")
+    public SessionResponse linkToGoogleAccount(@RequestBody @Valid JwtRequest request){
+        log.info("linkToGoogleAccount");
+        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(request.getGoogleIdToken());
+        if (googleUser == null)
+            return SessionResponse.builder().code(Enums.GoogleApiClientCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
+        if (!googleUser.getEmail().equals(userDetails.getUsername()))
+            return SessionResponse.builder().code(Enums.GoogleApiClientCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
+
+        boolean result = customerService.linkToGoogleAccount(Customer.builder().email(userDetails.getUsername()).build());
+        if (!result) return SessionResponse.builder().code(-1).build();
+        JwtResponse jwtResponse = authenticateCustomer(userDetails.getUsername(), Utils.parseToStringList(userDetails.getAuthorities()) );
+        return SessionResponse.builder().data(jwtResponse).code(1).build();
+    }
+
+    @PostMapping("signUpWithGoogle")
+    public SessionResponse signUpWithGoogle(@RequestBody @Valid CustomerSignUpWithGoogleRequest request) {
+        log.info("registerWithGoogle");
+        GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(request.getGoogleIdToken());
+        if (googleUser == null)
+            return SessionResponse.builder().code(Enums.GoogleApiClientCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
+        if (!googleUser.getEmail().equals(request.getEmail()))
+            return SessionResponse.builder().code(Enums.GoogleApiClientCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
+        Customer customerToSave = request.toCustomer();
+        customerToSave.setIsLinkedToGoogleAccount(true);
+        customerToSave.setStatus(Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
+        Customer customer = customerService.registerCustomer(customerToSave);
+        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
+        return SessionResponse.builder().data(jwtResponse).code(1).build();
+    }
+
+
+
     @PostMapping("verifyResetPassword")
     public ResponseEntity<Boolean> verifyResetPassword(@RequestBody @Valid VerifyResetPasswordRequest req){
         log.info("verifyResetPassword");
         boolean result = customerService.verifyResetPassword(req);
         return ResponseEntity.ok(result);
     }
+
 
     private JwtResponse authenticateCustomer(String username, List<String> roles){
         final String jwtToken = jwtUtil.generateJwtToken(username, roles);

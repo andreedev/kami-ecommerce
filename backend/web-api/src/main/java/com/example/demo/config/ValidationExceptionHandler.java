@@ -30,4 +30,14 @@ public class ValidationExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(errorMessages);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<String> handleValidationException(RuntimeException ex) {
+        ex.printStackTrace();
+        String errorMessage = ex.toString();
+        return new ResponseEntity<>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
 }

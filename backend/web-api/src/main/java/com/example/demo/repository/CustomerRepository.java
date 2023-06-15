@@ -17,4 +17,6 @@ public interface CustomerRepository {
     VerifyEmailCodeServiceResult verifyEmailCode(String code);
     boolean verifyResetPassword(VerifyResetPasswordRequest req);
     void deleteById(String id);
+    boolean linkToGoogleAccount(Customer customer);
+
 }

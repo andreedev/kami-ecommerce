@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VerifyEmailCodeResponse {
+public class SessionResponse {
     private Integer code;
     private JwtResponse data;
 }

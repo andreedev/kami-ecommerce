@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-    public class CustomerRegistrationRequest {
+public class CustomerSignUpRequest {
     @NotEmpty(message = "The name is required")
     @Size(min = 3, max = 20, message = "The name must be between 3 and 20 characters.")
     private String name;
@@ -39,6 +39,7 @@ import lombok.Setter;
     private String phoneNumber;
     @Size(min = 6, max = 6, message = "Email verification code must be a 6-character string")
     private String emailVerificationCode;
+    private String googleIdToken;
     public Customer toCustomer(){
         return new Customer(name, lastName, password, email, documentType, documentNumber, phoneNumber);
     }

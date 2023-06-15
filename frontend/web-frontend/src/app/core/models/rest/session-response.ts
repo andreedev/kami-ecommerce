@@ -1,6 +1,6 @@
 import { LoginResponse } from "./login-response"
 
-export interface VerifyEmailCodeResponse {
+export interface SessionResponse {
     code?: number
     data?: LoginResponse
 }

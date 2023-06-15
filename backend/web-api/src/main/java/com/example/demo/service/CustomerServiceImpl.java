@@ -76,4 +76,10 @@ public class CustomerServiceImpl implements CustomerService{
         customerRepository.deleteById(id);
     }
 
+    @Override
+    public boolean linkToGoogleAccount(Customer customer) {
+        if (customer == null || customer.getEmail()==null) return false;
+        return customerRepository.linkToGoogleAccount(customer);
+    }
+
 }

@@ -1,16 +1,11 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SessionResponse } from 'app/core/models/rest/session-response';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom } from 'rxjs';
-import { Endpoints } from '../../constants';
-import { Constants } from '../../constants/constants';
-import { Utils } from '../../helpers/utils';
-import { Customer, Employee } from '../../models';
-import { LoginResponse } from '../../models/rest/login-response';
-import { DataService } from '../data/data.service';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { AuthDataService } from '../data/auth-data.service';
-import { VerifyEmailCodeResponse } from 'app/core/models/rest/verify-email-code-response';
+import { Constants, Endpoints } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
+import { Customer, LoginResponse } from 'app/core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +28,7 @@ export class AuthService {
       this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, response.refreshToken!)
       return true
     } catch (error: any) {
-      if (error.status === 401){
+      if (error.status === 401) {
         this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
         this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
       }
@@ -53,7 +48,7 @@ export class AuthService {
     }
   }
 
-  async verifyEmailCode(code: string): Promise<VerifyEmailCodeResponse | HttpErrorResponse> {
+  async verifyEmailCode(code: string): Promise<SessionResponse | HttpErrorResponse> {
     try {
       const body = { code }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.VERIFY_EMAIL_CODE), body))
@@ -65,19 +60,8 @@ export class AuthService {
 
   async login(username: string, password: string): Promise<LoginResponse | null> {
     try {
-      const body: Employee = { username, password }
+      const body = { username, password }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
-      return response
-    } catch (error: any) {
-      if (error.status === 401) return null
-      throw error
-    }
-  }
-
-  async resolveGoogleAuth(username: string, password: string): Promise<LoginResponse | null> {
-    try {
-      const body: Employee = { username, password }
-      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.RESOLVE_GOOGLE_AUTH), body))
       return response
     } catch (error: any) {
       if (error.status === 401) return null
@@ -107,11 +91,41 @@ export class AuthService {
 
   async verifyResetPassword(code: string, newPassword: string): Promise<boolean | null> {
     try {
-      const body = { code, newPassword}
+      const body = { code, newPassword }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.VERIFY_RESET_PASSWORD), body))
       return response
     } catch (error: any) {
       return error
+    }
+  }
+
+  async resolveGoogleAuth(email: string, googleIdToken: string): Promise<SessionResponse | null> {
+    try {
+      const body = { email, googleIdToken }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.RESOLVE_GOOGLE_AUTH), body))
+      return response
+    } catch (error: any) {
+      throw error
+    }
+  }
+
+  async linkToGoogleAccount(username: string, password: string, googleIdToken: string): Promise<SessionResponse | null> {
+    try {
+      const body = { username, password, googleIdToken }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LINK_TO_GOOGLE_ACCOUNT), body))
+      return response
+    } catch (error: any) {
+      throw error
+    }
+  }
+
+  async signUpWithGoogle(customer: Customer): Promise<SessionResponse | null> {
+    try {
+      const body = { customer }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.SIGN_UP_WITH_GOOGLE), body))
+      return response
+    } catch (error: any) {
+      throw error
     }
   }
 

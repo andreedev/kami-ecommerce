@@ -16,8 +16,9 @@ export interface Customer {
     updatedAt?: string;
     cart?: Array<Product>;
     isLinkedToGoogleAccount?: boolean;
-    googleAccountId?: string;
+
 
     //doesn't persist
     passwordConfirm?: string
+    googleIdToken?: string
 }

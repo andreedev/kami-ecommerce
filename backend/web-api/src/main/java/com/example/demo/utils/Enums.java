@@ -91,10 +91,21 @@ public class Enums {
 
     @Getter
     @AllArgsConstructor
-    public enum ResolveGoogleAuthCode {
-        UNREGISTERED(1, "unregistered"),
-        ACCOUNT_NOT_LINKED_TO_GOOGLE(2, "account_not_linked_to_google"),
-        LINKED_TO_GOOGLE(3, "linked_to_google");
+    public enum GoogleAuthResolverCode {
+        SUCCESSFUL_GOOGLE_LOGIN(1, "Successful google login"),
+        UNREGISTERED(-1, "Unregistered"),
+        ACCOUNT_NOT_LINKED_TO_GOOGLE(-2, "Account not linked to google"),
+        ;
+        private final int code;
+        private final String value;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum GoogleApiClientCode {
+        INVALID_GOOGLE_ID_TOKEN(350, "Invalid google id token"),
+        EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH(360, "Email received and google email does not match"),
+        ;
         private final int code;
         private final String value;
     }
