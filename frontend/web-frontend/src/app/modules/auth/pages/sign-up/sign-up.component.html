@@ -55,7 +55,7 @@
                 <div class="mb-3 max-w-300px">
                     <p class="fs-12px lh-sm text-gray-60">Al crear una cuenta o iniciar sesión, usted reconoce y acepta las condiciones de Indeed. Además, reconoce nuestras políticas sobre cookies y de privacidad.</p>
                 </div>
-                <p class="text-danger text-center fs-12px" [innerHTML]="message"></p>
+                <p class="text-center fs-12px" [class]="messageClass" [innerHTML]="message"></p>
                 <div class="d-flex mb-2">
                     <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="signUp()">Crear cuenta</button>
                 </div>
@@ -73,7 +73,7 @@
                 <div class="mb-3">
                     <input type="text" class="form-control" placeholder="Código verificación" [(ngModel)]="emailVerificationCode">
                 </div>
-                <p class="text-danger text-center fs-12px" [innerHTML]="message"></p>
+                <p class="text-center fs-12px" [class]="messageClass"  [innerHTML]="message"></p>
                 <div class="d-flex mb-2">
                     <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="verifyEmailCode()">Verificar</button>
                 </div>

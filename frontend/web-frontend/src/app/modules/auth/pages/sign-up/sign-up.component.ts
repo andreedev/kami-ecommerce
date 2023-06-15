@@ -47,10 +47,10 @@ export class SignUpComponent implements OnInit {
     this.dataService.enableLoading();
     const response: any = await this.authService.signUp(this.authDataService.customerSignUpRequest);
     if (response === 1) {
-      this.step= 2;
+      this.step = 2;
     } else if (response instanceof HttpErrorResponse) {
       console.log('http error response')
-      this.messageClass = 'text-danger';
+      this.messageClass = 'text-red';
       const errorMessages = response.error.errorMessages;
       this.message = this.sanitizer.bypassSecurityTrustHtml(
         errorMessages.join('<br>')
@@ -62,7 +62,7 @@ export class SignUpComponent implements OnInit {
   async verifyEmailCode(): Promise<void> {
     if (!this.validateEmailVerificationCode()) return;
     this.dataService.enableLoading();
-    const response: any= await this.authService.verifyEmailCode(this.emailVerificationCode);
+    const response: any = await this.authService.verifyEmailCode(this.emailVerificationCode);
     if (response.code === 1) {
       this.messageClass = 'text-green';
       this.message = 'Tu correo ha sido verificado con éxito. Iniciando sesión...';
@@ -77,7 +77,7 @@ export class SignUpComponent implements OnInit {
       this.messageClass = 'text-red';
       this.message = 'Código inválido o expirado.';
     } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-danger';
+      this.messageClass = 'text-red';
       const errorMessages = response.error.errorMessages;
       this.message = this.sanitizer.bypassSecurityTrustHtml(
         errorMessages.join('<br>')
@@ -87,7 +87,7 @@ export class SignUpComponent implements OnInit {
   }
 
   private validateCustomerSignUpRequest(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
 
     if (this.authDataService.customerSignUpRequest.documentType == DocumentType.DNI.getCode()) {
       if (
@@ -171,7 +171,7 @@ export class SignUpComponent implements OnInit {
   }
 
   private validateEmailVerificationCode(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
 
     if (
       !Utils.stringHasNumber(this.authDataService.customerSignUpRequest.phoneNumber!)

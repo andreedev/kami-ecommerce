@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Customer;
+import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
+import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.repository.CustomerRepository;
+import com.example.demo.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,19 +44,31 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public Customer findByEmail(String email, Integer statusFilter) {
+        return customerRepository.findByEmail(email, statusFilter);
+    }
+
+    @Override
     public Customer registerCustomer(Customer customer) {
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerRepository.registerCustomer(customer);
     }
 
     @Override
-    public String generateEmailVerificationCode(String customerId) {
-        return customerRepository.generateEmailVerificationCode(customerId);
+    public String generateVerificationCode(VerificationCode verificationCode) {
+        verificationCode.setCode(Utils.generateEmailVerificationCode());
+        return customerRepository.generateVerificationCode(verificationCode);
     }
 
     @Override
     public VerifyEmailCodeServiceResult verifyEmailCode(String code) {
         return customerRepository.verifyEmailCode(code);
+    }
+
+    @Override
+    public boolean verifyResetPassword(VerifyResetPasswordRequest req) {
+        req.setNewPassword(passwordEncoder.encode(req.getNewPassword()));
+        return customerRepository.verifyResetPassword(req);
     }
 
     @Override

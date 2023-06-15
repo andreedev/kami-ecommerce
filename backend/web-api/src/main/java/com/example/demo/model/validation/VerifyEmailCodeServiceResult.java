@@ -1,6 +1,6 @@
 package com.example.demo.model.validation;
 
-import com.example.demo.model.EmailVerificationCode;
+import com.example.demo.model.VerificationCode;
 import lombok.*;
 
 @Builder
@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VerifyEmailCodeServiceResult {
-    private EmailVerificationCode emailVerificationCode;
+    private VerificationCode verificationCode;
     private int code;
 }

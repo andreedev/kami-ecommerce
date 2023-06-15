@@ -7,6 +7,7 @@ export abstract class Endpoints {
     static readonly CHECK_EMAIL: string = `${Endpoints.AUTH}/checkEmail`
     static readonly VERIFY_EMAIL_CODE: string = `${Endpoints.AUTH}/verifyEmailCode`
     static readonly RESET_PASSWORD: string = `${Endpoints.AUTH}/resetPassword`
+    static readonly VERIFY_RESET_PASSWORD: string = `${Endpoints.AUTH}/verifyResetPassword`
 
     static readonly EMPLOYEE: string = 'admin/employee'
     static readonly GET_EMPLOYEE: string = `${Endpoints.EMPLOYEE}/getEmployee`

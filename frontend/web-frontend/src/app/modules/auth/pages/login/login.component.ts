@@ -40,7 +40,7 @@ export class LoginComponent  {
     this.dataService.enableLoading()
     this.authService.checkEmail(this.email).then(res => {
       this.dataService.disableLoading()
-      if (res===1){
+      if (res){
         this.step = 2;
         this.emailAutofocus=false
         this.passwordAutofocus=true
@@ -57,6 +57,7 @@ export class LoginComponent  {
     this.authService.login(this.email, this.password).then(res => {
       this.dataService.disableLoading()
       if (!res) {
+        this.messageClass = 'text-red';
         this.message = 'Contraseña incorrecta'
         return
       }
@@ -68,7 +69,7 @@ export class LoginComponent  {
   }
 
   private validate(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
     if (!Utils.validateIsEmail(this.email)) {
       this.message = 'La dirección de email no es válida';
       return false;

@@ -42,7 +42,7 @@ export class AuthService {
     }
   }
 
-  async checkEmail(email: string): Promise<number | null> {
+  async checkEmail(email: string): Promise<boolean | null> {
     try {
       const body = { email }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.CHECK_EMAIL), body))
@@ -78,6 +78,26 @@ export class AuthService {
     try {
       const body = customerSignUpRequest
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REGISTER), body))
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
+  async resetPassword(email: string): Promise<boolean | null> {
+    try {
+      const body = { email }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.RESET_PASSWORD), body))
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
+  async verifyResetPassword(code: string, newPassword: string): Promise<boolean | null> {
+    try {
+      const body = { code, newPassword}
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.VERIFY_RESET_PASSWORD), body))
       return response
     } catch (error: any) {
       return error

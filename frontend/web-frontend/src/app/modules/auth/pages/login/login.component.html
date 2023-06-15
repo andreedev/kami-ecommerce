@@ -23,7 +23,7 @@
                     <input type="email" class="form-control" placeholder="Correo electrónico" [(ngModel)]="email" 
                     (keyup.enter)="checkEmail()" [appFocus]="emailAutofocus">
                 </div>
-                <p class="text-danger text-center fs-12px">{{ message }}</p>
+                <p class="text-center fs-12px" [class]="messageClass">{{ message }}</p>
                 <div class="d-flex mb-2">
                     <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="checkEmail()">Continuar</button>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="mb-3">
                     <input type="password" class="form-control" placeholder="Contraseña" [(ngModel)]="password" (keyup.enter)="login()" [appFocus]="passwordAutofocus">
                 </div>
-                <p class="text-danger text-center fs-12px">{{ message }}</p>
+                <p class="text-center fs-12px" [class]="messageClass" >{{ message }}</p>
                 <div class="d-flex mb-2">
                     <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="login()">Iniciar sesión</button>
                 </div>

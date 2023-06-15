@@ -47,6 +47,16 @@ public class Enums {
 
     @Getter
     @AllArgsConstructor
+    public enum VerificationCodeType {
+        EMAIL_VERIFICATION(1, "email_verification"),
+        PASSWORD_RESET(2, "password_reset"),
+        ;
+        private final int code;
+        private final String value;
+    }
+
+    @Getter
+    @AllArgsConstructor
     public enum DocumentType {
         DNI(1, "DNI"),
         CE(4, "CARNET EXT."),

@@ -1,10 +1,12 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Customer;
-import com.example.demo.model.EmailVerificationCode;
+import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
+import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.utils.Enums;
 import com.example.demo.utils.Utils;
+import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -57,7 +59,20 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer findByEmail(String email) {
-        Query query = new Query(where("email").is(email));
+        Query query = new Query();
+        query.addCriteria(new Criteria().andOperator(
+                where("email").regex(email, "i")
+        ));
+        return mongoTemplate.findOne(query, Customer.class, "customers");
+    }
+
+    @Override
+    public Customer findByEmail(String email, Integer statusFilter) {
+        Query query = new Query();
+        query.addCriteria(new Criteria().andOperator(
+                where("email").regex(email, "i"),
+                where("status").is(statusFilter)
+        ));
         return mongoTemplate.findOne(query, Customer.class, "customers");
     }
 
@@ -69,30 +84,46 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public String generateEmailVerificationCode(String customerId) {
-        String code = Utils.generateEmailVerificationCode();
-        EmailVerificationCode emailVerificationCode = EmailVerificationCode.builder().code(code).customerId(customerId).build();
-        EmailVerificationCode result = mongoTemplate.save(emailVerificationCode, "emailVerificationCodes");
-        return code;
+    public String generateVerificationCode(VerificationCode verificationCode) {
+        VerificationCode result = mongoTemplate.save(verificationCode, "verificationCodes");
+        return result.getCode();
     }
 
     @Override
 //    @Transactional
     public VerifyEmailCodeServiceResult verifyEmailCode(String code) {
         Query query = new Query(where("code").is(code));
-        EmailVerificationCode emailVerificationCodeDb = mongoTemplate.findOne(query, EmailVerificationCode.class, "emailVerificationCodes");
-        if (emailVerificationCodeDb!= null && emailVerificationCodeDb.getCustomerId()!=null) {
+        VerificationCode verificationCode = mongoTemplate.findOne(query, VerificationCode.class, "verificationCodes");
+        if (verificationCode != null && verificationCode.getCustomerId()!=null &&
+            verificationCode.getType().equals(Enums.VerificationCodeType.EMAIL_VERIFICATION.getCode())
+        ) {
             Query query2 = new Query(
                 new Criteria().andOperator(
-                    Criteria.where("id").is(emailVerificationCodeDb.getCustomerId()),
+                    Criteria.where("id").is(verificationCode.getCustomerId()),
                     Criteria.where("status").is(Enums.CustomerStatus.REGISTERED.getCode())
             ));
             Update update = new Update().set("status", Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
             mongoTemplate.updateFirst(query2, update, Customer.class);
-            mongoTemplate.remove(emailVerificationCodeDb, "emailVerificationCodes");
-            return VerifyEmailCodeServiceResult.builder().code(1).emailVerificationCode(emailVerificationCodeDb).build();
+            mongoTemplate.remove(verificationCode, "verificationCodes");
+            return VerifyEmailCodeServiceResult.builder().code(1).verificationCode(verificationCode).build();
         }
         return VerifyEmailCodeServiceResult.builder().code(-1).build();
+    }
+
+    @Override
+    public boolean verifyResetPassword(VerifyResetPasswordRequest req) {
+        Query query = new Query(new Criteria().andOperator(
+                where("code").is(req.getCode()),
+                where("type").is(Enums.VerificationCodeType.PASSWORD_RESET.getCode())
+        ));
+        VerificationCode verificationCode = mongoTemplate.findOne(query, VerificationCode.class, "verificationCodes");
+        if (verificationCode==null || verificationCode.getCustomerId()==null) return false;
+        Query query2 = new Query(Criteria.where("id").is(verificationCode.getCustomerId()));
+        Update update = new Update().set("password", req.getNewPassword());
+        UpdateResult updateResult = mongoTemplate.updateFirst(query2, update, Customer.class, "customers");
+        if (updateResult.getModifiedCount() == 0) return false;
+        mongoTemplate.remove(verificationCode, "verificationCodes");
+        return true;
     }
 
     @Override

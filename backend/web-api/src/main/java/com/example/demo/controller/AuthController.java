@@ -6,9 +6,11 @@ import com.example.demo.config.jwt.model.JwtRequest;
 import com.example.demo.config.jwt.model.JwtResponse;
 import com.example.demo.config.jwt.model.JwtTokenRefreshRequest;
 import com.example.demo.model.Customer;
+import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.CustomerRegistrationRequest;
 import com.example.demo.model.validation.VerifyEmailCodeResponse;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
+import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.EmailService;
 import com.example.demo.utils.Enums;
@@ -92,15 +94,17 @@ public class AuthController {
 
     @PostMapping("register")
     public Integer registerCustomer(@RequestBody @Valid CustomerRegistrationRequest req){
-        //this delete customer with status registered
         Customer customerWithStatusRegistered = customerService.findByEmail(req.getEmail());
         if (customerWithStatusRegistered!=null && customerWithStatusRegistered.getStatus().equals(Enums.CustomerStatus.REGISTERED.getCode())){
             customerService.deleteById(customerWithStatusRegistered.getId());
         }
 
         Customer customer = customerService.registerCustomer(req.toCustomer());
-        String code = customerService.generateEmailVerificationCode(customer.getId());
-        emailService.sendEmail(req.getEmail(), "Bienvenido", "Bienvenido a Company Name", "<p>Código de verificación: "+code+"</p>"+ "<p>Este código es válido solo por 10 minutos.</p>");
+        String code = customerService.generateVerificationCode(
+                new VerificationCode(customer.getId(), Enums.VerificationCodeType.EMAIL_VERIFICATION.getCode()));
+        emailService.sendEmail(customer.getEmail(), "Verificar correo electrónico", "Verificar correo electrónico",
+                "¡Hola!\n\nRecibes este correo porque te has registrado en nuestro sitio web. Para completar el proceso de registro, necesitamos verificar tu dirección de correo electrónico. A continuación, encontrarás un código de verificación de 6 dígitos que deberás utilizar para confirmar tu correo electrónico.\n\nCódigo de verificación: " + code + "\n\nSi no has realizado este registro, por favor ignora este mensaje.\n\n¡Gracias por unirte a nosotros!\n\nEl equipo de soporte de Company Name"
+        );
         return 1;
     }
 
@@ -109,9 +113,7 @@ public class AuthController {
         String code = req.get("code").toString();
         VerifyEmailCodeServiceResult result = customerService.verifyEmailCode(code);
         if (result.getCode()==1) {
-            //this 3 lines can be improved in the future
-            Customer customer = customerService.findById(result.getEmailVerificationCode().getCustomerId());
-            assert customer != null;
+            Customer customer = customerService.findById(result.getVerificationCode().getCustomerId());
             JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
             return VerifyEmailCodeResponse.builder().code(result.getCode()).data(jwtResponse).build();
         }
@@ -120,10 +122,30 @@ public class AuthController {
 
     @PostMapping("checkEmail")
     public ResponseEntity<Boolean> checkEmail(@RequestBody Map<String, Object> req){
-        String code = req.get("email").toString();
-        return ResponseEntity.ok(customerService.existsByEmail(code));
+        String email = req.get("email").toString();
+        return ResponseEntity.ok(customerService.existsByEmail(email));
     }
 
+    @PostMapping("resetPassword")
+    public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, Object> req){
+        log.info("resetPassword");
+        String email = req.get("email").toString();
+        Customer customer = customerService.findByEmail(email, Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
+        if (customer==null) return ResponseEntity.ok(false);
+        String code = customerService.generateVerificationCode(
+                new VerificationCode(customer.getId(), Enums.VerificationCodeType.PASSWORD_RESET.getCode()));
+        emailService.sendEmail(email, "Reestablecer contraseña", "Reestablecer contraseña",
+                "¡Hola!\n\nRecibes este correo porque has solicitado restablecer tu contraseña. A continuación, encontrarás un código de 6 dígitos que podrás utilizar para completar el proceso.\n\nCódigo de verificación: " + code + "\n\nSi no has solicitado este cambio, puedes ignorar este mensaje. Tu contraseña actual seguirá siendo válida.\n\n¡Que tengas un buen día!\n\nEl equipo de soporte"
+        );
+        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("verifyResetPassword")
+    public ResponseEntity<Boolean> verifyResetPassword(@RequestBody @Valid VerifyResetPasswordRequest req){
+        log.info("verifyResetPassword");
+        boolean result = customerService.verifyResetPassword(req);
+        return ResponseEntity.ok(result);
+    }
     private JwtResponse authenticateCustomer(String username, List<String> roles){
         final String jwtToken = jwtUtil.generateJwtToken(username, roles);
         final String refreshJwtToken =  jwtUtil.generateJwtRefreshToken(username);
