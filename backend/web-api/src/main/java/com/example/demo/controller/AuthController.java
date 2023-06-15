@@ -7,10 +7,7 @@ import com.example.demo.config.jwt.model.JwtResponse;
 import com.example.demo.config.jwt.model.JwtTokenRefreshRequest;
 import com.example.demo.model.Customer;
 import com.example.demo.model.VerificationCode;
-import com.example.demo.model.validation.CustomerRegistrationRequest;
-import com.example.demo.model.validation.VerifyEmailCodeResponse;
-import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
-import com.example.demo.model.validation.VerifyResetPasswordRequest;
+import com.example.demo.model.validation.*;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.EmailService;
 import com.example.demo.utils.Enums;
@@ -52,6 +49,17 @@ public class AuthController {
         this.emailService = emailService;
     }
 
+    @PostMapping("resolveGoogleAuth")
+    public ResolveGoogleAuthResponse resolveGoogleAuth(@RequestBody @Valid ResolveGoogleAuthRequest req){
+        log.info("resolveGoogleAuth");
+        Customer customer = customerService.findByEmail(req.getEmail(), Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
+        if (customer==null)
+            return ResolveGoogleAuthResponse.builder().code(Enums.ResolveGoogleAuthCode.UNREGISTERED.getCode()).build();
+        if (!customer.getIsLinkedToGoogleAccount())
+            return ResolveGoogleAuthResponse.builder().code(Enums.ResolveGoogleAuthCode.ACCOUNT_NOT_LINKED_TO_GOOGLE.getCode()).build();
+
+        return null;
+    }
     @PostMapping("login")
     public ResponseEntity<Object> createToken(@RequestBody @Valid JwtRequest request) throws Exception {
         try {
@@ -146,6 +154,7 @@ public class AuthController {
         boolean result = customerService.verifyResetPassword(req);
         return ResponseEntity.ok(result);
     }
+
     private JwtResponse authenticateCustomer(String username, List<String> roles){
         final String jwtToken = jwtUtil.generateJwtToken(username, roles);
         final String refreshJwtToken =  jwtUtil.generateJwtRefreshToken(username);

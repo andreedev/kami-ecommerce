@@ -11,7 +11,7 @@ const routes: Routes = [
     children: [
       { path: AppRoutes.LOGIN_COMPONENT_NAME, component: LoginComponent },
       { path: AppRoutes.SIGN_UP_COMPONENT_NAME, component: SignUpComponent },
-      { path: AppRoutes.RESET_PASSWORD_COMPONENT_NAME, component: ResetPasswordComponent, data: {email: 'some value'} },
+      { path: AppRoutes.RESET_PASSWORD_COMPONENT_NAME, component: ResetPasswordComponent},
       { path: "", pathMatch: "full", redirectTo: AppRoutes.LOGIN_COMPONENT_NAME }
     ]
   },

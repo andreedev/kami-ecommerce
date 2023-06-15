@@ -89,4 +89,14 @@ public class Enums {
         }
     }
 
+    @Getter
+    @AllArgsConstructor
+    public enum ResolveGoogleAuthCode {
+        UNREGISTERED(1, "unregistered"),
+        ACCOUNT_NOT_LINKED_TO_GOOGLE(2, "account_not_linked_to_google"),
+        LINKED_TO_GOOGLE(3, "linked_to_google");
+        private final int code;
+        private final String value;
+    }
+
 }

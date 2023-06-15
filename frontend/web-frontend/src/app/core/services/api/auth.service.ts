@@ -74,6 +74,17 @@ export class AuthService {
     }
   }
 
+  async resolveGoogleAuth(username: string, password: string): Promise<LoginResponse | null> {
+    try {
+      const body: Employee = { username, password }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.RESOLVE_GOOGLE_AUTH), body))
+      return response
+    } catch (error: any) {
+      if (error.status === 401) return null
+      throw error
+    }
+  }
+
   async signUp(customerSignUpRequest: Customer): Promise<LoginResponse | null> {
     try {
       const body = customerSignUpRequest
