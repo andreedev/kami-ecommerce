@@ -16,8 +16,13 @@ public class CustomerServiceImpl implements CustomerService{
     private CustomerRepository customerRepository;
 
     @Override
-    public Boolean customerExistsByUsernameOrEmailOrDocumentNumber(CustomerRegistrationRequest req) {
-        return customerRepository.customerExistsByUsernameOrEmailOrDocumentNumber(req);
+    public boolean existsByEmail(String email) {
+        return customerRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByDocumentNumber(String documentNumber) {
+        return customerRepository.existsByDocumentNumber(documentNumber);
     }
 
     @Override

@@ -27,15 +27,18 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Boolean customerExistsByUsernameOrEmailOrDocumentNumber(CustomerRegistrationRequest req) {
+    public boolean existsByEmail(String email) {
         Query query = new Query();
-        query.addCriteria(
-            new Criteria().orOperator(
-//                where("username").is(req.getUsername()),
-                where("email").regex(req.getEmail(), "i"),
-                where("documentNumber").is(req.getDocumentNumber())
-            )
-        );
+        query.addCriteria(new Criteria().orOperator(
+            where("email").regex(email, "i")
+        ));
+        return mongoTemplate.exists(query, Customer.class);
+    }
+
+    @Override
+    public boolean existsByDocumentNumber(String documentNumber) {
+        Query query = new Query();
+        query.addCriteria(new Criteria().orOperator( where("documentNumber").is(documentNumber.trim()) ));
         return mongoTemplate.exists(query, Customer.class);
     }
 

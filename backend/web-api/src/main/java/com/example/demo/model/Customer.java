@@ -49,9 +49,6 @@ public class Customer {
     private Boolean isLinkedToGoogleAccount;
 //    private String googleAccountId;
 
-    @Transient
-    private String passwordConfirm;
-
     public Customer(String name, String lastName, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
         this.name = name;
         this.lastName = lastName;

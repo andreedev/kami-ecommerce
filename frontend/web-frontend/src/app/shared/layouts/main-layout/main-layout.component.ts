@@ -15,13 +15,7 @@ import { Constants } from 'app/core/constants';
 export class MainLayoutComponent implements OnInit {
 
   constructor(
-    private dataService: DataService,
-    private cartDataService: CartDataService,
-    private searchDataService: SearchDataService,
-    private productModalDataService: ProductModalDataService,
-    private categoryDataService: CategoryDataService,
-    private authDataService: AuthDataService,
-    private cookieService: CookieService,
+    private dataService: DataService
   ) { }
 
   ngOnInit(): void {
@@ -32,15 +26,4 @@ export class MainLayoutComponent implements OnInit {
     this.dataService.screenWidth = event.target.innerWidth
   }
 
-  debug(): void {
-    console.log(this.dataService);
-    console.log(this.authDataService);
-    console.log(this.cartDataService);
-    console.log(this.searchDataService);
-    console.log(this.productModalDataService);
-    console.log(this.categoryDataService);
-    // console.log(this.cookieService.get((Constants.SESSION_TOKEN_NAME)));
-    // console.log(this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME)));
-    
-  }
 }

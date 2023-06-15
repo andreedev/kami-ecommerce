@@ -1,9 +1,7 @@
 package com.example.demo.model.validation;
 
 import com.example.demo.model.Product;
-import com.example.demo.utils.validators.ExistingId;
-import com.example.demo.utils.validators.UniqueProductName;
-import com.example.demo.utils.validators.UniqueProductSku;
+import com.example.demo.utils.validators.ExistingProductId;
 import com.example.demo.utils.validators.ValidProductStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -20,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductUpdateRequest {
-    @ExistingId
+    @ExistingProductId
     @NotBlank(message = "The id is required")
     private String id;
 

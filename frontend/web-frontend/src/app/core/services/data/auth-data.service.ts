@@ -20,6 +20,7 @@ export class AuthDataService {
     documentType: 1,
     documentNumber: "",
     name: "",
+    lastName: "",
     email: "",
     password: "",
     passwordConfirm: "",

@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ExistingIdValidator implements ConstraintValidator<ExistingId, String> {
+public class ExistingProductIdValidator implements ConstraintValidator<ExistingProductId, String> {
 
     @Autowired
     private ProductService productService;

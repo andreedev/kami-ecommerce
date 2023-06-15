@@ -36,12 +36,20 @@ export class Utils {
         return re.test(String(email).toLowerCase());
     }
 
-    static validateStringIsEmpty(str: string): boolean {
+    static stringIsEmpty(str: string): boolean {
         return str.length == 0;
     }
 
-    static validateStringHasLessLengthThanX(str: string, x: number): boolean {
-        return (str.length <= x) ? true : false;
+    static stringHasLength(str: string, x: number): boolean {
+        return (str.length === x) ? true : false;
+    }
+
+    static stringHasLessLengthThan(str: string, x: number): boolean {
+        return (str.length < x) ? true : false;
+    }
+
+    static stringHasMoreLengthThan(str: string, x: number): boolean {
+        return (str.length > x) ? true : false;
     }
 
     static stringHasNumber(myString: string): boolean {
@@ -186,15 +194,15 @@ export class Utils {
 
     static multiply(a: number, b: number): number {
         if (isNaN(a) || isNaN(b)) {
-          throw new Error('Invalid operands. Both operands must be valid numbers.');
+            throw new Error('Invalid operands. Both operands must be valid numbers.');
         }
-      
+
         const result = a * b;
         const roundedResult = Math.round(result * 100) / 100; // Round to 2 decimal places
         return roundedResult;
     }
-      
-    
-    
+
+
+
 
 }

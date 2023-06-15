@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ExistingIdValidator.class)
-public @interface ExistingId {
+@Constraint(validatedBy = ExistingProductIdValidator.class)
+public @interface ExistingProductId {
     String message() default "Invalid id";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

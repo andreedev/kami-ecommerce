@@ -1,10 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Customer;
-import com.example.demo.model.validation.CustomerRegistrationRequest;
 
 public interface CustomerService {
-    Boolean customerExistsByUsernameOrEmailOrDocumentNumber(CustomerRegistrationRequest req);
+    boolean existsByEmail(String email);
+    boolean existsByDocumentNumber(String documentNumber);
     Customer findByUsername(String username);
     Customer findByEmail(String email);
     Customer registerCustomer(Customer customer);
