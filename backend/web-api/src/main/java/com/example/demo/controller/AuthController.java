@@ -7,8 +7,11 @@ import com.example.demo.config.jwt.model.JwtResponse;
 import com.example.demo.config.jwt.model.JwtTokenRefreshRequest;
 import com.example.demo.model.Customer;
 import com.example.demo.model.validation.CustomerRegistrationRequest;
+import com.example.demo.model.validation.VerifyEmailCodeResponse;
+import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.EmailService;
+import com.example.demo.utils.Enums;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -88,24 +92,42 @@ public class AuthController {
 
     @PostMapping("register")
     public Integer registerCustomer(@RequestBody @Valid CustomerRegistrationRequest req){
-        boolean existsByDocumentNumber = customerService.existsByDocumentNumber(req.getDocumentNumber());
-        if (existsByDocumentNumber) return -2;
+        //this delete customer with status registered
+        Customer customerWithStatusRegistered = customerService.findByEmail(req.getEmail());
+        if (customerWithStatusRegistered!=null && customerWithStatusRegistered.getStatus().equals(Enums.CustomerStatus.REGISTERED.getCode())){
+            customerService.deleteById(customerWithStatusRegistered.getId());
+        }
+
         Customer customer = customerService.registerCustomer(req.toCustomer());
         String code = customerService.generateEmailVerificationCode(customer.getId());
-        emailService.sendEmail(req.getEmail(), "Bienvenido", "Bienvenido a Company Name", "<p>Código de verificación: "+code+"</p>"+
-                "<p>Este código es válido solo por 10 minutos.</p>");
+        emailService.sendEmail(req.getEmail(), "Bienvenido", "Bienvenido a Company Name", "<p>Código de verificación: "+code+"</p>"+ "<p>Este código es válido solo por 10 minutos.</p>");
         return 1;
     }
 
     @PostMapping("verifyEmailCode")
-    public ResponseEntity<Integer> verifyEmailCode(@RequestBody Map<String, Object> req){
-        String code = req.get("emailVerificationCode").toString();
-        return ResponseEntity.ok(customerService.verifyEmailCode(code));
+    public VerifyEmailCodeResponse verifyEmailCode(@RequestBody Map<String, Object> req){
+        String code = req.get("code").toString();
+        VerifyEmailCodeServiceResult result = customerService.verifyEmailCode(code);
+        if (result.getCode()==1) {
+            //this 3 lines can be improved in the future
+            Customer customer = customerService.findById(result.getEmailVerificationCode().getCustomerId());
+            assert customer != null;
+            JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
+            return VerifyEmailCodeResponse.builder().code(result.getCode()).data(jwtResponse).build();
+        }
+        return VerifyEmailCodeResponse.builder().code(result.getCode()).build();
     }
 
     @PostMapping("checkEmail")
-    public ResponseEntity<Integer> checkEmail(@RequestBody Map<String, Object> req){
+    public ResponseEntity<Boolean> checkEmail(@RequestBody Map<String, Object> req){
         String code = req.get("email").toString();
-        return ResponseEntity.ok(customerService.checkEmail(code));
+        return ResponseEntity.ok(customerService.existsByEmail(code));
+    }
+
+    private JwtResponse authenticateCustomer(String username, List<String> roles){
+        final String jwtToken = jwtUtil.generateJwtToken(username, roles);
+        final String refreshJwtToken =  jwtUtil.generateJwtRefreshToken(username);
+        log.info("User authenticated by method authenticateCustomer: "+username);
+        return new JwtResponse(jwtToken, refreshJwtToken);
     }
 }

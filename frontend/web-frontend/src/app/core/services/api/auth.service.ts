@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom } from 'rxjs';
@@ -10,6 +10,7 @@ import { LoginResponse } from '../../models/rest/login-response';
 import { DataService } from '../data/data.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { AuthDataService } from '../data/auth-data.service';
+import { VerifyEmailCodeResponse } from 'app/core/models/rest/verify-email-code-response';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,16 @@ export class AuthService {
     }
   }
 
+  async verifyEmailCode(code: string): Promise<VerifyEmailCodeResponse | HttpErrorResponse> {
+    try {
+      const body = { code }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.VERIFY_EMAIL_CODE), body))
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
   async login(username: string, password: string): Promise<LoginResponse | null> {
     try {
       const body: Employee = { username, password }
@@ -69,8 +80,7 @@ export class AuthService {
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REGISTER), body))
       return response
     } catch (error: any) {
-      if (error.status === 401) return null
-      throw error
+      return error
     }
   }
 

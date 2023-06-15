@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Customer;
-import com.example.demo.model.validation.CustomerRegistrationRequest;
+import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +26,11 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public Customer findById(String id) {
+        return customerRepository.findById(id);
+    }
+
+    @Override
     public Customer findByUsername(String username) {
         return customerRepository.findByUsername(username);
     }
@@ -47,13 +52,13 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Integer verifyEmailCode(String emailVerificationCode) {
-        return customerRepository.verifyEmailCode(emailVerificationCode);
+    public VerifyEmailCodeServiceResult verifyEmailCode(String code) {
+        return customerRepository.verifyEmailCode(code);
     }
 
     @Override
-    public Integer checkEmail(String email) {
-        return customerRepository.checkEmail(email);
+    public void deleteById(String id) {
+        customerRepository.deleteById(id);
     }
 
 }

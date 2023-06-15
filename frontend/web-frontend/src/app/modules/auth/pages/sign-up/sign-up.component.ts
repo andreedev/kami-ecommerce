@@ -4,10 +4,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { Customer } from 'app/core/models';
 import { AuthService, DataService } from 'app/core/services';
 import { AuthDataService } from 'app/core/services/data/auth-data.service';
 import { DocumentType } from 'app/core/enums/document-type';
+import { VerifyEmailCodeResponse } from 'app/core/models/rest/verify-email-code-response';
+import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({
   selector: 'app-sign-up',
@@ -23,6 +24,9 @@ export class SignUpComponent implements OnInit {
   messageClass: string = '';
 
   isEmailPrefilled: boolean = false;
+  step: number = 1
+
+  emailVerificationCode: string = ''
 
   constructor(
     private authService: AuthService,
@@ -39,18 +43,39 @@ export class SignUpComponent implements OnInit {
   }
 
   async signUp(): Promise<void> {
-    if (!this.validate()) return;
+    if (!this.validateCustomerSignUpRequest()) return;
     this.dataService.enableLoading();
     const response: any = await this.authService.signUp(this.authDataService.customerSignUpRequest);
     if (response === 1) {
-      //now customer should send email verification code
+      this.step= 2;
+    } else if (response instanceof HttpErrorResponse) {
+      console.log('http error response')
+      this.messageClass = 'text-danger';
+      const errorMessages = response.error.errorMessages;
+      this.message = this.sanitizer.bypassSecurityTrustHtml(
+        errorMessages.join('<br>')
+      );
+    }
+    this.dataService.disableLoading();
+  }
 
-      // this.messageClass = 'text-green';
-      // this.message = 'Registro exitoso. Redireccionando...';
-      // this.resetCustomerSignUpRequest();
-      // setTimeout(() => {
-      //   this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
-      // }, 1000);
+  async verifyEmailCode(): Promise<void> {
+    if (!this.validateEmailVerificationCode()) return;
+    this.dataService.enableLoading();
+    const response: any= await this.authService.verifyEmailCode(this.emailVerificationCode);
+    if (response.code === 1) {
+      this.messageClass = 'text-green';
+      this.message = 'Tu correo ha sido verificado con éxito. Iniciando sesión...';
+      this.resetCustomerSignUpRequest();
+      this.authDataService.updateSession(response.data)
+      this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
+      this.authDataService.loadProfile()
+      setTimeout(() => {
+        this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
+      }, 1200);
+    } else if (response.code === -1) {
+      this.messageClass = 'text-red';
+      this.message = 'Código inválido o expirado.';
     } else if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-danger';
       const errorMessages = response.error.errorMessages;
@@ -61,7 +86,7 @@ export class SignUpComponent implements OnInit {
     this.dataService.disableLoading();
   }
 
-  private validate(): boolean {
+  private validateCustomerSignUpRequest(): boolean {
     this.messageClass = 'text-danger';
 
     if (this.authDataService.customerSignUpRequest.documentType == DocumentType.DNI.getCode()) {
@@ -138,6 +163,20 @@ export class SignUpComponent implements OnInit {
       !Utils.stringHasMoreLengthThan(this.authDataService.customerSignUpRequest.phoneNumber!, 8)
     ) {
       this.message = 'Celular invalido';
+      return false;
+    }
+
+    this.message = '';
+    return true;
+  }
+
+  private validateEmailVerificationCode(): boolean {
+    this.messageClass = 'text-danger';
+
+    if (
+      !Utils.stringHasNumber(this.authDataService.customerSignUpRequest.phoneNumber!)
+    ) {
+      this.message = 'El código solo contiene números.';
       return false;
     }
 

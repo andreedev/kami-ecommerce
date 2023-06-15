@@ -2,10 +2,9 @@ package com.example.demo.repository;
 
 import com.example.demo.model.Customer;
 import com.example.demo.model.EmailVerificationCode;
-import com.example.demo.model.validation.CustomerRegistrationRequest;
+import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.utils.Enums;
 import com.example.demo.utils.Utils;
-import jakarta.validation.constraints.Email;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -29,8 +27,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public boolean existsByEmail(String email) {
         Query query = new Query();
-        query.addCriteria(new Criteria().orOperator(
-            where("email").regex(email, "i")
+        query.addCriteria(new Criteria().andOperator(
+            where("email").regex(email, "i"),
+            where("status").is(Enums.CustomerStatus.EMAIL_VERIFIED.getCode())
         ));
         return mongoTemplate.exists(query, Customer.class);
     }
@@ -38,8 +37,16 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public boolean existsByDocumentNumber(String documentNumber) {
         Query query = new Query();
-        query.addCriteria(new Criteria().orOperator( where("documentNumber").is(documentNumber.trim()) ));
+        query.addCriteria(new Criteria().andOperator(
+                where("documentNumber").is(documentNumber.trim()),
+                where("status").is(Enums.CustomerStatus.EMAIL_VERIFIED.getCode())
+        ));
         return mongoTemplate.exists(query, Customer.class);
+    }
+
+    @Override
+    public Customer findById(String id) {
+        return mongoTemplate.findById(id, Customer.class, "customers");
     }
 
     @Override
@@ -71,8 +78,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
 //    @Transactional
-    public Integer verifyEmailCode(String emailVerificationCode) {
-        Query query = new Query(where("code").is(emailVerificationCode));
+    public VerifyEmailCodeServiceResult verifyEmailCode(String code) {
+        Query query = new Query(where("code").is(code));
         EmailVerificationCode emailVerificationCodeDb = mongoTemplate.findOne(query, EmailVerificationCode.class, "emailVerificationCodes");
         if (emailVerificationCodeDb!= null && emailVerificationCodeDb.getCustomerId()!=null) {
             Query query2 = new Query(
@@ -83,17 +90,16 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             Update update = new Update().set("status", Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
             mongoTemplate.updateFirst(query2, update, Customer.class);
             mongoTemplate.remove(emailVerificationCodeDb, "emailVerificationCodes");
-            return 1;
+            return VerifyEmailCodeServiceResult.builder().code(1).emailVerificationCode(emailVerificationCodeDb).build();
         }
-        return -1;
+        return VerifyEmailCodeServiceResult.builder().code(-1).build();
     }
 
     @Override
-    public Integer checkEmail(String email) {
-        Query query = new Query();
-        query.addCriteria(
-            new Criteria().orOperator(where("email").regex(email, "i"))
-        );
-        return mongoTemplate.exists(query, Customer.class) ? 1: -1;
+    public void deleteById(String id) {
+        Query query = new Query(Criteria.where("id").is(id).and("status").is(Enums.CustomerStatus.REGISTERED.getCode()));
+        mongoTemplate.remove(query, Customer.class, "customers");
     }
+
+
 }
