@@ -12,9 +12,7 @@ public class UniqueCustomerEmailValidator implements ConstraintValidator<UniqueC
     private CustomerService customerService;
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.trim().isEmpty()) {
-            return true;
-        }
+        if (value == null || value.isEmpty()) return false;
         return !customerService.existsByEmail(value);
     }
 }

@@ -203,7 +203,7 @@ public class AuthController {
     public SessionResponse authenticateWithGoogle(@RequestBody @Valid ResolveGoogleAuthRequest req) {
         log.info("authenticateWithGoogle");
         SessionResponse sessionResponse = SessionResponse.builder().build();
-        Customer customer = customerService.findByEmail(req.getEmail(), Enums.CustomerStatus.VERIFIED_EMAIL.getCode());
+        Customer customer = customerService.findByEmail(req.getEmail());
         if (customer==null){
             sessionResponse.setCode(Enums.AuthenticateWithGoogleResponseCode.UNREGISTERED.getCode());
             return sessionResponse;
@@ -265,11 +265,11 @@ public class AuthController {
     }
 
     @PostMapping("signUpWithGoogle")
-    public SessionResponse signUpWithGoogle(@RequestBody @Valid CustomerSignUpWithGoogleRequestExt request) {
+    public SessionResponse signUpWithGoogle(@RequestBody @Valid CustomerSignUpWithGoogleRequest request) {
         log.info("signUpWithGoogle");
         GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(request.getGoogleIdToken());
         if (googleUser == null)
-            return SessionResponse.builder().code(Enums.ValidateGoogleIdTokenResponseCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
+                return SessionResponse.builder().code(Enums.ValidateGoogleIdTokenResponseCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
         if (!googleUser.getEmail().equals(request.getEmail()))
             return SessionResponse.builder().code(Enums.ValidateGoogleIdTokenResponseCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
         Customer customer = customerService.registerCustomer(request.buildCustomer());

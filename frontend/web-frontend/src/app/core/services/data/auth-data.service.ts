@@ -6,6 +6,7 @@ import { CustomerService } from 'app/core/services/api/customer.service';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from '../api/auth.service';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 
 @Injectable({
   providedIn: 'root'
@@ -24,31 +25,40 @@ export class AuthDataService {
     password: "",
     passwordConfirm: "",
     phoneNumber: "",
+    isLinkedToGoogleAccount: false,
     googleIdToken: ""
   };
 
-
-
-  linkToGoogleAccountRequest = {
+  linkToGoogleAccountRequest: any = {
     email: '',
     password: '',
-    idToken: ''
+    googleIdToken: ''
   }
 
   resendVerificationEmailEvent: EventEmitter<any> = new EventEmitter();
+  authenticateWithGoogleEvent: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private cookieService: CookieService,
     private customerService: CustomerService,
-    private authService: AuthService
+    private authService: AuthService,
+    public socialAuthService: SocialAuthService
   ) {
     this.checkAuthStatus();
+    this.initializeGoogleAuthResolver();
   }
 
-  async checkAuthStatus(): Promise<void>{
-    if (this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)){
+  initializeGoogleAuthResolver(): void {
+    const observer = this.socialAuthService.authState.subscribe((user: any) => {
+      this.authenticateWithGoogleEvent.emit(user)
+      // observer.unsubscribe()
+    });
+  }
+
+  async checkAuthStatus(): Promise<void> {
+    if (this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)) {
       const response: boolean = await this.authService.refreshToken();
-      if (response){
+      if (response) {
         this.authStatus.next(AuthStatus.LOGGED_IN.getName());
         this.loadProfile()
       }
@@ -56,9 +66,8 @@ export class AuthDataService {
   }
 
   updateSession(res: SessionResponse): void {
-    if (!res.data || !res.data.token || !res.data.refreshToken) return;
-    this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.data.token)
-    this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.data.refreshToken)
+    this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.data.token!)
+    this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.data.refreshToken!)
   }
 
   logout(): void {

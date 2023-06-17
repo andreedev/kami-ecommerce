@@ -1,6 +1,6 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
@@ -30,28 +30,29 @@ export class LoginComponent {
   emailAutofocus = true
   passwordAutofocus = false
 
+  previusEmail: string = '';
+  canAuthenticateWithGoogle: boolean = true;
+
   constructor(
     private authService: AuthService,
     private authDataService: AuthDataService,
     private dataService: DataService,
     private router: Router,
-    private sanitizer: DomSanitizer,
-    public socialAuthService: SocialAuthService,
+    private sanitizer: DomSanitizer
   ) {
-    this.initializeGoogleAuthResolver()
-  }
-
-  initializeGoogleAuthResolver(): void {
-    this.socialAuthService.authState.subscribe(async (user: any) => {
-      console.log(user)
+    this.authDataService.authenticateWithGoogleEvent.subscribe(async (user: any) => {
+      if (user.email === this.previusEmail) return;
       if (user === null) return;
+      if (!this.canAuthenticateWithGoogle) return;
+      this.canAuthenticateWithGoogle=false
+      console.log(user)
       const idToken = user.idToken
       const googleEmail = user.email
-      const response: SessionResponse = await this.authService.authenticateWithGoogle(googleEmail, idToken);
-      console.log(response);
+      this.previusEmail = user.email;
+      const response: any = await this.authService.authenticateWithGoogle(googleEmail, idToken);
       if (response instanceof HttpErrorResponse) {
         this.messageClass = 'text-red';
-          this.message = 'Internal error'
+        this.message = 'Internal error'
         return
       }
       if (response.code === -1) {
@@ -76,12 +77,12 @@ export class LoginComponent {
         this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
         return
       }
-      if (response.code === 350 ||response.code === 360) {
+      if (response.code === 350 || response.code === 360) {
         this.messageClass = 'text-red';
         this.message = 'Invalid google session'
         return
       }
-    });
+    })
   }
 
   async checkEmail(): Promise<void> {
@@ -92,24 +93,24 @@ export class LoginComponent {
     if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-red';
       this.message = 'Internal error'
-    } else if (response.code===1) {
+    } else if (response.code === 1) {
       this.step = 2;
       this.emailAutofocus = false
       this.passwordAutofocus = true
-    } else if (response.code===-1){
+    } else if (response.code === -1) {
       this.authDataService.customerSignUpRequest.email = this.email
       this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
-    } else if (response.code===-2){
+    } else if (response.code === -2) {
       this.messageClass = 'text-primary';
       this.message = response.message
       setTimeout(() => {
         this.authDataService.resendVerificationEmailEvent.emit(this.email);
         this.router.navigate([AppRoutes.VERIFY_EMAIL_COMPONENT_ROUTE_NAME])
       }, 2500);
-    } else if (response.code===-3){
+    } else if (response.code === -3) {
       this.messageClass = 'text-red';
       this.message = response.message
-    } else if (response.code===-4){
+    } else if (response.code === -4) {
       this.messageClass = 'text-red';
       this.message = response.message
     }
@@ -122,7 +123,7 @@ export class LoginComponent {
     this.dataService.enableLoading();
     const response: any = await this.authService.login(this.email, this.password);
     if (response instanceof HttpErrorResponse) {
-      if (response.error.code===-1 && response.status ===401){
+      if (response.error.code === -1 && response.status === 401) {
         this.messageClass = 'text-red';
         this.message = response.error.message;
       } else {
@@ -134,7 +135,7 @@ export class LoginComponent {
       this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
       this.authDataService.loadProfile()
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
-    } else if (response.code===-2){
+    } else if (response.code === -2) {
       this.messageClass = 'text-red';
       this.message = response.message
       setTimeout(() => {

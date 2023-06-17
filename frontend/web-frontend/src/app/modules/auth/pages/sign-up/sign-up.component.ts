@@ -7,6 +7,7 @@ import { DocumentType } from 'app/core/enums/document-type';
 import { Utils } from 'app/core/helpers/utils';
 import { AuthService, DataService } from 'app/core/services';
 import { AuthDataService } from 'app/core/services/data/auth-data.service';
+import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({
   selector: 'app-sign-up',
@@ -39,23 +40,53 @@ export class SignUpComponent implements OnInit {
   }
 
   async signUp(): Promise<void> {
+    if (this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount)
+      this.signUpWithGoogle()
+    else 
+      this.signUpWithEmail()
+  }
+
+  async signUpWithEmail(): Promise<void> {
     if (!this.validateCustomerSignUpRequest()) return;
     this.dataService.enableLoading();
     const response: any = await this.authService.signUp(this.authDataService.customerSignUpRequest);
     if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-red';
-      if (response.error){
+      this.message = 'Internal error'
+      if (response.error && response.error.errorMessages){
         const errorMessages = response.error.errorMessages;
         if (errorMessages){
           this.message = this.sanitizer.bypassSecurityTrustHtml(
             errorMessages.join('<br>')
           );
         }
-      } else {
-        this.message = 'Internal error'
       }
     } else if (response === 1) {
       this.router.navigate([AppRoutes.VERIFY_EMAIL_COMPONENT_ROUTE_NAME])
+    }
+    this.dataService.disableLoading();
+  }
+
+  async signUpWithGoogle(): Promise<void> {
+    if (!this.validateCustomerSignUpRequest()) return;
+    this.dataService.enableLoading();
+    const response: any = await this.authService.signUpWithGoogle(this.authDataService.customerSignUpRequest);
+    if (response instanceof HttpErrorResponse) {
+      this.messageClass = 'text-red';
+      this.message = 'Internal error'
+      if (response.error && response.error.errorMessages){
+        const errorMessages = response.error.errorMessages;
+        if (errorMessages){
+          this.message = this.sanitizer.bypassSecurityTrustHtml(
+            errorMessages.join('<br>')
+          );
+        }
+      }
+    } else if (response.code === 1) {
+      this.authDataService.updateSession(response)
+      this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
+      this.authDataService.loadProfile()
+      this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
     }
     this.dataService.disableLoading();
   }
@@ -119,24 +150,26 @@ export class SignUpComponent implements OnInit {
       return false;
     }
 
-    if (Utils.stringIsEmpty(this.authDataService.customerSignUpRequest.password!)) {
-      this.message = 'Ingrese una contraseña';
-      return false;
-    } else if (this.authDataService.customerSignUpRequest.password!.length < 8) {
-      this.message = 'La contraseña debe tener al menos 8 caracteres';
-      return false;
-    }
-
-    if (this.authDataService.customerSignUpRequest.password !== this.authDataService.customerSignUpRequest.passwordConfirm) {
-      this.message = 'Las contraseñas no coinciden';
-      return false;
+    if (!this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount){
+      if (Utils.stringIsEmpty(this.authDataService.customerSignUpRequest.password!)) {
+        this.message = 'Ingrese una contraseña';
+        return false;
+      } else if (this.authDataService.customerSignUpRequest.password!.length < 8) {
+        this.message = 'La contraseña debe tener al menos 8 caracteres';
+        return false;
+      }
+  
+      if (this.authDataService.customerSignUpRequest.password !== this.authDataService.customerSignUpRequest.passwordConfirm) {
+        this.message = 'Las contraseñas no coinciden';
+        return false;
+      }
     }
 
     if (
       !Utils.stringHasNumber(this.authDataService.customerSignUpRequest.phoneNumber!) ||
       !Utils.stringHasMoreLengthThan(this.authDataService.customerSignUpRequest.phoneNumber!, 8)
     ) {
-      this.message = 'Celular invalido';
+      this.message = 'El celular debe tener como mínimo 9 digitos';
       return false;
     }
 

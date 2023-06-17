@@ -59,15 +59,14 @@ export class ResetPasswordComponent {
     const response: any = await this.authService.verifyResetPassword(this.code, this.newPassword);
     if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-red';
-      if (response.error){
+      this.message = 'Internal error'
+      if (response.error && response.error.errorMessages){
         const errorMessages = response.error.errorMessages;
         if (errorMessages){
           this.message = this.sanitizer.bypassSecurityTrustHtml(
             errorMessages.join('<br>')
           );
         }
-      } else {
-        this.message = 'Internal error'
       }
     } if (response === true) {
       this.messageClass = 'text-green';

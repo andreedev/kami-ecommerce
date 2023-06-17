@@ -11,10 +11,7 @@ public class UniqueCustomerDocumentNumberValidator implements ConstraintValidato
     private CustomerService customerService;
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        value=value.trim();
-        if (value == null || value.isEmpty()) {
-            return true;
-        }
-        return !customerService.existsByDocumentNumber(value);
+        if (value == null || value.isEmpty()) return false;
+        return !customerService.existsByDocumentNumber(value.trim());
     }
 }

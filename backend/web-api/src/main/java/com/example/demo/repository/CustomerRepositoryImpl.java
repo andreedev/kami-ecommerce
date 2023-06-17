@@ -83,6 +83,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public String generateVerificationCode(VerificationCode verificationCode) {
+        Query query = new Query(where("customerId").is(verificationCode.getCustomerId()));
+        mongoTemplate.remove(query, "verificationCodes");
         VerificationCode result = mongoTemplate.save(verificationCode, "verificationCodes");
         return result.getCode();
     }

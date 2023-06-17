@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom } from 'rxjs';
 import { Constants, Endpoints } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { Customer, LoginResponse } from 'app/core/models';
+import { Customer, JwtResponse } from 'app/core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class AuthService {
       const refreshToken = this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME))
       const body = { refreshToken }
       const headers = this.getAuthHeaders()
-      const response: LoginResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }))
+      const response: JwtResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }))
       this.cookieService.set(Constants.SESSION_TOKEN_NAME, response.token!)
       this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, response.refreshToken!)
       return true
@@ -32,12 +32,11 @@ export class AuthService {
         this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
         this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
       }
-      // throw error
       return false
     }
   }
 
-  async checkEmail(email: string): Promise<SessionResponse | null> {
+  async checkEmail(email: string): Promise<SessionResponse | any> {
     try {
       const body = { email }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.CHECK_EMAIL), body))
@@ -68,7 +67,7 @@ export class AuthService {
     }
   }
 
-  async login(username: string, password: string): Promise<LoginResponse | null> {
+  async login(username: string, password: string): Promise<JwtResponse | any> {
     try {
       const body = { username, password }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
@@ -78,7 +77,7 @@ export class AuthService {
     }
   }
 
-  async signUp(customerSignUpRequest: Customer): Promise<LoginResponse | null> {
+  async signUp(customerSignUpRequest: Customer): Promise<JwtResponse | any> {
     try {
       const body = customerSignUpRequest
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REGISTER), body))
@@ -108,7 +107,7 @@ export class AuthService {
     }
   }
 
-  async authenticateWithGoogle(email: string, googleIdToken: string): Promise<SessionResponse> {
+  async authenticateWithGoogle(email: string, googleIdToken: string): Promise<SessionResponse | any> {
     try {
       const body = { email, googleIdToken }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.AUTHENTICATE_WITH_GOOGLE), body))
@@ -118,7 +117,7 @@ export class AuthService {
     }
   }
 
-  async linkToGoogleAccount(username: string, password: string, googleIdToken: string): Promise<SessionResponse | null> {
+  async linkToGoogleAccount(username: string, password: string, googleIdToken: string): Promise<SessionResponse | any> {
     try {
       const body = { username, password, googleIdToken }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LINK_TO_GOOGLE_ACCOUNT), body))
@@ -128,13 +127,13 @@ export class AuthService {
     }
   }
 
-  async signUpWithGoogle(customer: Customer): Promise<SessionResponse | null> {
+  async signUpWithGoogle(customer: Customer): Promise<SessionResponse | any> {
     try {
-      const body = { customer }
-      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.SIGN_UP_WITH_GOOGLE), body))
+      const body = customer
+      const response = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.SIGN_UP_WITH_GOOGLE), body));
       return response
-    } catch (error: any) {
-      throw error
+    } catch (error) {
+      return error
     }
   }
 

@@ -50,7 +50,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer registerCustomer(Customer customer) {
-        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        if (!customer.getIsLinkedToGoogleAccount()) customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerRepository.registerCustomer(customer);
     }
 

@@ -45,15 +45,17 @@
                     <input type="email" class="form-control" [(ngModel)]="authDataService.customerSignUpRequest.email">
                 </div>
             </ng-container>
-            <div class="mb-1">
-                <label class="fs-14px text-gray-60 ps-1">Contraseña</label>
-                <input type="password" class="form-control" [(ngModel)]="authDataService.customerSignUpRequest.password">
-                <p class="fs-12px text-gray-60 ps-2 mb-0">Utilice al menos 8 caracteres</p>
-            </div>
-            <div class="mb-1">
-                <label class="fs-14px text-gray-60 ps-1">Confirmar contraseña</label>
-                <input type="password" class="form-control" [(ngModel)]="authDataService.customerSignUpRequest.passwordConfirm">
-            </div>
+            <ng-container *ngIf="!this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount">
+                <div class="mb-1">
+                    <label class="fs-14px text-gray-60 ps-1">Contraseña</label>
+                    <input type="password" class="form-control" [(ngModel)]="authDataService.customerSignUpRequest.password">
+                    <p class="fs-12px text-gray-60 ps-2 mb-0">Utilice al menos 8 caracteres</p>
+                </div>
+                <div class="mb-1">
+                    <label class="fs-14px text-gray-60 ps-1">Confirmar contraseña</label>
+                    <input type="password" class="form-control" [(ngModel)]="authDataService.customerSignUpRequest.passwordConfirm">
+                </div>
+            </ng-container>
             <div class="mb-1">
                 <label class="fs-14px text-gray-60 ps-1">Celular</label>
                 <input type="text" class="form-control" [(ngModel)]="authDataService.customerSignUpRequest.phoneNumber">

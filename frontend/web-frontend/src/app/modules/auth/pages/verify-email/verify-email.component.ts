@@ -48,7 +48,7 @@ export class VerifyEmailComponent implements OnInit{
       if (response.code === 1) {
         this.messageClass = 'text-green';
         this.message = 'Tu correo ha sido verificado con éxito. Iniciando sesión...';
-        this.authDataService.updateSession(response.data)
+        this.authDataService.updateSession(response)
         this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
         this.authDataService.loadProfile()
         setTimeout(() => {
@@ -58,7 +58,9 @@ export class VerifyEmailComponent implements OnInit{
         this.messageClass = 'text-red';
         this.message = 'Código inválido o expirado.';
       } else if (response instanceof HttpErrorResponse) {
-        if (response.error){
+        this.messageClass = 'text-red';
+        this.message = 'Internal error'
+        if (response.error && response.error.errorMessages){
           const errorMessages = response.error.errorMessages;
           if (errorMessages){
             this.message = this.sanitizer.bypassSecurityTrustHtml(
