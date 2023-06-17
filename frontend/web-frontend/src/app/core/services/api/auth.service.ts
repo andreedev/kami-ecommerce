@@ -74,8 +74,7 @@ export class AuthService {
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
       return response
     } catch (error: any) {
-      if (error.status === 401) return null
-      throw error
+      return error
     }
   }
 

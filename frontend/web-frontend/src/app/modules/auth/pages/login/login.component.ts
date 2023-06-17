@@ -77,8 +77,8 @@ export class LoginComponent {
     this.message = ''
     this.dataService.enableLoading()
     const response: any = await this.authService.checkEmail(this.email);
-    if (!response){
-      this.messageClass = 'text-danger';
+    if (response instanceof HttpErrorResponse) {
+      this.messageClass = 'text-red';
       this.message = 'Internal error'
     } else if (response.code===1) {
       this.step = 2;
@@ -100,16 +100,6 @@ export class LoginComponent {
     } else if (response.code===-4){
       this.messageClass = 'text-red';
       this.message = response.message
-    } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-red';
-      if (response.error){
-        const errorMessages = response.error.errorMessages;
-        if (errorMessages){
-          this.message = this.sanitizer.bypassSecurityTrustHtml(
-            errorMessages.join('<br>')
-          );
-        }
-      }
     }
     this.dataService.disableLoading()
   }
@@ -119,21 +109,31 @@ export class LoginComponent {
     this.message = ''
     this.dataService.enableLoading();
     const response: any = await this.authService.login(this.email, this.password);
-    if (response.code === 1) {
+    if (response instanceof HttpErrorResponse) {
+      if (response.error.code===-1 && response.status ===401){
+        this.messageClass = 'text-red';
+        this.message = response.error.message;
+      } else {
+        this.messageClass = 'text-red';
+        this.message = 'Internal error'
+      }
+    } else if (response.code === 1) {
       this.authDataService.updateSession(response)
       this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
       this.authDataService.loadProfile()
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
-    } else if (response === false) {
+    } else if (response.code===-2){
       this.messageClass = 'text-red';
-      this.message = 'Código inválido o expirado.';
-    } else if (response instanceof HttpErrorResponse) {
-      console.log(response);
-      if (response.status===401){
-        this.messageClass = 'text-red';
-        this.message = response.message
-      }
+      this.message = response.message
+      setTimeout(() => {
+        this.authDataService.resendVerificationEmailEvent.emit(this.email);
+        this.router.navigate([AppRoutes.VERIFY_EMAIL_COMPONENT_ROUTE_NAME])
+      }, 2500);
+    } else {
+      this.messageClass = 'text-red';
+      this.message = response.message
     }
+    this.dataService.disableLoading();
   }
 
   private validateEmail(): boolean {
