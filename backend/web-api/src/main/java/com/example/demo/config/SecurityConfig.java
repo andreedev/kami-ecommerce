@@ -26,7 +26,7 @@ import java.util.Arrays;
 public class SecurityConfig {
     private final JwtAuthEntryPoint jwtAuthEntryPoint;
     private final JwtAuthFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,7 +36,6 @@ public class SecurityConfig {
             corsConfiguration.applyPermitDefaultValues();
             corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090","http://localhost:4200","http://localhost:4201", "http://kamistore.com.s3-website-us-east-1.amazonaws.com"));
-//            corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
             return corsConfiguration;
         });
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -52,11 +51,9 @@ public class SecurityConfig {
             .requestMatchers("/api/admin/**").hasAuthority(Enums.Roles.ROLE_ADMIN.getValue())
             .anyRequest().anonymous()
             .and()
-                .authenticationProvider(authenticationProvider)
+                .authenticationProvider(customAuthenticationProvider)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             ;
         return http.build();
     }
-
-
 }

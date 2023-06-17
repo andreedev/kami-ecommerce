@@ -25,7 +25,7 @@ public class CustomerSignUpRequest {
     @NotEmpty(message = "The password is required")
     @Size(min = 8, max = 20, message = "The password must be between {min} and {max} characters")
     private String password;
-    @NotEmpty(message = "The password is required")
+    @NotEmpty(message = "The email is required")
     @Email(message = "The email must be a valid one")
     @UniqueCustomerEmail(message = "El correo ya se encuentra registrado")
     private String email;

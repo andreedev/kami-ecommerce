@@ -12,5 +12,6 @@ import lombok.*;
 @AllArgsConstructor
 public class SessionResponse {
     private Integer code;
+    private String message;
     private JwtResponse data;
 }

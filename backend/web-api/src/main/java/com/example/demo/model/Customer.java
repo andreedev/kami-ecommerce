@@ -8,10 +8,10 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@JsonIgnoreProperties({"authorities"})
+@JsonIgnoreProperties({"authorities", "accountNonLocked", "accountNonExpired", "credentialsNonExpired", "enabled"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
@@ -27,7 +27,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("customers")
-public class Customer {
+public class Customer implements UserDetails {
     @Id
     private String id;
     private String name;
@@ -39,7 +39,7 @@ public class Customer {
     private Integer documentType;
     private String documentNumber;
     private String phoneNumber;
-    private Collection<String> roles;
+    private List<String> roles;
     private List<Address> addresses;
     @CreatedDate
     private LocalDateTime createdAt;
@@ -47,7 +47,6 @@ public class Customer {
     private LocalDateTime updatedAt;
     private CustomerCart cart;
     private Boolean isLinkedToGoogleAccount;
-//    private String googleAccountId;
 
     public Customer(String name, String lastName, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
         this.name = name;
@@ -59,7 +58,7 @@ public class Customer {
         this.phoneNumber= phoneNumber;
         this.addresses=new ArrayList<>();
         this.roles = new ArrayList<>(Collections.singleton(Enums.Roles.ROLE_CUSTOMER.getValue()));
-        this.status = Enums.CustomerStatus.REGISTERED.getCode();
+        this.status = Enums.CustomerStatus.UNVERIFIED_EMAIL.getCode();
         this.isLinkedToGoogleAccount = false;
     }
 
@@ -73,13 +72,43 @@ public class Customer {
         this.phoneNumber= phoneNumber;
         this.addresses=new ArrayList<>();
         this.roles = new ArrayList<>(Collections.singleton(Enums.Roles.ROLE_CUSTOMER.getValue()));
-        this.status = Enums.CustomerStatus.REGISTERED.getCode();
+        this.status = Enums.CustomerStatus.UNVERIFIED_EMAIL.getCode();
         this.isLinkedToGoogleAccount = isLinkedToGoogleAccount;
     }
+
 
     public Collection<GrantedAuthority> getAuthorities(){
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         this.getRoles().forEach(role -> { authorities.add(new SimpleGrantedAuthority(role)); });
         return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

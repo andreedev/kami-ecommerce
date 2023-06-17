@@ -12,6 +12,9 @@ export abstract class AppRoutes {
     static readonly RESET_PASSWORD_COMPONENT_NAME: string = `reset-password`
     static readonly RESET_PASSWORD_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}/${AppRoutes.RESET_PASSWORD_COMPONENT_NAME}`
 
+    static readonly VERIFY_EMAIL_COMPONENT_NAME: string = `verify-email`
+    static readonly VERIFY_EMAIL_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}/${AppRoutes.VERIFY_EMAIL_COMPONENT_NAME}`
+
     
     static readonly HOME_MODULE_NAME: string = ''
     static readonly HOME_MODULE_ROUTE_NAME: string = `/${AppRoutes.HOME_MODULE_NAME}`

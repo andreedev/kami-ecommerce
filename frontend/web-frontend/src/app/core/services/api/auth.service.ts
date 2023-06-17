@@ -37,7 +37,7 @@ export class AuthService {
     }
   }
 
-  async checkEmail(email: string): Promise<boolean | null> {
+  async checkEmail(email: string): Promise<SessionResponse | null> {
     try {
       const body = { email }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.CHECK_EMAIL), body))
@@ -52,6 +52,16 @@ export class AuthService {
     try {
       const body = { code }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.VERIFY_EMAIL_CODE), body))
+      return response
+    } catch (error: any) {
+      return error
+    }
+  }
+
+  async resendVerificationEmail(email: string): Promise<number | HttpErrorResponse> {
+    try {
+      const body = { email }
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.RESEND_VERIFICATION_EMAIL), body))
       return response
     } catch (error: any) {
       return error
@@ -99,10 +109,10 @@ export class AuthService {
     }
   }
 
-  async resolveGoogleAuth(email: string, googleIdToken: string): Promise<SessionResponse | null> {
+  async authenticateWithGoogle(email: string, googleIdToken: string): Promise<SessionResponse> {
     try {
       const body = { email, googleIdToken }
-      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.RESOLVE_GOOGLE_AUTH), body))
+      const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.AUTHENTICATE_WITH_GOOGLE), body))
       return response
     } catch (error: any) {
       throw error

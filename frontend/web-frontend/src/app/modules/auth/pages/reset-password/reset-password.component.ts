@@ -47,12 +47,14 @@ export class ResetPasswordComponent {
       this.messageClass = 'text-red';
       this.message = 'Correo no se encuentra registrado.';
     } else if (response instanceof HttpErrorResponse) {
-      console.log('http error response')
-      this.messageClass = 'text-red';
-      const errorMessages = response.error.errorMessages;
-      this.message = this.sanitizer.bypassSecurityTrustHtml(
-        errorMessages.join('<br>')
-      );
+      if (response.error){
+        const errorMessages = response.error.errorMessages;
+        if (errorMessages){
+          this.message = this.sanitizer.bypassSecurityTrustHtml(
+            errorMessages.join('<br>')
+          );
+        }
+      }
     }
     this.dataService.disableLoading();
   }
@@ -71,11 +73,14 @@ export class ResetPasswordComponent {
       this.messageClass = 'text-red';
       this.message = 'Código inválido o expirado.';
     } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-red';
-      const errorMessages = response.error.errorMessages;
-      this.message = this.sanitizer.bypassSecurityTrustHtml(
-        errorMessages.join('<br>')
-      );
+      if (response.error){
+        const errorMessages = response.error.errorMessages;
+        if (errorMessages){
+          this.message = this.sanitizer.bypassSecurityTrustHtml(
+            errorMessages.join('<br>')
+          );
+        }
+      }
     }
     this.dataService.disableLoading();
   }

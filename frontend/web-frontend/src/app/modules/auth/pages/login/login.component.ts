@@ -1,9 +1,12 @@
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { AfterContentInit, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
 import { AuthStatus } from 'app/core/enums/auth-status';
 import { Utils } from 'app/core/helpers/utils';
+import { SessionResponse } from 'app/core/models';
 import { AuthService } from 'app/core/services';
 import { AuthDataService } from 'app/core/services/data/auth-data.service';
 import { DataService } from 'app/core/services/data/data.service';
@@ -12,64 +15,135 @@ import { DataService } from 'app/core/services/data/data.service';
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent  {
+export class LoginComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
 
   email: string = ''
   password: string = ''
 
-  //validate
+  message: SafeHtml = '';
   messageClass: string = '';
-  message: string = ''
+
   step: number = 1
 
-  emailAutofocus=true
-  passwordAutofocus=false
+  emailAutofocus = true
+  passwordAutofocus = false
 
   constructor(
     private authService: AuthService,
     private authDataService: AuthDataService,
     private dataService: DataService,
-    private router: Router
-  ) { }
-
-  checkEmail(): void {
-    if (!this.validate()) return;
-    this.message = ''
-    this.dataService.enableLoading()
-    this.authService.checkEmail(this.email).then(res => {
-      this.dataService.disableLoading()
-      if (res){
-        this.step = 2;
-        this.emailAutofocus=false
-        this.passwordAutofocus=true
-      } else { 
-        this.authDataService.customerSignUpRequest.email = this.email
-        this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
-      }
-    })
+    private router: Router,
+    private sanitizer: DomSanitizer,
+    public socialAuthService: SocialAuthService,
+  ) {
+    this.initializeGoogleAuthHandler()
   }
 
-  login(): void {
+  initializeGoogleAuthHandler(): void {
+    this.socialAuthService.authState.subscribe(async (user: any) => {
+      console.log(user)
+      if (user === null) return;
+      const idToken = user.idToken
+      const googleEmail = user.email
+      this.authDataService.googleIdToken = idToken
+      const response: SessionResponse = await this.authService.authenticateWithGoogle(googleEmail, idToken);
+      console.log(response);
+      if (response.code === -1) {
+        this.authDataService.customerSignUpRequest.email = googleEmail
+        this.authDataService.customerSignUpRequest.name = user.firstName
+        this.authDataService.customerSignUpRequest.lastName = user.lastName
+        this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount = true
+        this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
+      }
+      if (response.code === -2) {
+
+      }
+      if (response.code === 1) {
+
+      }
+      if (response.code === 350) {
+
+      }
+      if (response.code === 360) {
+
+      }
+    });
+  }
+
+  async checkEmail(): Promise<void> {
+    if (!this.validateEmail()) return;
     this.message = ''
     this.dataService.enableLoading()
-    this.authService.login(this.email, this.password).then(res => {
-      this.dataService.disableLoading()
-      if (!res) {
-        this.messageClass = 'text-red';
-        this.message = 'Contraseña incorrecta'
-        return
+    const response: any = await this.authService.checkEmail(this.email);
+    if (!response){
+      this.messageClass = 'text-danger';
+      this.message = 'Internal error'
+    } else if (response.code===1) {
+      this.step = 2;
+      this.emailAutofocus = false
+      this.passwordAutofocus = true
+    } else if (response.code===-1){
+      this.authDataService.customerSignUpRequest.email = this.email
+      this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
+    } else if (response.code===-2){
+      this.messageClass = 'text-primary';
+      this.message = response.message
+      setTimeout(() => {
+        this.authDataService.resendVerificationEmailEvent.emit(this.email);
+        this.router.navigate([AppRoutes.VERIFY_EMAIL_COMPONENT_ROUTE_NAME])
+      }, 2500);
+    } else if (response.code===-3){
+      this.messageClass = 'text-red';
+      this.message = response.message
+    } else if (response.code===-4){
+      this.messageClass = 'text-red';
+      this.message = response.message
+    } else if (response instanceof HttpErrorResponse) {
+      this.messageClass = 'text-red';
+      if (response.error){
+        const errorMessages = response.error.errorMessages;
+        if (errorMessages){
+          this.message = this.sanitizer.bypassSecurityTrustHtml(
+            errorMessages.join('<br>')
+          );
+        }
       }
-      this.authDataService.updateSession(res)
+    }
+    this.dataService.disableLoading()
+  }
+
+  async login(): Promise<void> {
+    if (!this.validatePassword()) return;
+    this.message = ''
+    this.dataService.enableLoading();
+    const response: any = await this.authService.login(this.email, this.password);
+    if (response.code === 1) {
+      this.authDataService.updateSession(response)
       this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
       this.authDataService.loadProfile()
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
-    })
+    } else if (response === false) {
+      this.messageClass = 'text-red';
+      this.message = 'Código inválido o expirado.';
+    } else if (response instanceof HttpErrorResponse) {
+      console.log(response);
+      if (response.status===401){
+        this.messageClass = 'text-red';
+        this.message = response.message
+      }
+    }
   }
 
-  private validate(): boolean {
+  private validateEmail(): boolean {
     this.messageClass = 'text-red';
+
+    if (Utils.stringIsEmpty(this.email)) {
+      this.message = 'Ingrese su correo';
+      return false;
+    }
+
     if (!Utils.validateIsEmail(this.email)) {
       this.message = 'La dirección de email no es válida';
       return false;
@@ -79,10 +153,24 @@ export class LoginComponent  {
     return true;
   }
 
-  reset():void{
-    this.step=1;
-    this.email=''
-    this.password=''
+  private validatePassword(): boolean {
+    this.messageClass = 'text-red';
+
+    if (Utils.stringIsEmpty(this.password)) {
+      this.message = 'Ingrese una contraseña';
+      return false;
+    }
+
+    this.message = '';
+    return true;
+  }
+
+  reset(): void {
+    this.step = 1;
+    this.email = ''
+    this.password = ''
+    this.emailAutofocus = true
+    this.passwordAutofocus = false
   }
 
 }

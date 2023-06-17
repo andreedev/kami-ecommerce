@@ -7,12 +7,14 @@ import { ResetPasswordComponent } from './pages/reset-password/reset-password.co
 import { CoreModule } from 'app/core/core.module';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     ResetPasswordComponent,
-    SignUpComponent
+    SignUpComponent,
+    VerifyEmailComponent
   ],
   imports: [
     CoreModule,

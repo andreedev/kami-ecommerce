@@ -30,6 +30,8 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public void sendEmail(String receiverEmail, String receiverName, String subject, String htmlPart) {
 
+        if (apiMailjetKey==null ||apiMailjetKey.isEmpty()) return;
+
         ClientOptions options = ClientOptions.builder()
                 .apiKey(apiMailjetKey)
                 .apiSecretKey(apiMailSecretKey)

@@ -5,7 +5,6 @@ import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.utils.Enums;
-import com.example.demo.utils.Utils;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,26 +27,23 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public boolean existsByEmail(String email) {
+        log.info("existsByEmail");
         Query query = new Query();
-        query.addCriteria(new Criteria().andOperator(
-            where("email").regex(email, "i"),
-            where("status").is(Enums.CustomerStatus.EMAIL_VERIFIED.getCode())
-        ));
+        query.addCriteria(where("email").regex(email, "i"));
         return mongoTemplate.exists(query, Customer.class);
     }
 
     @Override
     public boolean existsByDocumentNumber(String documentNumber) {
+        log.info("existsByDocumentNumber");
         Query query = new Query();
-        query.addCriteria(new Criteria().andOperator(
-                where("documentNumber").is(documentNumber.trim()),
-                where("status").is(Enums.CustomerStatus.EMAIL_VERIFIED.getCode())
-        ));
+        query.addCriteria(where("documentNumber").is(documentNumber));
         return mongoTemplate.exists(query, Customer.class);
     }
 
     @Override
     public Customer findById(String id) {
+        log.info("findById");
         return mongoTemplate.findById(id, Customer.class, "customers");
     }
 
@@ -59,6 +55,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer findByEmail(String email) {
+        log.info("findByEmail");
         Query query = new Query();
         query.addCriteria(new Criteria().andOperator(
                 where("email").regex(email, "i")
@@ -68,6 +65,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer findByEmail(String email, Integer statusFilter) {
+        log.info("findByEmail with statusFilter");
         Query query = new Query();
         query.addCriteria(new Criteria().andOperator(
                 where("email").regex(email, "i"),
@@ -100,9 +98,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
             Query query2 = new Query(
                 new Criteria().andOperator(
                     Criteria.where("id").is(verificationCode.getCustomerId()),
-                    Criteria.where("status").is(Enums.CustomerStatus.REGISTERED.getCode())
+                    Criteria.where("status").is(Enums.CustomerStatus.UNVERIFIED_EMAIL.getCode())
             ));
-            Update update = new Update().set("status", Enums.CustomerStatus.EMAIL_VERIFIED.getCode());
+            Update update = new Update().set("status", Enums.CustomerStatus.VERIFIED_EMAIL.getCode());
             mongoTemplate.updateFirst(query2, update, Customer.class);
             mongoTemplate.remove(verificationCode, "verificationCodes");
             return VerifyEmailCodeServiceResult.builder().code(1).verificationCode(verificationCode).build();
@@ -128,7 +126,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public void deleteById(String id) {
-        Query query = new Query(Criteria.where("id").is(id).and("status").is(Enums.CustomerStatus.REGISTERED.getCode()));
+        log.info("deleteById");
+        Query query = new Query(Criteria.where("id").is(id).and("status").is(Enums.CustomerStatus.UNVERIFIED_EMAIL.getCode()));
         mongoTemplate.remove(query, Customer.class, "customers");
     }
 
@@ -137,7 +136,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         Query query = new Query(
                 new Criteria().andOperator(
                         Criteria.where("email").is(customer.getEmail()),
-                        Criteria.where("status").ne(Enums.CustomerStatus.DISABLED.getCode()),
                         Criteria.where("isLinkedToGoogleAccount").is(false)
                 ));
         Update update = new Update().set("isLinkedToGoogleAccount", true);

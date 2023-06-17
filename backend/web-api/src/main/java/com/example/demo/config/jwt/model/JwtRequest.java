@@ -14,7 +14,6 @@ public class JwtRequest implements Serializable {
     private static final long serialVersionUID = 2636936156391265891L;
     @NotEmpty(message = "Username is required")
     private String username;
-    @NotEmpty(message = "Password is required")
     private String password;
     private String googleIdToken;
 }

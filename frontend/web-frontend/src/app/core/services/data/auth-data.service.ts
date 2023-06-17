@@ -1,5 +1,5 @@
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Customer, LoginResponse } from 'app/core/models';
 import { AuthService } from '../api/auth.service';
 import { CustomerService } from 'app/core/services/api/customer.service'
@@ -27,15 +27,16 @@ export class AuthDataService {
     phoneNumber: ""
   };
 
+  googleIdToken: any
+
+  resendVerificationEmailEvent: EventEmitter<any> = new EventEmitter();
+
+
   constructor(
     private cookieService: CookieService,
-    private socialAuthService: SocialAuthService,
     private customerService: CustomerService,
     private authService: AuthService
   ) {
-    this.socialAuthService.authState.subscribe((user) => {
-      console.log(user);
-    });
     this.checkAuthStatus();
   }
 
@@ -58,9 +59,10 @@ export class AuthDataService {
     this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
     this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
     this.authStatus.next(AuthStatus.NONE.getName());
-    try {
-      this.socialAuthService.signOut();
-    } catch (error) { }
+    // try {
+    //   //this doesn't delete session in google servers
+    //   this.socialAuthService.signOut();
+    // } catch (error) { return; }
   }
 
   async loadProfile(): Promise<void> {

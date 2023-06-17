@@ -1,0 +1,24 @@
+<div class="d-flex flex-column justify-content-center align-items-center bg-light py-5 vh-100" >
+    <div class="d-flex justify-content-center mb-3">
+        <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME">
+            <img src="https://picsum.photos/seed/picsum/75/50">
+        </a>
+    </div>
+
+    <div class="card text-dark bg-light mb-3 mx-3 max-w-350px">
+        <div class="card-body">
+            <div class="mb-2">
+                <div class="fs-22px">Verifica tu correo</div>
+                <div class="fs-12px">Se ha enviado un código de verificación a tu correo.</div>
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Código verificación" [(ngModel)]="emailVerificationCode">
+            </div>
+            <p class="text-center fs-12px" [class]="messageClass"  [innerHTML]="message"></p>
+            <div class="d-flex mb-2">
+                <button class="btn bg-color-1-with-hover text-white fw-bold btn-block w-100" (click)="verifyEmailCode()">Verificar</button>
+            </div>
+        </div>
+    </div>
+    
+</div>

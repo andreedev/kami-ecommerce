@@ -19,6 +19,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { GalleriaModule } from 'primeng/galleria';
 import { CarouselModule } from 'primeng/carousel';
 import { DividerModule } from 'primeng/divider';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   //Components
@@ -46,7 +47,8 @@ import { DividerModule } from 'primeng/divider';
     OverlayPanelModule,
     GalleriaModule,
     CarouselModule,
-    DividerModule
+    DividerModule,
+    InputTextModule 
 
     ,SharedRoutingModule
   ],
@@ -71,7 +73,8 @@ import { DividerModule } from 'primeng/divider';
     OverlayPanelModule,
     GalleriaModule,
     CarouselModule,
-    DividerModule
+    DividerModule,
+    InputTextModule 
   ]
 })
 export class SharedModule { }

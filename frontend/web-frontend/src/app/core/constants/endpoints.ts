@@ -6,9 +6,10 @@ export abstract class Endpoints {
     static readonly REGISTER: string = `${Endpoints.AUTH}/register`
     static readonly CHECK_EMAIL: string = `${Endpoints.AUTH}/checkEmail`
     static readonly VERIFY_EMAIL_CODE: string = `${Endpoints.AUTH}/verifyEmailCode`
+    static readonly RESEND_VERIFICATION_EMAIL: string = `${Endpoints.AUTH}/resendVerificationEmail`
     static readonly RESET_PASSWORD: string = `${Endpoints.AUTH}/resetPassword`
     static readonly VERIFY_RESET_PASSWORD: string = `${Endpoints.AUTH}/verifyResetPassword`
-    static readonly RESOLVE_GOOGLE_AUTH: string = `${Endpoints.AUTH}/resolveGoogleAuth`
+    static readonly AUTHENTICATE_WITH_GOOGLE: string = `${Endpoints.AUTH}/authenticateWithGoogle`
     static readonly LINK_TO_GOOGLE_ACCOUNT: string = `${Endpoints.AUTH}/linkToGoogleAccount`
     static readonly SIGN_UP_WITH_GOOGLE: string = `${Endpoints.AUTH}/signUpWithGoogle`
 
