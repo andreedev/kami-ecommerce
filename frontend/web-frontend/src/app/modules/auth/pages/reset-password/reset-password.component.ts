@@ -39,22 +39,16 @@ export class ResetPasswordComponent {
     if (!this.validateEmail()) return;
     this.dataService.enableLoading();
     const response: any = await this.authService.resetPassword(this.email);
-    if (response === true) {
+    if (response instanceof HttpErrorResponse) {
+      this.messageClass = 'text-danger';
+      this.message = 'Internal error'
+    } else if (response === true) {
       this.step = 2;
       this.emailFocus = false
       this.codeFocus = true
     } else if (response === false) {
       this.messageClass = 'text-red';
-      this.message = 'Correo no se encuentra registrado.';
-    } else if (response instanceof HttpErrorResponse) {
-      if (response.error){
-        const errorMessages = response.error.errorMessages;
-        if (errorMessages){
-          this.message = this.sanitizer.bypassSecurityTrustHtml(
-            errorMessages.join('<br>')
-          );
-        }
-      }
+      this.message = 'No se ha podido encontrar tu cuenta';
     }
     this.dataService.disableLoading();
   }
@@ -63,7 +57,19 @@ export class ResetPasswordComponent {
     if (!this.validateResetPasswordRequest()) return;
     this.dataService.enableLoading();
     const response: any = await this.authService.verifyResetPassword(this.code, this.newPassword);
-    if (response === true) {
+    if (response instanceof HttpErrorResponse) {
+      this.messageClass = 'text-red';
+      if (response.error){
+        const errorMessages = response.error.errorMessages;
+        if (errorMessages){
+          this.message = this.sanitizer.bypassSecurityTrustHtml(
+            errorMessages.join('<br>')
+          );
+        }
+      } else {
+        this.message = 'Internal error'
+      }
+    } if (response === true) {
       this.messageClass = 'text-green';
       this.message = 'Tu contraseña se ha reestablecido. Redireccionado...';
       setTimeout(() => {
@@ -72,15 +78,6 @@ export class ResetPasswordComponent {
     } else if (response === false) {
       this.messageClass = 'text-red';
       this.message = 'Código inválido o expirado.';
-    } else if (response instanceof HttpErrorResponse) {
-      if (response.error){
-        const errorMessages = response.error.errorMessages;
-        if (errorMessages){
-          this.message = this.sanitizer.bypassSecurityTrustHtml(
-            errorMessages.join('<br>')
-          );
-        }
-      }
     }
     this.dataService.disableLoading();
   }

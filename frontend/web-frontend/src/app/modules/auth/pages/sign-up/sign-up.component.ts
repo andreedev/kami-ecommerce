@@ -1,13 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterContentInit, Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
+import { DocumentType } from 'app/core/enums/document-type';
 import { Utils } from 'app/core/helpers/utils';
 import { AuthService, DataService } from 'app/core/services';
 import { AuthDataService } from 'app/core/services/data/auth-data.service';
-import { DocumentType } from 'app/core/enums/document-type';
-import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({
   selector: 'app-sign-up',
@@ -18,7 +17,6 @@ import { AuthStatus } from 'app/core/enums/auth-status';
 export class SignUpComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
 
-  //validation
   message: SafeHtml = '';
   messageClass: string = '';
 
@@ -44,14 +42,20 @@ export class SignUpComponent implements OnInit {
     if (!this.validateCustomerSignUpRequest()) return;
     this.dataService.enableLoading();
     const response: any = await this.authService.signUp(this.authDataService.customerSignUpRequest);
-    if (response === 1) {
-    } else if (response instanceof HttpErrorResponse) {
-      console.log('http error response')
+    if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-red';
-      const errorMessages = response.error.errorMessages;
-      this.message = this.sanitizer.bypassSecurityTrustHtml(
-        errorMessages.join('<br>')
-      );
+      if (response.error){
+        const errorMessages = response.error.errorMessages;
+        if (errorMessages){
+          this.message = this.sanitizer.bypassSecurityTrustHtml(
+            errorMessages.join('<br>')
+          );
+        }
+      } else {
+        this.message = 'Internal error'
+      }
+    } else if (response === 1) {
+      this.router.navigate([AppRoutes.VERIFY_EMAIL_COMPONENT_ROUTE_NAME])
     }
     this.dataService.disableLoading();
   }
