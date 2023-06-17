@@ -38,36 +38,48 @@ export class LoginComponent {
     private sanitizer: DomSanitizer,
     public socialAuthService: SocialAuthService,
   ) {
-    this.initializeGoogleAuthHandler()
+    this.initializeGoogleAuthResolver()
   }
 
-  initializeGoogleAuthHandler(): void {
+  initializeGoogleAuthResolver(): void {
     this.socialAuthService.authState.subscribe(async (user: any) => {
       console.log(user)
       if (user === null) return;
       const idToken = user.idToken
       const googleEmail = user.email
-      this.authDataService.googleIdToken = idToken
       const response: SessionResponse = await this.authService.authenticateWithGoogle(googleEmail, idToken);
       console.log(response);
+      if (response instanceof HttpErrorResponse) {
+        this.messageClass = 'text-red';
+          this.message = 'Internal error'
+        return
+      }
       if (response.code === -1) {
         this.authDataService.customerSignUpRequest.email = googleEmail
         this.authDataService.customerSignUpRequest.name = user.firstName
         this.authDataService.customerSignUpRequest.lastName = user.lastName
         this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount = true
+        this.authDataService.customerSignUpRequest.googleIdToken = idToken
         this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
+        return
       }
       if (response.code === -2) {
-
+        this.authDataService.linkToGoogleAccountRequest.email = googleEmail
+        this.authDataService.linkToGoogleAccountRequest.idToken = idToken
+        this.router.navigate([AppRoutes.LINK_TO_GOOGLE_ACCOUNT_COMPONENT_ROUTE_NAME]);
+        return
       }
       if (response.code === 1) {
-
+        this.authDataService.updateSession(response)
+        this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
+        this.authDataService.loadProfile()
+        this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
+        return
       }
-      if (response.code === 350) {
-
-      }
-      if (response.code === 360) {
-
+      if (response.code === 350 ||response.code === 360) {
+        this.messageClass = 'text-red';
+        this.message = 'Invalid google session'
+        return
       }
     });
   }

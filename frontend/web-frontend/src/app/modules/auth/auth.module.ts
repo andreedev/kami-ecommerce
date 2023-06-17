@@ -8,13 +8,15 @@ import { CoreModule } from 'app/core/core.module';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
+import { LinkToGoogleAccountComponent } from './pages/link-to-google-account/link-to-google-account.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     ResetPasswordComponent,
     SignUpComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    LinkToGoogleAccountComponent
   ],
   imports: [
     CoreModule,

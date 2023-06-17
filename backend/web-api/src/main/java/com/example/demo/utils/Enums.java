@@ -102,7 +102,7 @@ public class Enums {
 
     @Getter
     @AllArgsConstructor
-    public enum GoogleApiClientCode {
+    public enum ValidateGoogleIdTokenResponseCode {
         INVALID_GOOGLE_ID_TOKEN(-350, "invalid_google_id_token"),
         EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH(-360, "email_received_and_google_email_does_not_match"),
         ;
@@ -127,10 +127,21 @@ public class Enums {
     @AllArgsConstructor
     public enum SessionResponseCode {
         SUCCESSFUL_LOGIN(1, "successful_login"),
-        INVALID_CREDENTIALS(-1, "invalid_credentials"),
+        INVALID_PASSWORD(-1, "invalid_password"),
         UNVERIFIED_EMAIL(-2, "unverified_email"),
         ACCOUNT_LINKED_TO_GOOGLE(-3, "account_linked_to_google"),
         DISABLED_ACCOUNT(-4, "disabled_account"),
+        ;
+        private final int code;
+        private final String value;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum LinkToGoogleAccountResponseCode {
+        SUCCESSFUL_LINKAGE(1, "successful_linkage"),
+        INVALID_PASSWORD(-1, "invalid_password"),
+        INTERNAL_ERROR(-2, "internal_error")
         ;
         private final int code;
         private final String value;

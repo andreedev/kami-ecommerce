@@ -15,6 +15,9 @@ export abstract class AppRoutes {
     static readonly VERIFY_EMAIL_COMPONENT_NAME: string = `verify-email`
     static readonly VERIFY_EMAIL_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}/${AppRoutes.VERIFY_EMAIL_COMPONENT_NAME}`
 
+    static readonly LINK_TO_GOOGLE_ACCOUNT_COMPONENT_NAME: string = `link-to-google-account`
+    static readonly LINK_TO_GOOGLE_ACCOUNT_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}/${AppRoutes.LINK_TO_GOOGLE_ACCOUNT_COMPONENT_NAME}`
+
     
     static readonly HOME_MODULE_NAME: string = ''
     static readonly HOME_MODULE_ROUTE_NAME: string = `/${AppRoutes.HOME_MODULE_NAME}`

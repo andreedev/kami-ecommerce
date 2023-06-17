@@ -2,16 +2,8 @@ package com.example.demo.model.validation;
 
 import com.example.demo.model.Customer;
 import com.example.demo.utils.Enums;
-import com.example.demo.utils.validators.UniqueCustomerDocumentNumber;
-import com.example.demo.utils.validators.UniqueCustomerEmail;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +11,7 @@ import java.util.Collections;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerSignUpWithGoogleRequestImpl extends CustomerSignUpRequest {
+public class CustomerSignUpWithGoogleRequestExt extends CustomerSignUpRequest {
     @NotNull(message = "Invalid token")
     private String googleIdToken;
     public Customer buildCustomer(){

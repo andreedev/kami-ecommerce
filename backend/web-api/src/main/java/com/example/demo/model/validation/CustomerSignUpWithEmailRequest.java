@@ -2,19 +2,16 @@ package com.example.demo.model.validation;
 
 import com.example.demo.model.Customer;
 import com.example.demo.utils.Enums;
-import com.example.demo.utils.validators.UniqueCustomerDocumentNumber;
-import com.example.demo.utils.validators.UniqueCustomerEmail;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-@Builder
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerSignUpDefaultRequestExt extends CustomerSignUpRequest {
+public class CustomerSignUpWithEmailRequest extends CustomerSignUpRequest {
     @NotEmpty(message = "The password is required")
     @Size(min = 8, max = 20, message = "The password must be between {min} and {max} characters")
     private String password;

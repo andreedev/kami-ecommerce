@@ -8,7 +8,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueCustomerEmailValidator implements ConstraintValidator<UniqueCustomerEmail, String> {
-
     @Autowired
     private CustomerService customerService;
     @Override

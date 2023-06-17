@@ -133,11 +133,10 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public boolean linkToGoogleAccount(Customer customer) {
-        Query query = new Query(
-                new Criteria().andOperator(
-                        Criteria.where("email").is(customer.getEmail()),
-                        Criteria.where("isLinkedToGoogleAccount").is(false)
-                ));
+        Query query = new Query(new Criteria().andOperator(
+                where("email").regex(customer.getEmail(), "i"),
+                where("isLinkedToGoogleAccount").is(false)
+        ));
         Update update = new Update().set("isLinkedToGoogleAccount", true);
         UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Customer.class);
         return true;

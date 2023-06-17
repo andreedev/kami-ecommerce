@@ -1,12 +1,11 @@
-import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { Injectable, EventEmitter } from '@angular/core';
-import { Customer, LoginResponse } from 'app/core/models';
-import { AuthService } from '../api/auth.service';
-import { CustomerService } from 'app/core/services/api/customer.service'
+import { EventEmitter, Injectable } from '@angular/core';
 import { Constants } from 'app/core/constants';
+import { AuthStatus } from 'app/core/enums/auth-status';
+import { Customer, SessionResponse } from 'app/core/models';
+import { CustomerService } from 'app/core/services/api/customer.service';
 import { CookieService } from 'ngx-cookie-service';
 import { BehaviorSubject } from 'rxjs';
-import { AuthStatus } from 'app/core/enums/auth-status';
+import { AuthService } from '../api/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,13 +23,19 @@ export class AuthDataService {
     email: "",
     password: "",
     passwordConfirm: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    googleIdToken: ""
   };
 
-  googleIdToken: any
+
+
+  linkToGoogleAccountRequest = {
+    email: '',
+    password: '',
+    idToken: ''
+  }
 
   resendVerificationEmailEvent: EventEmitter<any> = new EventEmitter();
-
 
   constructor(
     private cookieService: CookieService,
@@ -50,19 +55,16 @@ export class AuthDataService {
     }
   }
 
-  updateSession(res: LoginResponse): void {
-    this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.token!)
-    this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.refreshToken!)
+  updateSession(res: SessionResponse): void {
+    if (!res.data || !res.data.token || !res.data.refreshToken) return;
+    this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.data.token)
+    this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.data.refreshToken)
   }
 
   logout(): void {
     this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
     this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
     this.authStatus.next(AuthStatus.NONE.getName());
-    // try {
-    //   //this doesn't delete session in google servers
-    //   this.socialAuthService.signOut();
-    // } catch (error) { return; }
   }
 
   async loadProfile(): Promise<void> {

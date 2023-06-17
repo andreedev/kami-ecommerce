@@ -14,7 +14,6 @@ import com.example.demo.service.EmailService;
 import com.example.demo.service.GoogleApiClientService;
 import com.example.demo.service.LocaleService;
 import com.example.demo.utils.Enums;
-import com.example.demo.utils.Utils;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +21,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.ProviderNotFoundException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -94,8 +91,8 @@ public class AuthController {
             );
         } catch (BadCredentialsException | UsernameNotFoundException e) {
             System.out.println(e.getMessage());
-            sessionResponse.setCode(Enums.SessionResponseCode.INVALID_CREDENTIALS.getCode());
-            sessionResponse.setMessage(localeService.getMessage((Enums.SessionResponseCode.INVALID_CREDENTIALS.getValue())));
+            sessionResponse.setCode(Enums.SessionResponseCode.INVALID_PASSWORD.getCode());
+            sessionResponse.setMessage(localeService.getMessage((Enums.SessionResponseCode.INVALID_PASSWORD.getValue())));
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(sessionResponse);
         }
         Customer customer = (Customer) authentication.getPrincipal();
@@ -147,8 +144,8 @@ public class AuthController {
     }
 
     @PostMapping("register")
-    public Integer registerCustomer(@RequestBody @Valid CustomerSignUpRequest request){
-        Customer customer = customerService.registerCustomer(request.toCustomer());
+    public Integer registerCustomer(@RequestBody @Valid CustomerSignUpWithEmailRequest request){
+        Customer customer = customerService.registerCustomer(request.buildCustomer());
         String code = customerService.generateVerificationCode(
                 new VerificationCode(customer.getId(), Enums.VerificationCodeType.EMAIL_VERIFICATION.getCode()));
         sendVerificationEmail(customer.getEmail(), code);
@@ -205,57 +202,78 @@ public class AuthController {
     @PostMapping("authenticateWithGoogle")
     public SessionResponse authenticateWithGoogle(@RequestBody @Valid ResolveGoogleAuthRequest req) {
         log.info("authenticateWithGoogle");
+        SessionResponse sessionResponse = SessionResponse.builder().build();
         Customer customer = customerService.findByEmail(req.getEmail(), Enums.CustomerStatus.VERIFIED_EMAIL.getCode());
-        if (customer==null)
-            return SessionResponse.builder().code(Enums.AuthenticateWithGoogleResponseCode.UNREGISTERED.getCode()).build();
-        if (!customer.getIsLinkedToGoogleAccount())
-            return SessionResponse.builder().code(Enums.AuthenticateWithGoogleResponseCode.ACCOUNT_NOT_LINKED_TO_GOOGLE.getCode()).build();
+        if (customer==null){
+            sessionResponse.setCode(Enums.AuthenticateWithGoogleResponseCode.UNREGISTERED.getCode());
+            return sessionResponse;
+        }
+        if (!customer.getIsLinkedToGoogleAccount()){
+            sessionResponse.setCode(Enums.AuthenticateWithGoogleResponseCode.ACCOUNT_NOT_LINKED_TO_GOOGLE.getCode());
+            return sessionResponse;
+        }
         GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(req.getGoogleIdToken());
-        if (googleUser == null)
-            return SessionResponse.builder().code(Enums.GoogleApiClientCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
-        if (!googleUser.getEmail().equals(req.getEmail()))
-            return SessionResponse.builder().code(Enums.GoogleApiClientCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
-
-        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
-        return SessionResponse.builder()
-                .data(jwtResponse)
-                .code(Enums.AuthenticateWithGoogleResponseCode.SUCCESS.getCode()).build();
+        if (googleUser == null){
+            sessionResponse.setCode(Enums.ValidateGoogleIdTokenResponseCode.INVALID_GOOGLE_ID_TOKEN.getCode());
+            return sessionResponse;
+        }
+        if (!googleUser.getEmail().equalsIgnoreCase(req.getEmail())){
+            sessionResponse.setCode(Enums.ValidateGoogleIdTokenResponseCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode());
+            return sessionResponse;
+        }
+        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), customer.getRoles());
+        sessionResponse.setCode(Enums.AuthenticateWithGoogleResponseCode.SUCCESS.getCode());
+        sessionResponse.setData(jwtResponse);
+        return sessionResponse;
     }
 
     @PostMapping("linkToGoogleAccount")
-    public SessionResponse linkToGoogleAccount(@RequestBody @Valid JwtRequest request){
+    public ResponseEntity<SessionResponse> linkToGoogleAccount(@RequestBody @Valid JwtRequest request){
         log.info("linkToGoogleAccount");
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) authenticationManager.authenticate(
+        Authentication authentication;
+        SessionResponse sessionResponse = SessionResponse.builder().build();
+        try {
+            authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
+            );
+        } catch (BadCredentialsException | UsernameNotFoundException e) {
+            System.out.println(e.getMessage());
+            sessionResponse.setCode(Enums.LinkToGoogleAccountResponseCode.INVALID_PASSWORD.getCode());
+            sessionResponse.setMessage(localeService.getMessage((Enums.LinkToGoogleAccountResponseCode.INVALID_PASSWORD.getValue())));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(sessionResponse);
+        }
+        Customer customer = (Customer) authentication.getPrincipal();
         GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(request.getGoogleIdToken());
-        if (googleUser == null)
-            return SessionResponse.builder().code(Enums.GoogleApiClientCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
-        if (!googleUser.getEmail().equals(userDetails.getUsername()))
-            return SessionResponse.builder().code(Enums.GoogleApiClientCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
-
-        boolean result = customerService.linkToGoogleAccount(Customer.builder().email(userDetails.getUsername()).build());
-        if (!result) return SessionResponse.builder().code(-1).build();
-        JwtResponse jwtResponse = authenticateCustomer(userDetails.getUsername(), Utils.parseToStringList(userDetails.getAuthorities()) );
-        return SessionResponse.builder().data(jwtResponse).code(1).build();
+        if (googleUser == null){
+            sessionResponse.setCode(Enums.ValidateGoogleIdTokenResponseCode.INVALID_GOOGLE_ID_TOKEN.getCode());
+            return ResponseEntity.ok(sessionResponse);
+        }
+        if (!googleUser.getEmail().equalsIgnoreCase(customer.getEmail())){
+            sessionResponse.setCode(Enums.ValidateGoogleIdTokenResponseCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode());
+            return ResponseEntity.ok(sessionResponse);
+        }
+        boolean result = customerService.linkToGoogleAccount(Customer.builder().email(customer.getEmail()).build());
+        if (!result){
+            sessionResponse.setCode(Enums.LinkToGoogleAccountResponseCode.INTERNAL_ERROR.getCode());
+            return ResponseEntity.ok(sessionResponse);
+        }
+        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(),customer.getRoles());
+        sessionResponse.setCode(Enums.LinkToGoogleAccountResponseCode.SUCCESSFUL_LINKAGE.getCode());
+        sessionResponse.setMessage(localeService.getMessage((Enums.LinkToGoogleAccountResponseCode.SUCCESSFUL_LINKAGE.getValue())));
+        sessionResponse.setData(jwtResponse);
+        return ResponseEntity.ok(sessionResponse);
     }
 
     @PostMapping("signUpWithGoogle")
-    public SessionResponse signUpWithGoogle(@RequestBody @Valid CustomerSignUpWithGoogleRequest request) {
+    public SessionResponse signUpWithGoogle(@RequestBody @Valid CustomerSignUpWithGoogleRequestExt request) {
         log.info("signUpWithGoogle");
         GoogleUser googleUser = googleApiClientService.validateGoogleIdToken(request.getGoogleIdToken());
         if (googleUser == null)
-            return SessionResponse.builder().code(Enums.GoogleApiClientCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
+            return SessionResponse.builder().code(Enums.ValidateGoogleIdTokenResponseCode.INVALID_GOOGLE_ID_TOKEN.getCode()).build();
         if (!googleUser.getEmail().equals(request.getEmail()))
-            return SessionResponse.builder().code(Enums.GoogleApiClientCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
-
-        Customer customerToSave = request.toCustomer();
-        customerToSave.setIsLinkedToGoogleAccount(true);
-        customerToSave.setStatus(Enums.CustomerStatus.VERIFIED_EMAIL.getCode());
-        Customer customer = customerService.registerCustomer(customerToSave);
-        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), (List<String>) customer.getRoles());
+            return SessionResponse.builder().code(Enums.ValidateGoogleIdTokenResponseCode.EMAIL_RECEIVED_AND_GOOGLE_EMAIL_DOES_NOT_MATCH.getCode()).build();
+        Customer customer = customerService.registerCustomer(request.buildCustomer());
+        JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(), customer.getRoles());
         return SessionResponse.builder().data(jwtResponse).code(1).build();
     }
 

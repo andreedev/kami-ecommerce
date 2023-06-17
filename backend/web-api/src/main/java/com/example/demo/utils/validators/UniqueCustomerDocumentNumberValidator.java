@@ -7,10 +7,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class UniqueCustomerDocumentNumberValidator implements ConstraintValidator<UniqueCustomerDocumentNumber, String> {
-
     @Autowired
     private CustomerService customerService;
-
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         value=value.trim();
