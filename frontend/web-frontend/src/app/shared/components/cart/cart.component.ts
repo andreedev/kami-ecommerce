@@ -19,17 +19,12 @@ export class CartComponent {
     public cartDataService: CartDataService,
     public searchDataService: SearchDataService,
   ) { }
-
+  
   clear():void{
-    this.cartDataService.cart.products = []
-    this.cartDataService.cart.totalAmount = 0
-    this.cartDataService.cart.subtotal = 0.00
-    Utils.deleteInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
     this.searchDataService.searchResults.data.forEach((p)=>{
       p.amount = 0
     })
+    this.cartDataService.clearCart()
   }
-  
-
 
 }

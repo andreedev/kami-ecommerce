@@ -5,9 +5,9 @@ import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.CustomProduct;
 import com.example.demo.model.validation.SearchRequest;
+import com.example.demo.model.validation.SimpleCartProduct;
 import com.example.demo.utils.Enums;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.Decimal128;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,11 +108,10 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findByListId(List<CustomProduct> req) {
+    public List<Product> findByListId(List<SimpleCartProduct> req) {
         List<String> productIds = req.stream()
-                .map(CustomProduct::getId)
+                .map(SimpleCartProduct::getId)
                 .collect(Collectors.toList());
-
         Query query = Query.query(Criteria.where("id").in(productIds));
         List<Product> productList = mongoTemplate.find(query, Product.class, "products");
         return productList;

@@ -1,4 +1,5 @@
 import { Address } from "./address"
+import { Cart } from "./cart";
 import { Product } from "./product"
 
 export interface Customer {
@@ -14,7 +15,7 @@ export interface Customer {
     addresses?: Array<Address>;
     createdAt?: string;
     updatedAt?: string;
-    cart?: Array<Product>;
+    cart?: Cart;
     isLinkedToGoogleAccount?: boolean;
 
 

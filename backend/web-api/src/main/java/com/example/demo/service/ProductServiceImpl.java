@@ -5,6 +5,7 @@ import com.example.demo.model.Discount;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.CustomProduct;
+import com.example.demo.model.validation.SimpleCartProduct;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.utils.Enums;
@@ -17,7 +18,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @Slf4j
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Cart loadGuestCart(List<CustomProduct> req) {
+    public Cart loadCart(List<SimpleCartProduct> req) {
         List<Product> result = productRepository.findByListId(req);
         List<CustomProduct> list = Utils.convertToCustomProductList(result);
         setupProductDiscount(list);
@@ -75,8 +75,8 @@ public class ProductServiceImpl implements ProductService{
         return featuredProducts;
     }
 
-    private void recoverGuestCartProductsAmount(List<CustomProduct> req, List<CustomProduct> list) {
-        for (CustomProduct reqProduct : req) {
+    private void recoverGuestCartProductsAmount(List<SimpleCartProduct> req, List<CustomProduct> list) {
+        for (SimpleCartProduct reqProduct : req) {
             for (CustomProduct listProduct : list) {
                 if (reqProduct.getId().equals(listProduct.getId())) {
                     listProduct.setAmount(reqProduct.getAmount());

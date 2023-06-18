@@ -25,6 +25,7 @@ export class AppComponent {
     console.log(this.searchDataService);
     console.log(this.productModalDataService);
     console.log(this.categoryDataService);
+    this.authDataService.profileLoadedEvent.emit(false);
     // console.log(this.cookieService.get((Constants.SESSION_TOKEN_NAME)));
     // console.log(this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME)));
     

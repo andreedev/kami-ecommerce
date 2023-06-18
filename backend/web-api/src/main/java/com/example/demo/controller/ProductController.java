@@ -2,18 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Cart;
 import com.example.demo.model.DynamicReport;
-import com.example.demo.model.Product;
 import com.example.demo.model.validation.CustomProduct;
-import com.example.demo.model.validation.EnumResponse;
+import com.example.demo.model.validation.SimpleCartProduct;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.service.ProductService;
-import com.example.demo.utils.Enums;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,8 +31,8 @@ public class ProductController {
     }
 
     @PostMapping("loadGuestCart")
-    public Cart search(@RequestBody List<CustomProduct> req){
-        return productService.loadGuestCart(req);
+    public Cart search(@RequestBody List<SimpleCartProduct> req){
+        return productService.loadCart(req);
     }
 
     @GetMapping("featured")

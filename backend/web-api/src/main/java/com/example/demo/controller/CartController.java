@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.*;
-import com.example.demo.model.validation.CustomProduct;
-import com.example.demo.model.validation.CustomerProduct;
+import com.example.demo.model.validation.SimpleCartProduct;
 import com.example.demo.service.CustomerService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +17,7 @@ import java.util.List;
 public class CartController {
     private final CustomerService customerService;
     @PostMapping("update")
-    public boolean updateCart(@RequestBody List<CustomerProduct> request){
+    public boolean updateCart(@RequestBody List<SimpleCartProduct> request){
         log.info("updateCart");
         Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         customer.setCart(new CustomerCart(request));

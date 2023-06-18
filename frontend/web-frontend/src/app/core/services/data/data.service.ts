@@ -1,11 +1,4 @@
-import { HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { DynamicReport, Product, SearchRequest } from 'app/core/models';
-import { CookieService } from 'ngx-cookie-service';
-import { Constants } from '../../constants';
-import { Cart } from '../../models/cart';
-import { Customer } from '../../models/customer';
-import { Utils } from '../../helpers/utils';
+import { HostListener, Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +12,7 @@ export class DataService {
 
   displayMobileMenu: boolean = false
 
-  constructor(
-    // private cookieService: CookieService,
-  ) {
+  constructor() {
     this.screenWidth = window.innerWidth;
   }
   /* loading */

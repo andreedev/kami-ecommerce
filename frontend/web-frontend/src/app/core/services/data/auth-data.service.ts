@@ -37,6 +37,7 @@ export class AuthDataService {
 
   resendVerificationEmailEvent: EventEmitter<any> = new EventEmitter();
   authenticateWithGoogleEvent: EventEmitter<any> = new EventEmitter();
+  profileLoadedEvent: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private cookieService: CookieService,
@@ -64,6 +65,10 @@ export class AuthDataService {
         this.authStatus.next(AuthStatus.LOGGED_IN.getName());
         this.loadProfile()
       }
+    } else {
+      setTimeout(() => {
+        this.profileLoadedEvent.emit(false);
+      }, 10);
     }
   }
 
@@ -82,6 +87,7 @@ export class AuthDataService {
     const customer: Customer | null = await this.customerService.getProfile();
     if (!customer) return;
     this.loggedInCustomer = customer;
+    this.profileLoadedEvent.emit(true);
   }
 
   keepSingleElementArray():void{

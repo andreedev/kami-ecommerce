@@ -5,12 +5,13 @@ import { Product } from 'app/core/models';
 import { Cart } from 'app/core/models/cart';
 import { ProductService } from '../api/product.service';
 import { CartService } from '../api/cart.service';
+import { AuthDataService } from './auth-data.service';
+import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartDataService {
-
   displayCart: boolean = false
   loadingCart: boolean = true
   cart: Cart = {
@@ -24,21 +25,38 @@ export class CartDataService {
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private authDataService: AuthDataService,
   ) {
-    this.loadCart()
+    this.loadLocalCart();
+    this.subscribeToProfileLoadedEvent()
   }
 
-  async loadCart() {
+  subscribeToProfileLoadedEvent(): void {
+    this.authDataService.profileLoadedEvent.subscribe((value) => {
+      if (value) {
+        if (!(this.authDataService.loggedInCustomer!.cart!.products.length===0 && this.cart.products.length>0)){
+          this.cart = this.authDataService.loggedInCustomer!.cart!;
+          this.loadingCart = false;
+          this.updateCartInLocalStorage();
+        } else{
+          this.cartService.updateCart(this.cart.products);
+        }
+      }
+    });
+  }
+
+
+  async loadLocalCart() {
     this.loadingCart = true
     const loadedCart = Utils.loadFromLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
     if (loadedCart && typeof loadedCart === 'object' && 'products' in loadedCart) {
       this.cart = loadedCart as Cart;
-      if (this.cart.products.length >= 0) {
+      if (this.cart.products.length > 0) {
         const response: Cart | null = await this.productService.loadGuestCart(this.cart.products)
         if (response !== null) {
           this.cart = response;
-          this.updateCartInLocalStorage()
+          this.updateCartInLocalStorage();
         }
       }
       this.loadingCart = false
@@ -55,6 +73,7 @@ export class CartDataService {
     }
     this.updateCartInLocalStorage();
     
+    if(this.authDataService.authStatus.getValue()!==AuthStatus.LOGGED_IN.getName()) return;
     const currentTime = new Date().getTime();
     const timeSinceLastUpdate = currentTime - this.lastUpdate;
   
@@ -81,6 +100,15 @@ export class CartDataService {
       return { id, amount };
     });
     Utils.updateInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME, cartCopy);
+  }
+
+  clearCart():void{
+    this.cart.products = []
+    this.cart.totalAmount = 0
+    this.cart.subtotal = 0.00
+    Utils.deleteInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
+    if(this.authDataService.authStatus.value!==AuthStatus.LOGGED_IN.getName()) return;
+    this.cartService.updateCart([]);
   }
 
 }

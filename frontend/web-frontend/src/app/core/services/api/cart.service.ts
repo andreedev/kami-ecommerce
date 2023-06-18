@@ -19,11 +19,10 @@ import { Customer, Product } from 'app/core/models';
 
     async updateCart(list: Product[]): Promise<boolean | null> {
       try {
-        const body = list
+        const body = Utils.reduceProductListInfo(list)
         const headers = this.authService.getAuthHeaders();
-        const response: any = await firstValueFrom(
-          this.http.post(Utils.getURL(Endpoints.UPDATE_CART), body, {headers})
-        );
+        const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.UPDATE_CART), body, {headers}));
+        console.log('cart updated');
         return response;
       } catch (error: any) {
         if (error.status === 401) {

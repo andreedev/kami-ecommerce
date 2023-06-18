@@ -1,4 +1,5 @@
 import { environment } from "assets/environments/environment";
+import { Product } from "../models";
 
 export class Utils {
     static readonly apiEnpoint: string = environment.apiEndpoint;
@@ -202,7 +203,13 @@ export class Utils {
         return roundedResult;
     }
 
-
+    static reduceProductListInfo(list: Product[]): Product[] {
+        const newList: Product[] = []
+        list.forEach((value: Product)=>{
+            newList.push({ id: value.id, amount: value.amount });
+        })
+        return newList
+    }
 
 
 }
