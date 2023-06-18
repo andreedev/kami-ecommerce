@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.model.validation.CustomProduct;
+import com.example.demo.model.validation.CustomerProduct;
 import lombok.*;
 
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerCart {
-    private List<CustomProduct> products;
+    private List<CustomerProduct> products;
 }

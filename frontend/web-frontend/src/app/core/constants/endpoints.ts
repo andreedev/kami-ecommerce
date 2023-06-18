@@ -19,6 +19,9 @@ export abstract class Endpoints {
     static readonly CUSTOMER: string = 'customer'
     static readonly PROFILE: string = `${Endpoints.CUSTOMER}/profile`
 
+    static readonly CART: string = 'cart'
+    static readonly UPDATE_CART: string = `${Endpoints.CART}/update`
+
     static readonly PRODUCT: string = 'product'
     static readonly SEARCH: string = `${Endpoints.PRODUCT}/search`
     static readonly LOAD_GUEST_CART: string = `${Endpoints.PRODUCT}/loadGuestCart`

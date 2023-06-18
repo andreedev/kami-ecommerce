@@ -46,6 +46,7 @@ public class SecurityConfig {
             .requestMatchers("/api/category/**").permitAll()
             .requestMatchers("/api/test/**").permitAll()
             .requestMatchers("/api/customer/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
+            .requestMatchers("/api/cart/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
             .requestMatchers("/api/order/**").hasAuthority(Enums.Roles.ROLE_CUSTOMER.getValue())
             .requestMatchers("/api/sales/**").hasAuthority(Enums.Roles.ROLE_SALES.getValue())
             .requestMatchers("/api/admin/**").hasAuthority(Enums.Roles.ROLE_ADMIN.getValue())

@@ -4,6 +4,7 @@ import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models';
 import { Cart } from 'app/core/models/cart';
 import { ProductService } from '../api/product.service';
+import { CartService } from '../api/cart.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,12 @@ export class CartDataService {
     totalAmount: 0
   }
 
+  lastUpdate: number = new Date().getTime();
+  updateTimeout: any
+
   constructor(
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService
   ) {
     this.loadCart()
   }
@@ -48,7 +53,25 @@ export class CartDataService {
     } else if (operation === 'delete') {
       this.cart.products = Utils.removeByAttr(this.cart.products, "id", product.id)
     }
-    this.updateCartInLocalStorage()
+    this.updateCartInLocalStorage();
+    
+    const currentTime = new Date().getTime();
+    const timeSinceLastUpdate = currentTime - this.lastUpdate;
+  
+    if (timeSinceLastUpdate >= Constants.UPDATE_CART_WAIT_TIME) {
+      this.updateCartOnTimeout();
+    } else {
+      clearTimeout(this.updateTimeout);
+      this.updateTimeout = setTimeout(() => {
+        this.updateCartOnTimeout();
+      }, Constants.UPDATE_CART_WAIT_TIME);
+    }
+  }
+
+  updateCartOnTimeout(): void {
+    clearTimeout(this.updateTimeout);
+    this.cartService.updateCart(this.cart.products);
+    this.lastUpdate = new Date().getTime();
   }
 
   updateCartInLocalStorage(): void {
@@ -57,7 +80,7 @@ export class CartDataService {
       const { id, amount } = product;
       return { id, amount };
     });
-    Utils.updateInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME, cartCopy)
+    Utils.updateInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME, cartCopy);
   }
 
 }

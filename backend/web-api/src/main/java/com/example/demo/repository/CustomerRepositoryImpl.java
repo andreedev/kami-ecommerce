@@ -144,5 +144,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return updateResult.getModifiedCount()==1;
     }
 
+    @Override
+    public boolean updateCart(Customer customer) {
+        Query query = new Query(Criteria.where("id").is(customer.getId()));
+        Update update = new Update().set("cart", customer.getCart());
+        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Customer.class);
+        return updateResult.getModifiedCount()==1;
+    }
+
 
 }

@@ -82,4 +82,9 @@ public class CustomerServiceImpl implements CustomerService{
         return customerRepository.linkToGoogleAccount(customer);
     }
 
+    @Override
+    public boolean updateCart(Customer customer) {
+        return customerRepository.updateCart(customer);
+    }
+
 }

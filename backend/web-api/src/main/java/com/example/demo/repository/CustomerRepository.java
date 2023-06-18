@@ -18,5 +18,6 @@ public interface CustomerRepository {
     boolean verifyResetPassword(VerifyResetPasswordRequest req);
     void deleteById(String id);
     boolean linkToGoogleAccount(Customer customer);
+    boolean updateCart(Customer customer);
 
 }

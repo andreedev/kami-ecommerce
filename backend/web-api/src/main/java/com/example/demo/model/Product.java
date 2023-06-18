@@ -1,10 +1,8 @@
 package com.example.demo.model;
 
 import com.example.demo.utils.Enums;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,6 +15,8 @@ import java.util.List;
 
 import static org.springframework.data.mongodb.core.mapping.FieldType.DECIMAL128;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
