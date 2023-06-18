@@ -61,8 +61,9 @@ export class LinkToGoogleAccountComponent implements OnInit {
         this.authDataService.updateSession(response)
         this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
         this.authDataService.loadProfile()
+        this.clearInputs();
         this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
-      }, 2000);
+      }, 2500);
     } else if (response.code === -2) {
       this.messageClass = 'text-red';
       this.message = response.message
@@ -87,10 +88,14 @@ export class LinkToGoogleAccountComponent implements OnInit {
   }
 
   cancel(): void {
+    this.clearInputs();
+    this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
+  }
+
+  clearInputs():void{
     this.authDataService.linkToGoogleAccountRequest.email = ''
     this.authDataService.linkToGoogleAccountRequest.password = ''
     this.authDataService.linkToGoogleAccountRequest.idToken = ''
-    this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
   }
 
 }
