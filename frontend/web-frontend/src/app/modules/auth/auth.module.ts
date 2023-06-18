@@ -25,10 +25,10 @@ import { LinkToGoogleAccountComponent } from './pages/link-to-google-account/lin
     SocialLoginModule//this must be imported in a module as close as possible to login component otherwise it won't work
   ],
   providers: [//this is an error fix: SocialLoginModule is already loaded. Import it in the AppModule only
-    {
-        provide: SocialLoginModule,
-        useValue: new SocialLoginModule(null!),
-    },
+    // {
+    //     provide: SocialLoginModule,
+    //     useValue: new SocialLoginModule(null!),
+    // },
   ]
 })
 export class AuthModule { }

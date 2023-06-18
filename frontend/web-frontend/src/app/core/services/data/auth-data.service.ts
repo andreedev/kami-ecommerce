@@ -49,9 +49,10 @@ export class AuthDataService {
   }
 
   initializeGoogleAuthResolver(): void {
-    const observer = this.socialAuthService.authState.subscribe((user: any) => {
-      this.authenticateWithGoogleEvent.emit(user)
-      // observer.unsubscribe()
+    this.socialAuthService.authState.subscribe((user: any) => {
+      (this.socialAuthService.authState.source as any).observers.splice(1);
+      (this.socialAuthService.authState.source as any).currentObservers.splice(1);
+      this.authenticateWithGoogleEvent.emit(user);
     });
   }
 

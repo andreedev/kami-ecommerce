@@ -20,7 +20,7 @@ import { environment } from 'assets/environments/environment';
     AppRoutingModule,
     CoreModule,
     SharedModule,
-    SocialLoginModule
+    // SocialLoginModule
   ],
   providers: [
     {

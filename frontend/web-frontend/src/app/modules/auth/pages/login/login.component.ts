@@ -15,7 +15,7 @@ import { DataService } from 'app/core/services/data/data.service';
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
 
@@ -83,6 +83,10 @@ export class LoginComponent {
         return
       }
     })
+  }
+
+  ngOnInit(): void {
+    
   }
 
   async checkEmail(): Promise<void> {
