@@ -50,11 +50,12 @@ export class AuthDataService {
 
   initializeGoogleAuthResolver(): void {
     this.socialAuthService.authState.subscribe((user: any) => {
-      (this.socialAuthService.authState.source as any).observers.splice(1);
-      (this.socialAuthService.authState.source as any).currentObservers.splice(1);
+      this.keepSingleElementArray()
       this.authenticateWithGoogleEvent.emit(user);
     });
   }
+
+  
 
   async checkAuthStatus(): Promise<void> {
     if (this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)) {
@@ -83,6 +84,18 @@ export class AuthDataService {
     this.loggedInCustomer = customer;
   }
 
-
+  keepSingleElementArray():void{
+    // @ts-ignore
+    if (this.socialAuthService.authState.source.observers!=null){
+      // @ts-ignore
+      this.socialAuthService.authState.source.observers.splice(1);
+    }
+    // @ts-ignore
+    if (this.socialAuthService.authState.source.currentObservers!=null){
+      // @ts-ignore
+      this.socialAuthService.authState.source.currentObservers.splice(1);
+    }
+    
+  }
 
 }

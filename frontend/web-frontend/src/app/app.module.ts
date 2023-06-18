@@ -39,10 +39,10 @@ import { environment } from 'assets/environments/environment';
             )
           }
         ],
-        onError: (err) => {
+        onError: (err:any) => {
           console.error(err);
         }
-      } as SocialAuthServiceConfig,
+      },
     }
   ],
   bootstrap: [AppComponent]

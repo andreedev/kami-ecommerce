@@ -36,7 +36,7 @@ export class VerifyEmailComponent implements OnInit{
       this.resendVerificationEmail(email);
       setTimeout(() => {
         this.dataService.disableLoading();
-      }, 2500);
+      }, 1000);
     })
   }
 

@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
   passwordAutofocus = false
 
   previusEmail: string = '';
-  canAuthenticateWithGoogle: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -43,9 +42,8 @@ export class LoginComponent implements OnInit {
     this.authDataService.authenticateWithGoogleEvent.subscribe(async (user: any) => {
       if (user.email === this.previusEmail) return;
       if (user === null) return;
-      if (!this.canAuthenticateWithGoogle) return;
-      this.canAuthenticateWithGoogle=false
-      console.log(user)
+      // console.log(user)
+      this.dataService.enableLoading()
       const idToken = user.idToken
       const googleEmail = user.email
       this.previusEmail = user.email;
@@ -53,40 +51,36 @@ export class LoginComponent implements OnInit {
       if (response instanceof HttpErrorResponse) {
         this.messageClass = 'text-red';
         this.message = 'Internal error'
-        return
-      }
-      if (response.code === -1) {
+
+      } else if (response.code === -1) {
         this.authDataService.customerSignUpRequest.email = googleEmail
         this.authDataService.customerSignUpRequest.name = user.firstName
         this.authDataService.customerSignUpRequest.lastName = user.lastName
         this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount = true
         this.authDataService.customerSignUpRequest.googleIdToken = idToken
         this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
-        return
-      }
-      if (response.code === -2) {
+
+      } else if (response.code === -2) {
         this.authDataService.linkToGoogleAccountRequest.email = googleEmail
         this.authDataService.linkToGoogleAccountRequest.idToken = idToken
         this.router.navigate([AppRoutes.LINK_TO_GOOGLE_ACCOUNT_COMPONENT_ROUTE_NAME]);
-        return
-      }
-      if (response.code === 1) {
+
+      } else if (response.code === 1) {
         this.authDataService.updateSession(response)
         this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName())
         this.authDataService.loadProfile()
         this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
-        return
-      }
-      if (response.code === 350 || response.code === 360) {
+        
+      } else if (response.code === 350 || response.code === 360) {
         this.messageClass = 'text-red';
         this.message = 'Invalid google session'
-        return
       }
+      this.dataService.disableLoading()
     })
   }
 
   ngOnInit(): void {
-    
+    this.authDataService.keepSingleElementArray()
   }
 
   async checkEmail(): Promise<void> {
@@ -103,6 +97,7 @@ export class LoginComponent implements OnInit {
       this.passwordAutofocus = true
     } else if (response.code === -1) {
       this.authDataService.customerSignUpRequest.email = this.email
+      this.authDataService.customerSignUpRequest.isLinkedToGoogleAccount = false
       this.router.navigate([AppRoutes.SIGN_UP_COMPONENT_ROUTE_NAME])
     } else if (response.code === -2) {
       this.messageClass = 'text-primary';
