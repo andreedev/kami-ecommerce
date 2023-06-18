@@ -123,7 +123,7 @@ export class AuthService {
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LINK_TO_GOOGLE_ACCOUNT), body))
       return response
     } catch (error: any) {
-      throw error
+      return error
     }
   }
 

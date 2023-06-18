@@ -141,7 +141,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         ));
         Update update = new Update().set("isLinkedToGoogleAccount", true);
         UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Customer.class);
-        return true;
+        return updateResult.getModifiedCount()==1;
     }
 
 

@@ -72,7 +72,7 @@ export class ResetPasswordComponent {
       this.messageClass = 'text-green';
       this.message = 'Tu contraseña se ha reestablecido. Redireccionado...';
       setTimeout(() => {
-        this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
+        this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
       }, 1500);
     } else if (response === false) {
       this.messageClass = 'text-red';
@@ -96,7 +96,11 @@ export class ResetPasswordComponent {
   private validateResetPasswordRequest(): boolean {
     this.messageClass = 'text-red';
 
-    if (
+    
+    if (Utils.stringIsEmpty(this.code)) {
+      this.message = 'Ingrese el código enviado a su correo.';
+      return false;
+    } else if (
       !Utils.stringHasNumber(this.code)
     ) {
       this.message = 'El código debe contener solo números.';

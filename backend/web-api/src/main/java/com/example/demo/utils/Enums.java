@@ -141,7 +141,7 @@ public class Enums {
     public enum LinkToGoogleAccountResponseCode {
         SUCCESSFUL_LINKAGE(1, "successful_linkage"),
         INVALID_PASSWORD(-1, "invalid_password"),
-        INTERNAL_ERROR(-2, "internal_error")
+        ACCOUNT_ALREADY_LINKED_TO_GOOGLE(-2, "account_already_linked_to_google")
         ;
         private final int code;
         private final String value;

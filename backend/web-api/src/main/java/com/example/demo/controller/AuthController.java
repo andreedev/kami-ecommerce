@@ -254,7 +254,9 @@ public class AuthController {
         }
         boolean result = customerService.linkToGoogleAccount(Customer.builder().email(customer.getEmail()).build());
         if (!result){
-            sessionResponse.setCode(Enums.LinkToGoogleAccountResponseCode.INTERNAL_ERROR.getCode());
+            sessionResponse.setMessage(
+                    localeService.getMessage((Enums.LinkToGoogleAccountResponseCode.ACCOUNT_ALREADY_LINKED_TO_GOOGLE.getValue())));
+            sessionResponse.setCode(Enums.LinkToGoogleAccountResponseCode.ACCOUNT_ALREADY_LINKED_TO_GOOGLE.getCode());
             return ResponseEntity.ok(sessionResponse);
         }
         JwtResponse jwtResponse = authenticateCustomer(customer.getEmail(),customer.getRoles());
