@@ -1,18 +1,25 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Address;
 import com.example.demo.model.Customer;
+import com.example.demo.model.Product;
 import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.utils.Enums;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -43,13 +50,29 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 
     @Override
     public Customer findById(String id) {
-        log.info("findById");
-        return mongoTemplate.findById(id, Customer.class, "customers");
+        Query query = new Query(where("id").is(id));
+        query.fields()
+                .exclude("password")
+                .exclude("documentType")
+                .exclude("documentNumber")
+                .exclude("phoneNumber")
+                .exclude("createdAt")
+                .exclude("updatedAt")
+        ;
+        return mongoTemplate.findOne(query, Customer.class, "customers");
     }
 
     @Override
     public Customer findByUsername(String username) {
         Query query = new Query(where("username").is(username));
+        query.fields()
+                .exclude("password")
+                .exclude("documentType")
+                .exclude("documentNumber")
+                .exclude("phoneNumber")
+                .exclude("createdAt")
+                .exclude("updatedAt")
+        ;
         return mongoTemplate.findOne(query, Customer.class, "customers");
     }
 
@@ -60,6 +83,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         query.addCriteria(new Criteria().andOperator(
                 where("email").regex(email, "i")
         ));
+        query.fields()
+                .exclude("documentType")
+                .exclude("documentNumber")
+                .exclude("phoneNumber")
+                .exclude("createdAt")
+                .exclude("updatedAt")
+        ;
         return mongoTemplate.findOne(query, Customer.class, "customers");
     }
 
@@ -71,6 +101,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 where("email").regex(email, "i"),
                 where("status").is(statusFilter)
         ));
+        query.fields()
+                .exclude("password")
+                .exclude("documentType")
+                .exclude("documentNumber")
+                .exclude("phoneNumber")
+                .exclude("createdAt")
+                .exclude("updatedAt")
+        ;
         return mongoTemplate.findOne(query, Customer.class, "customers");
     }
 
@@ -151,6 +189,39 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Customer.class);
         return updateResult.getModifiedCount()==1;
     }
+
+    @Override
+    public List<Address> findByListId(List<Address> req) {
+        List<String> ids = req.stream().map(Address::getId).collect(Collectors.toList());
+        Query query = Query.query(Criteria.where("id").in(ids));
+        query.fields()
+                .exclude("status")
+        ;
+        return mongoTemplate.find(query, Address.class, "addresses");
+    }
+
+    @Override
+    public boolean saveAddress(Customer customer, Address address) {
+        Address result = mongoTemplate.save(address, "addresses");
+        Query query = new Query(Criteria.where("id").is(customer.getId()));
+        Update update = new Update().push("addresses", Address.builder().id(result.getId()).build());
+        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Customer.class);
+        return updateResult.getModifiedCount()==1;
+    }
+
+    @Override
+    public boolean deleteAddress(Customer customer, String addressId) {
+        Query query = new Query(Criteria.where("id").is(addressId));
+        Update update = new Update().set("active", false);
+        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Address.class);
+
+        Query query2 = new Query(Criteria.where("id").is(customer.getId()));
+        Update update2 = new Update().pull("addresses", Address.builder().id(addressId).build());
+        UpdateResult updateResult2 = mongoTemplate.updateFirst(query2, update2, Customer.class);
+
+        return updateResult2.getModifiedCount()==1;
+    }
+
 
 
 }

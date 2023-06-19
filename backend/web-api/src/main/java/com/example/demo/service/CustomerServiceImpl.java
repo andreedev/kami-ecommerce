@@ -1,14 +1,19 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Address;
 import com.example.demo.model.Customer;
 import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.utils.Utils;
+import org.bson.codecs.ObjectIdGenerator;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service()
 public class CustomerServiceImpl implements CustomerService{
@@ -85,6 +90,22 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public boolean updateCart(Customer customer) {
         return customerRepository.updateCart(customer);
+    }
+
+    @Override
+    public List<Address> loadAddresses(List<Address> req) {
+        return customerRepository.findByListId(req);
+    }
+
+    @Override
+    public boolean saveAddress(Customer customer, Address address) {
+        address.setActive(true);
+        return customerRepository.saveAddress(customer,address);
+    }
+
+    @Override
+    public boolean deleteAddress(Customer customer, String addressId) {
+        return customerRepository.deleteAddress(customer, addressId);
     }
 
 }

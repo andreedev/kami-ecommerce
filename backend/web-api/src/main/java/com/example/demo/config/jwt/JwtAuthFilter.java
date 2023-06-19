@@ -68,20 +68,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         if (null != username && SecurityContextHolder.getContext().getAuthentication() == null) {
             Customer customer = applicationContext.getBean("customerService", CustomerService.class).findByEmail(username);
-            Customer safeCustomerObj = Customer.builder()
-//                    .username(customer.getEmail())
-                    .name(customer.getName())
-                    .lastName(customer.getLastName())
-                    .email(customer.getEmail())
-                    .id(customer.getId())
-                    .roles(customer.getRoles())
-                    .status(customer.getStatus())
-                    .cart(customer.getCart())
-                    .build();
-
-            if (jwtUtil.validateJwtToken(token, safeCustomerObj.getEmail())) {
+            customer.setPassword(null);
+            if (jwtUtil.validateJwtToken(token, customer.getEmail())) {
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(safeCustomerObj, null, safeCustomerObj.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(customer, null, customer.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } else {

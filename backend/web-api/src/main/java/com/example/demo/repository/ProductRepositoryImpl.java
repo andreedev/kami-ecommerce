@@ -111,6 +111,12 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .map(Product::getId)
                 .collect(Collectors.toList());
         Query query = Query.query(Criteria.where("id").in(productIds));
+        query.fields()
+                .exclude("keywords")
+                .exclude("status")
+                .exclude("createdAt")
+                .exclude("updatedAt")
+        ;
         List<Product> productList = mongoTemplate.find(query, Product.class, "products");
         return productList;
     }

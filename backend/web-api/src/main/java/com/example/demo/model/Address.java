@@ -1,16 +1,16 @@
 package com.example.demo.model;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Document("addresses")
 public class Address {
     @Id
     private String id;
@@ -19,5 +19,5 @@ public class Address {
     private String reference;
     private String lat;
     private String log;
-    private Integer status;
+    private Boolean active;
 }

@@ -28,5 +28,16 @@ public class OrderController {
         return orderService.create(req);
     }
 
+    @PostMapping("payment/recalculate")
+    public boolean recalculatePaymentDetail(@RequestBody @Valid Order req){
+        log.info("createOrder");
+        Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        req.setCustomerId(customer.getId());
+        req.setProducts(Utils.convertToProductList(customer.getCart().getProducts()));
+        return orderService.create(req);
+    }
+
+
+
 
 }
