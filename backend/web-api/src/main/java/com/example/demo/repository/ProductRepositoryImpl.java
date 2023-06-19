@@ -3,9 +3,7 @@ package com.example.demo.repository;
 import com.example.demo.model.Customer;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
-import com.example.demo.model.validation.CustomProduct;
 import com.example.demo.model.validation.SearchRequest;
-import com.example.demo.model.validation.SimpleCartProduct;
 import com.example.demo.utils.Enums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,9 +106,9 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public List<Product> findByListId(List<SimpleCartProduct> req) {
+    public List<Product> findByListId(List<Product> req) {
         List<String> productIds = req.stream()
-                .map(SimpleCartProduct::getId)
+                .map(Product::getId)
                 .collect(Collectors.toList());
         Query query = Query.query(Criteria.where("id").in(productIds));
         List<Product> productList = mongoTemplate.find(query, Product.class, "products");

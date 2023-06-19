@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { Constants } from 'app/core/constants';
+import { Router } from '@angular/router';
+import { AppRoutes, Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { DataService } from 'app/core/services';
 import { CartDataService } from 'app/core/services/data/cart-data.service';
 import { SearchDataService } from 'app/core/services/data/search-data.service';
 import { environment } from 'assets/environments/environment';
+import { AuthDataService } from '../../../core/services/data/auth-data.service';
+import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({
   selector: 'cart',
@@ -17,14 +20,29 @@ export class CartComponent {
   constructor(
     public dataService: DataService,
     public cartDataService: CartDataService,
-    public searchDataService: SearchDataService,
+    private searchDataService: SearchDataService,
+    private authDataService: AuthDataService,
+    private router: Router
   ) { }
-  
-  clear():void{
-    this.searchDataService.searchResults.data.forEach((p)=>{
-      p.amount = 0
+
+  clear(): void {
+    this.searchDataService.searchResults.data.forEach((p) => {
+      p.quantity = 0
     })
     this.cartDataService.clearCart()
+  }
+
+  checkout(): any {
+    if (this.authDataService.authStatus.value !== AuthStatus.LOGGED_IN.getName()) {
+      return this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
+    }
+    this.dataService.enableLoading();
+    setTimeout(() => {
+      this.dataService.disableLoading()
+    }, 1000);
+    this.cartDataService.displayCart = false;
+    this.cartDataService.saveCart();
+    this.router.navigate([AppRoutes.CHECKOUT_MODULE_ROUTE_NAME]);
   }
 
 }

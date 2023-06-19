@@ -1,7 +1,7 @@
-  import { HttpClient } from '@angular/common/http';
-  import { Injectable } from '@angular/core';
-  import { firstValueFrom } from 'rxjs';
-  import { AuthService } from './auth.service';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+import { AuthService } from './auth.service';
 import { DataService } from '../data/data.service';
 import { Utils } from 'app/core/helpers/utils';
 import { Endpoints } from 'app/core/constants';

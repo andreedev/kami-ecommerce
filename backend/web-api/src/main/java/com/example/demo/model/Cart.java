@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.model.validation.CustomProduct;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -12,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cart {
-    private List<CustomProduct> products;
+    private List<Product> products;
     // doesn't persist
     private BigDecimal subtotal;
     private Integer totalAmount;

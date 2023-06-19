@@ -6,6 +6,7 @@ import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 import { UnauthenticatedGuard } from './core/guards/unauthenticated.guard';
 import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
+import { CheckoutLayoutComponent } from './shared/layouts/checkout-layout/checkout-layout.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,17 @@ const routes: Routes = [
       }
     ],
     canActivate: [UnauthenticatedGuard]
+  },
+  {
+    path: AppRoutes.CHECKOUT_MODULE_NAME,
+    component: CheckoutLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('app/modules/checkout/checkout.module').then(m => m.CheckoutModule),
+          canActivate: [AuthenticatedGuard]
+      },
+    ],
   },
   {
     path: '',

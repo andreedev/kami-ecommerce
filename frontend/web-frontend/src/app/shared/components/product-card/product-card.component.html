@@ -42,18 +42,18 @@
     
     <ng-container *ngIf="displayCartInteractionBtn">
         <ng-container *ngIf="product.stock! > 0">
-            <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
+            <ng-container *ngIf="product.quantity! > 0; else neverAddedToCart">
                 <a class="product-operation-btn align-self-center">
                     <div class="d-flex align-items-center justify-content-between">
-                        <ng-container *ngIf="product.amount==1; else decreaseProduct">
+                        <ng-container *ngIf="product.quantity==1; else decreaseProduct">
                             <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
                         </ng-container>
                         <ng-template #decreaseProduct>
                             <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
                         </ng-template>
-                        <span>{{ product.amount }}</span>
+                        <span>{{ product.quantity }}</span>
                         <i 
-                            *ngIf="product.amount! < product.stock!; else outOfStock"
+                            *ngIf="product.quantity! < product.stock!; else outOfStock"
                             class="fa fa-plus cp mx-2" 
                             (click)="increaseQuantity(product.id!)"
                         ></i>
@@ -111,15 +111,15 @@
                     <div class="d-flex align-items-end">
                         <a class="product-operation-btn-sm h-fit-content fs-14px">
                             <div class="d-flex align-items-center justify-content-between">
-                                <ng-container *ngIf="product.amount==1; else decreaseProduct">
+                                <ng-container *ngIf="product.quantity==1; else decreaseProduct">
                                     <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
                                 </ng-container>
                                 <ng-template #decreaseProduct>
                                     <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
                                 </ng-template>
-                                <span>{{ product.amount }}</span>
+                                <span>{{ product.quantity }}</span>
                                 <i 
-                                    *ngIf="product.amount! < product.stock!; else outOfStock"
+                                    *ngIf="product.quantity! < product.stock!; else outOfStock"
                                     class="fa fa-plus cp mx-2" 
                                     (click)="increaseQuantity(product.id!)"
                                 ></i>
@@ -201,18 +201,18 @@
         <div class="row m-0 p-0 justify-content-center mt-3">
             <div class="col-6 px-1 px-sm-2">
                 <ng-container *ngIf="product.stock! > 0">
-                    <ng-container *ngIf="product.amount! > 0; else neverAddedToCart">
+                    <ng-container *ngIf="product.quantity! > 0; else neverAddedToCart">
                         <a class="product-operation-btn-2 align-self-center d-inline-block">
                             <div class="d-flex align-items-center justify-content-between">
-                                <ng-container *ngIf="product.amount==1; else decreaseProduct">
+                                <ng-container *ngIf="product.quantity==1; else decreaseProduct">
                                     <i class="fa fa-trash cp mx-2" (click)="removeFromCart(product.id!)"></i>
                                 </ng-container>
                                 <ng-template #decreaseProduct>
                                     <i class="fa fa-minus cp mx-2" (click)="decreaseQuantity(product.id!)"></i>
                                 </ng-template>
-                                <span>{{ product.amount }}</span>
+                                <span>{{ product.quantity }}</span>
                                 <i 
-                                    *ngIf="product.amount! < product.stock!; else outOfStock"
+                                    *ngIf="product.quantity! < product.stock!; else outOfStock"
                                     class="fa fa-plus cp mx-2" 
                                     (click)="increaseQuantity(product.id!)"
                                 ></i>

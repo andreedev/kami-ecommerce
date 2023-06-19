@@ -4,8 +4,6 @@ import com.example.demo.model.Cart;
 import com.example.demo.model.Discount;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
-import com.example.demo.model.validation.CustomProduct;
-import com.example.demo.model.validation.SimpleCartProduct;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.utils.Enums;
@@ -29,20 +27,19 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public DynamicReport<CustomProduct> search(SearchRequest req) {
+    public DynamicReport<Product> search(SearchRequest req) {
         DynamicReport<Product> result = productRepository.search(req);
-        List<CustomProduct> list = Utils.convertToCustomProductList(result.getData());
-        setupProductDiscount(list);
-        DynamicReport<CustomProduct> result2 = new DynamicReport<CustomProduct>(list, result.getTotalPages());
+        List<Product> list = result.getData();
+        Utils.setupProductDiscount(list);
+        DynamicReport<Product> result2 = new DynamicReport<Product>(list, result.getTotalPages());
         return result2;
     }
 
     @Override
-    public Cart loadCart(List<SimpleCartProduct> req) {
-        List<Product> result = productRepository.findByListId(req);
-        List<CustomProduct> list = Utils.convertToCustomProductList(result);
-        setupProductDiscount(list);
-        recoverGuestCartProductsAmount(req, list);
+    public Cart loadCart(List<Product> req) {
+        List<Product> list = productRepository.findByListId(req);
+        Utils.setupProductDiscount(list);
+        Utils.recoverCartProductsAmount(req, list);
         Cart cart = Cart.builder()
                 .products(list)
                 .subtotal(Utils.calculateCartSubtotal(list))
@@ -52,7 +49,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<CustomProduct> getFeaturedProducts() {
+    public List<Product> getFeaturedProducts() {
         SearchRequest req = SearchRequest.builder()
                 .query("")
                 .orderFilter(Enums.SearchRequestOrderFilter.RECOMMENDED.getCode())
@@ -60,7 +57,7 @@ public class ProductServiceImpl implements ProductService{
                 .page(1)
                 .pageSize(8)
                 .build();
-        List<CustomProduct> featuredProducts = Utils.convertToCustomProductList(productRepository.search(req).getData());
+        List<Product> featuredProducts = productRepository.search(req).getData();
         if (featuredProducts.size() < 8){
             int missing = 8 - featuredProducts.size();
             SearchRequest fallbackReq  = SearchRequest.builder()
@@ -69,38 +66,11 @@ public class ProductServiceImpl implements ProductService{
                     .page(1)
                     .pageSize(missing)
                     .build();
-            featuredProducts.addAll(Utils.convertToCustomProductList(productRepository.search(fallbackReq).getData()));
+            featuredProducts.addAll(productRepository.search(fallbackReq).getData());
         }
-        setupProductDiscount(featuredProducts);
+        Utils.setupProductDiscount(featuredProducts);
         return featuredProducts;
     }
 
-    private void recoverGuestCartProductsAmount(List<SimpleCartProduct> req, List<CustomProduct> list) {
-        for (SimpleCartProduct reqProduct : req) {
-            for (CustomProduct listProduct : list) {
-                if (reqProduct.getId().equals(listProduct.getId())) {
-                    listProduct.setAmount(reqProduct.getAmount());
-                    break;
-                }
-            }
-        }
-    }
 
-    private void setupProductDiscount(List<CustomProduct> list){
-        LocalDateTime currentDate = LocalDateTime.now();
-
-        for (CustomProduct product : list) {
-            Discount discount = product.getDiscount();
-            if (discount!=null && discount.getStartDate().isBefore(currentDate) && discount.getEndDate().isAfter(currentDate)){
-                BigDecimal price = product.getPrice();
-                Integer discountPercentage = product.getDiscount().getPercentage();
-                BigDecimal discountAmount = price.multiply(BigDecimal.valueOf(discountPercentage)).divide(BigDecimal.valueOf(100));
-                BigDecimal priceWithDiscount = price.subtract(discountAmount);
-                priceWithDiscount = priceWithDiscount.setScale(2, RoundingMode.HALF_UP);
-                product.getDiscount().setPriceWithDiscountApplied(priceWithDiscount);
-            } else {
-                product.setDiscount(null);
-            }
-        }
-    }
 }

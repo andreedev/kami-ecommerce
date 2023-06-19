@@ -40,7 +40,7 @@
                 </ng-container>
                 <hr>
                 <div class="d-flex flex-column justify-content-evenly align-items-center px-3">
-                    <span class="mt-2 mt-sm-3 btn bg-green-with-hover text-white transition-300ms d-flex flex-row justify-content-between align-items-center cp w-100">
+                    <span class="mt-2 mt-sm-3 btn bg-green-with-hover text-white transition-300ms d-flex flex-row justify-content-between align-items-center cp w-100" (click)="checkout()">
                         <span class="fw-bold">Ir a pagar</span>
                         <span>S/{{ cartDataService.cart.subtotal }}</span>
                     </span>

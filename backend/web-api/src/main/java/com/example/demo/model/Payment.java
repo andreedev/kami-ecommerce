@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.utils.validators.ValidPaymentMethod;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,20 +17,15 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("payments")
 public class Payment {
-    @Id
-    private String id;
-    private String customerId;
-    private String type;
-    private String gateway;
+    @NotEmpty(message = "The payment method is required")
+    @ValidPaymentMethod
+    private String paymentMethod;
     private String operationCode;
-    private String voucherUrl;
-    private String token;
-    private Integer status;
-    private BigDecimal amount;
+    private String voucher;
+    private BigDecimal total;
+//    private String paymentGateway;
+//    private String token;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-
 }

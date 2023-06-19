@@ -20,9 +20,9 @@ export class ProductCardComponent implements OnChanges {
 
   responsiveOptions: any[] = [
     {
-          breakpoint: '768px',
-          numVisible: 5
-      },
+      breakpoint: '768px',
+      numVisible: 5
+    },
   ];
 
   constructor(
@@ -34,16 +34,16 @@ export class ProductCardComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product']) {
-        const loadedProduct: Product = Utils.getByAttr(this.cartDataService.cart.products, "id", this.product.id)
-        if (loadedProduct) this.product.amount = loadedProduct.amount
-        this.product.mediaUrls!.forEach((m)=>{
-          this.images.push({src:m})
-        })
+      const loadedProduct: Product = Utils.getByAttr(this.cartDataService.cart.products, "id", this.product.id)
+      if (loadedProduct) this.product.quantity = loadedProduct.quantity
+      this.product.mediaUrls!.forEach((m) => {
+        this.images.push({ src: m })
+      })
     }
   }
 
   ngOnInit(): void {
-    
+
   }
 
   productDetails(product: Product): void {
@@ -52,35 +52,35 @@ export class ProductCardComponent implements OnChanges {
   }
 
   addToCart(product: Product): void {
-    const newAmount = 1;
-    this.product.amount = newAmount;
+    const newQuantity = 1;
+    this.product.quantity = newQuantity;
     this.cartDataService.updateCart(product, 'create')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", product.id, "amount", newAmount)
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", product.id, "quantity", newQuantity)
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
 
   increaseQuantity(id: string): void {
-    const newAmount = ++this.product.amount!;
-    this.cartDataService.updateCart({id, amount: newAmount}, 'update')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "amount", newAmount)
+    const newQuantity = ++this.product.quantity!;
+    this.cartDataService.updateCart({ id, quantity: newQuantity }, 'update')
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity)
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
 
   decreaseQuantity(id: string): void {
-    const newAmount = --this.product.amount!;
-    this.cartDataService.updateCart({id, amount: newAmount}, 'update')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "amount", newAmount)
+    const newQuantity = --this.product.quantity!;
+    this.cartDataService.updateCart({ id, quantity: newQuantity }, 'update')
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity)
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
 
   removeFromCart(id: string): void {
-    const newAmount = 0;
-    this.product.amount = newAmount;
-    this.cartDataService.updateCart({id, amount: newAmount}, 'delete')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "amount", newAmount)
+    const newQuantity = 0;
+    this.product.quantity = newQuantity;
+    this.cartDataService.updateCart({ id, quantity: newQuantity }, 'delete')
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity)
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
@@ -88,7 +88,7 @@ export class ProductCardComponent implements OnChanges {
   private recountTotalAmount(): void {
     let totalAmount = 0;
     for (const product of this.cartDataService.cart.products) {
-      totalAmount += product.amount!;
+      totalAmount += product.quantity!;
     }
     this.cartDataService.cart.totalAmount = totalAmount;
   }
@@ -97,14 +97,14 @@ export class ProductCardComponent implements OnChanges {
     let subtotal = 0
     for (const product of this.cartDataService.cart.products) {
       if (product.discount) {
-        subtotal += Utils.multiply(product.discount.priceWithDiscountApplied!, product.amount!)
+        subtotal += Utils.multiply(product.discount.priceWithDiscountApplied!, product.quantity!)
       } else {
-        subtotal += Utils.multiply(product.price!, product.amount!)
+        subtotal += Utils.multiply(product.price!, product.quantity!)
       }
     }
     subtotal = Math.round(subtotal * 100) / 100;
     this.cartDataService.cart.subtotal = subtotal
   }
 
-  
+
 }

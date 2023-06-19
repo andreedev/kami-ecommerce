@@ -2,8 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Cart;
 import com.example.demo.model.DynamicReport;
-import com.example.demo.model.validation.CustomProduct;
-import com.example.demo.model.validation.SimpleCartProduct;
+import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
@@ -25,18 +24,18 @@ public class ProductController {
     }
 
     @PostMapping("search")
-    public DynamicReport<CustomProduct> search(@RequestBody @Valid SearchRequest req){
+    public DynamicReport<Product> search(@RequestBody @Valid SearchRequest req){
         req.setPageSize(20);
         return productService.search(req);
     }
 
     @PostMapping("loadGuestCart")
-    public Cart search(@RequestBody List<SimpleCartProduct> req){
+    public Cart search(@RequestBody List<Product> req){
         return productService.loadCart(req);
     }
 
     @GetMapping("featured")
-    public List<CustomProduct> featured(){
+    public List<Product> featured(){
         return productService.getFeaturedProducts();
     }
 

@@ -15,14 +15,39 @@ public class Enums {
     @Getter
     @AllArgsConstructor
     public enum OrderStatus {
-        NEW(1), PROCESSING(2), SHIPPED(3), DELIVERED(4), CANCELLED(5);
-        private int code;
+        CREATED(1, "created"),
+        PAYMENT_IN_PROCESS(2, "payment_in_process"),
+        PAYMENT_CONFIRMED(2, "payment_confirmed"),
+        SHIPPED(3, "shipped"),
+        DELIVERED(4, "delivered"),
+        CANCELLED(5, "canceled");
+        private final int code;
+        private final String value;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum PaymentMethod {
+        BANK_TRANSFER(1, "bank_transfer"),
+        DIGITAL_WALLET(2, "digital_wallet");
+        private final int code;
+        private final String value;
+    }
+    @Getter
+    @AllArgsConstructor
+    public enum DeliveryMethod {
+        DELIVERY(1, "delivery"),
+        IN_STORE_PICKUP(2, "in_store_pickup");
+        private final int code;
+        private final String value;
     }
 
     @Getter
     @AllArgsConstructor
     public enum ProductStatus {
-        CREATED(1, "created"), PUBLISHED(2, "published"), DISABLED(3, "disabled");
+        CREATED(1, "created"),
+        PUBLISHED(2, "published"),
+        DISABLED(3, "disabled");
         private final int code;
         private final String value;
     }

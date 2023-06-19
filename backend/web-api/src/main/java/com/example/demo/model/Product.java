@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -39,6 +40,9 @@ public class Product {
     private String keywords;
     private Integer stock;
 
+    @Transient
+    private Integer quantity;
+
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
@@ -59,18 +63,4 @@ public class Product {
         this.rating = 0;
     }
 
-    public Product(String id, Integer status, String name, String sku, BigDecimal price, Discount discount, String brand, List<String> categories, List<String> specifications, List<String> mediaUrls, String keywords, Integer stock) {
-        this.id = id;
-        this.status = status;
-        this.name = name;
-        this.sku = sku;
-        this.price = price;
-        this.discount = discount;
-        this.brand = brand;
-        this.categories = categories;
-        this.specifications = specifications;
-        this.mediaUrls = mediaUrls;
-        this.keywords = keywords;
-        this.stock = stock;
-    }
 }

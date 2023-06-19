@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SimpleCartProduct {
+public class SimplifiedProduct {
     private String id;
-    private Integer amount;
+    private Integer quantity;
 }

@@ -1,14 +1,17 @@
 package com.example.demo.utils;
 
 import com.example.demo.model.Category;
+import com.example.demo.model.Discount;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.CustomCategory;
-import com.example.demo.model.validation.CustomProduct;
+import com.example.demo.model.validation.SimplifiedProduct;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,23 +30,19 @@ public class Utils {
         return Integer.toString(code);
     }
 
-    public static List<CustomProduct> convertToCustomProductList(List<Product> products) {
+    public static String generateSixDigitsCode() {
+        Random rand = new Random(System.currentTimeMillis());
+        int code = rand.nextInt(900000) + 100000;
+        return Integer.toString(code);
+    }
+
+    public static List<Product> convertToProductList(List<SimplifiedProduct> products) {
         return products.stream()
-                .map(product -> new CustomProduct(
-                        product.getId(),
-                        product.getName(),
-                        product.getSku(),
-                        product.getPrice(),
-                        product.getDiscount(),
-                        product.getBrand(),
-                        product.getCategories(),
-                        product.getSpecifications(),
-                        product.getMediaUrls(),
-                        product.getRating(),
-                        product.getStock(),
-                        0
-                    )
-                )
+                .map( value -> Product.builder()
+                        .id(value.getId())
+                        .quantity(value.getQuantity())
+                        .build())
+
                 .collect(Collectors.toList());
     }
 
@@ -57,20 +56,20 @@ public class Utils {
                 .collect(Collectors.toList());
     }
 
-    public static BigDecimal calculateCartSubtotal(List<CustomProduct> list) {
+    public static BigDecimal calculateCartSubtotal(List<Product> list) {
         BigDecimal subtotal = BigDecimal.ZERO;
-        for (CustomProduct product : list) {
+        for (Product product : list) {
             BigDecimal price = (product.getDiscount() != null) ? product.getDiscount().getPriceWithDiscountApplied() : product.getPrice();
-            BigDecimal amount = new BigDecimal(product.getAmount());
+            BigDecimal amount = new BigDecimal(product.getQuantity());
             BigDecimal productSubtotal = price.multiply(amount);
             subtotal = subtotal.add(productSubtotal);
         }
         return subtotal.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
-    public static int countCartTotalAmount(List<CustomProduct> list){
+    public static int countCartTotalAmount(List<Product> list){
         int totalAmount = 0;
-        for (CustomProduct product : list) {
-            totalAmount += product.getAmount();
+        for (Product product : list) {
+            totalAmount += product.getQuantity();
         }
         return totalAmount;
     }
@@ -87,5 +86,31 @@ public class Utils {
         return roles;
     }
 
+    public static void recoverCartProductsAmount(List<Product> req, List<Product> list) {
+        for (Product reqProduct : req) {
+            for (Product listProduct : list) {
+                if (reqProduct.getId().equals(listProduct.getId())) {
+                    listProduct.setQuantity(reqProduct.getQuantity());
+                    break;
+                }
+            }
+        }
+    }
 
+    public static void setupProductDiscount(List<Product> list){
+        LocalDateTime currentDate = LocalDateTime.now();
+        for (Product product : list) {
+            Discount discount = product.getDiscount();
+            if (discount!=null && discount.getStartDate().isBefore(currentDate) && discount.getEndDate().isAfter(currentDate)){
+                BigDecimal price = product.getPrice();
+                Integer discountPercentage = product.getDiscount().getPercentage();
+                BigDecimal discountAmount = price.multiply(BigDecimal.valueOf(discountPercentage)).divide(BigDecimal.valueOf(100));
+                BigDecimal priceWithDiscount = price.subtract(discountAmount);
+                priceWithDiscount = priceWithDiscount.setScale(2, RoundingMode.HALF_UP);
+                product.getDiscount().setPriceWithDiscountApplied(priceWithDiscount);
+            } else {
+                product.setDiscount(null);
+            }
+        }
+    }
 }

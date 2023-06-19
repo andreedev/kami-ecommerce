@@ -205,8 +205,8 @@ export class Utils {
 
     static reduceProductListInfo(list: Product[]): Product[] {
         const newList: Product[] = []
-        list.forEach((value: Product)=>{
-            newList.push({ id: value.id, amount: value.amount });
+        list.forEach((value: Product) => {
+            newList.push({ id: value.id, quantity: value.quantity });
         })
         return newList
     }
