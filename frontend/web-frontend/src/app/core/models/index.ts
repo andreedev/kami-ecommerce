@@ -1,3 +1,6 @@
+export { Payment } from './payment';
+export { Delivery } from './delivery';
+export { Order } from './order';
 export { SessionResponse } from './rest/session-response';
 export { Product } from './product';
 export { Address } from './address';

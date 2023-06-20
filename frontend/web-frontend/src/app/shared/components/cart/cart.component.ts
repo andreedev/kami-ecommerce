@@ -36,11 +36,7 @@ export class CartComponent {
     if (this.authDataService.authStatus.value !== AuthStatus.LOGGED_IN.getName()) {
       return this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
     }
-    this.dataService.enableLoading();
     this.cartDataService.saveCart();
-    setTimeout(() => {
-      this.dataService.disableLoading();
-    }, 500);
     this.cartDataService.displayCart = false;
     this.router.navigate([AppRoutes.CHECKOUT_MODULE_ROUTE_NAME]);
   }

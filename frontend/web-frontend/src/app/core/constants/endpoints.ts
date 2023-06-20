@@ -13,11 +13,10 @@ export abstract class Endpoints {
     static readonly LINK_TO_GOOGLE_ACCOUNT: string = `${Endpoints.AUTH}/linkToGoogleAccount`
     static readonly SIGN_UP_WITH_GOOGLE: string = `${Endpoints.AUTH}/signUpWithGoogle`
 
-    static readonly EMPLOYEE: string = 'admin/employee'
-    static readonly GET_EMPLOYEE: string = `${Endpoints.EMPLOYEE}/getEmployee`
-
     static readonly CUSTOMER: string = 'customer'
     static readonly PROFILE: string = `${Endpoints.CUSTOMER}/profile`
+    static readonly SAVE_ADDRESS: string = `${Endpoints.CUSTOMER}/address/save`
+    static readonly DELETE_ADDRESS: string = `${Endpoints.CUSTOMER}/address/delete`
 
     static readonly CART: string = 'cart'
     static readonly UPDATE_CART: string = `${Endpoints.CART}/update`
@@ -29,4 +28,8 @@ export abstract class Endpoints {
 
     static readonly CATEGORY: string = 'category'
     static readonly CATEGORIES: string = `${Endpoints.CATEGORY}/categories`
+
+    static readonly ORDER: string = 'order'
+    static readonly CALCULATE_PAYMENT: string = `${Endpoints.ORDER}/payment/calculate`
+    static readonly CREATE_ORDER: string = `${Endpoints.ORDER}/create`
 }

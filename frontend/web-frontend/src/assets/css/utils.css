@@ -583,7 +583,11 @@ img {
     color: var(--gray-30) !important;
 }
 
-.text-gray {
+.text-gray-40 {
+    color: var(--gray-40) !important;
+}
+
+.text-gray, .text-gray-50 {
     color: var(--gray-50) !important;
 }
 
@@ -592,7 +596,7 @@ img {
 }
 
 .text-gray-70 {
-color: var(--gray-70) !important;
+    color: var(--gray-70) !important;
 }
 
 .text-gray-80 {
@@ -2864,8 +2868,16 @@ color: var(--gray-70) !important;
     background-color:  rgba(0, 0, 0, 0.1);
 }
 
+.bg-black-transparent-10-force{
+    background-color:  rgba(0, 0, 0, 0.1) !important;
+}
+
 .bg-black-transparent-20{
     background-color:  rgba(0, 0, 0, 0.2);
+}
+
+.bg-black-transparent-20-force{
+    background-color:  rgba(0, 0, 0, 0.2) !important;
 }
 
 .bg-black-transparent-30{

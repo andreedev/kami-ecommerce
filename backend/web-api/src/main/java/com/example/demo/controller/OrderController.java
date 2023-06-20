@@ -19,14 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
-    @PostMapping("create")
-    public boolean createOrder(@RequestBody @Valid Order req){
-        log.info("createOrder");
-        Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        req.setCustomerId(customer.getId());
-        req.setProducts(Utils.convertToProductList(customer.getCart().getProducts()));
-        return orderService.create(req);
-    }
 
     @PostMapping("payment/calculate")
     public Order calculatePayment(@RequestBody @Valid Order req){
@@ -36,6 +28,16 @@ public class OrderController {
         req.setProducts(Utils.convertToProductList(customer.getCart().getProducts()));
         return orderService.calculatePayment(req);
     }
+    @PostMapping("create")
+    public boolean createOrder(@RequestBody @Valid Order req){
+        log.info("createOrder");
+        Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        req.setCustomerId(customer.getId());
+        req.setProducts(Utils.convertToProductList(customer.getCart().getProducts()));
+        return orderService.create(req);
+    }
+
+
 
 
 

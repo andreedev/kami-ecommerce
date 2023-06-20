@@ -51,6 +51,18 @@
     padding: 10px !important;
 }
 
+.p-radiobutton .p-radiobutton-box.p-highlight {
+    border-color: #29d884 !important;
+    background: #29d884 !important;
+}
+
+.p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #29d88480;
+    border-color: #29d884;
+}
+
 .main-content {
     margin-left: 0;
 }

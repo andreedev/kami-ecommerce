@@ -15,9 +15,9 @@ export class CheckoutLayoutComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // @HostListener('window:resize', ['$event'])
-  // onResize(event: any) {
-  //   this.dataService.screenWidth = event.target.innerWidth
-  // }
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.dataService.screenWidth = event.target.innerWidth
+  }
 
 }

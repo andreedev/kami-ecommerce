@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService{
         Utils.recoverCartProductsQuantity(order.getProducts(), list);
         order.setSubTotal(Utils.calculateCartSubtotal(list));
         if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
-            order.setDeliveryCost(new BigDecimal(10));
+            order.setDeliveryCost(new BigDecimal(12));
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
         return orderRepository.create(order);
@@ -44,7 +44,7 @@ public class OrderServiceImpl implements OrderService{
         order.setSubTotal(Utils.calculateCartSubtotal(list));
         order.setDeliveryCost(new BigDecimal(BigInteger.ZERO));
         if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
-            order.setDeliveryCost(new BigDecimal(10));
+            order.setDeliveryCost(new BigDecimal(12));
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
         return Order.builder()

@@ -68,7 +68,7 @@ export class AuthDataService {
     } else {
       setTimeout(() => {
         this.profileLoadedEvent.emit(false);
-      }, 10);
+      }, 50);
     }
   }
 
