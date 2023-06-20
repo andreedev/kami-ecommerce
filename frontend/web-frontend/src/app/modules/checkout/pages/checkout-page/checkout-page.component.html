@@ -1,1 +1,114 @@
-<p>checkout-page works!</p>
+<div class="container-fluid container-lg bg-light">
+    <div class="row mx-0 py-3 pb-5">
+        <div class="col-12 col-md-7 col-xl-8 px-0 px-md-2">
+            <div class="d-flex flex-column">
+                <div class="card bg-white mb-3">
+                    <div class="card-header bg-white">
+                        <p class="fs-22px m-0 fw-500"><i class="fa-regular fa-circle-check me-2"></i>Elige un tipo de entrega</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text fs-14px mb-2">Tipos de entrega disponibles:</div>
+                        <div class="row m-0 p-0">
+                            <div class="col-12 col-lg-6 px-0 px-md-2">
+                                <label class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between" for="delivery">
+                                    <div><i class="fa-solid fa-truck me-2"></i>Delivery</div>
+                                    <p-radioButton name="deliveryMethod" value="delivery" inputId="delivery"
+                                        [(ngModel)]="deliveryMethod" (onClick)="onChangeDeliveryMethod($event)"></p-radioButton>
+                                </label>
+                            </div>
+                            <div class="col-12 col-lg-6 px-0 px-md-2">
+                                <label class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between" for="in_store_pickup">
+                                    <div><i class="fa-solid fa-shop me-2"></i>Recojo en tienda</div>
+                                    <p-radioButton name="deliveryMethod" value="in_store_pickup" inputId="in_store_pickup"
+                                        [(ngModel)]="deliveryMethod" (onClick)="onChangeDeliveryMethod($event)"></p-radioButton>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="card bg-white mb-3">
+                    <div class="card-header bg-white">
+                        <p class="fs-22px m-0 fw-500"><i class="fa-regular fa-circle-check me-2"></i>Selecciona método de pago</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text fs-14px mb-2">Métodos de pago disponibles:</div>
+                        <div class="row m-0 p-0">
+                            <div class="col-12 col-lg-6 px-0 px-md-2">
+                                <label class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between" for="bank_transfer">
+                                    <div>
+                                        <i class="fa-solid fa-money-bill-transfer me-2"></i>
+                                        <span class="fs-14px">Transferencia bancaria</span>
+                                    </div>
+                                    <p-radioButton name="paymentMethod" value="delivery" inputId="bank_transfer"
+                                        [(ngModel)]="paymentMethod" (onClick)="onChangePaymentMethod($event)"></p-radioButton>
+                                </label>
+                            </div>
+                            <div class="col-12 col-lg-6 px-0 px-md-2">
+                                <label class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between" for="digital_wallet">
+                                    <div><i class="fa-solid fa-wallet me-2"></i>Yape/Plin</div>
+                                    <p-radioButton name="paymentMethod" value="in_store_pickup" inputId="digital_wallet"
+                                        [(ngModel)]="paymentMethod" (onClick)="onChangePaymentMethod($event)"></p-radioButton>
+                                </label>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-5 col-xl-4 px-0 px-md-2">
+            <div class="accordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button py-3" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne">
+                            <p class="fs-22px m-0 fw-500">Resumen de la compra</p>
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                        <div class="accordion-body p-2">
+                            <div class="overflow-y-auto overflow-x-hidden max-h-380px">
+                                <ng-container *ngIf="!cartDataService.loadingCart">
+                                    <ng-container *ngFor="let product of cartDataService.cart.products">
+                                        <product-card [displayCartInteractionBtn]="true" [product]="product" 
+                                        type="cart-product-list-card"></product-card>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="d-flex">Subtotal:</span>
+                                        <span class="d-flex">S/ 5000.00</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="d-flex">Costo de envío:</span>
+                                        <span class="d-flex">S/ 10.00</span>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="d-flex fw-500">Total:</span>
+                                        <span class="d-flex fw-500">S/ 5010.00</span>
+                                    </div>
+                                </li>
+                              </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="d-flex flex-column">
+    
+                <button class="mt-2 mt-sm-3 btn bg-green-with-hover text-white transition-300ms cp w-100" 
+                    [disabled]="!generateOrderBtnIsActive" (click)="generateOrder()">
+                    <span class="fw-bold">Ir a pagar</span>
+                </button>
+    
+            </div>
+    
+        </div>
+    </div>
+</div>

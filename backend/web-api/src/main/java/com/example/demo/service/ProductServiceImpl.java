@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Cart;
-import com.example.demo.model.Discount;
 import com.example.demo.model.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
@@ -12,9 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,7 +35,7 @@ public class ProductServiceImpl implements ProductService{
     public Cart loadCart(List<Product> req) {
         List<Product> list = productRepository.findByListId(req);
         Utils.setupProductDiscount(list);
-        Utils.recoverCartProductsAmount(req, list);
+        Utils.recoverCartProductsQuantity(req, list);
         Cart cart = Cart.builder()
                 .products(list)
                 .subtotal(Utils.calculateCartSubtotal(list))

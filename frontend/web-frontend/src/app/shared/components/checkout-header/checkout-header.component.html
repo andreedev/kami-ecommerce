@@ -1,0 +1,21 @@
+<div class="bg-white border-bottom">
+    <div class="container-fluid px-0">
+
+        <div class="d-flex align-items-center justify-content-between my-2">
+
+            <a type="button" class="text-center text-gray-60 fs-14px px-3 px-xl-4 text-decoration-none" (click)="goBack()">
+                <i class="fa-solid fa-arrow-left me-3"></i> <span class="d-none d-sm-inline-block">Regresar</span>
+            </a>
+
+            <a [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME">
+                <img src="https://picsum.photos/seed/picsum/75/50">
+            </a>
+
+            <a type="button" class="text-center text-gray-60 fs-12px px-3 px-xl-4 text-decoration-none invisible">
+                <i class="fa-solid fa-arrow-left me-3"></i> <span class="d-none d-sm-inline-block">Regresar</span>
+            </a>
+
+        </div>
+
+    </div>
+</div>

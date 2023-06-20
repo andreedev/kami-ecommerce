@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 @Service()
@@ -25,12 +26,31 @@ public class OrderServiceImpl implements OrderService{
         List<Product> list = productRepository.findByListId(order.getProducts());
         if (list.isEmpty()) return false;
         Utils.setupProductDiscount(list);
-        Utils.recoverCartProductsAmount(order.getProducts(), list);
+        Utils.recoverCartProductsQuantity(order.getProducts(), list);
         order.setSubTotal(Utils.calculateCartSubtotal(list));
         if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
             order.setDeliveryCost(new BigDecimal(10));
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
         return orderRepository.create(order);
+    }
+
+    @Override
+    public Order calculatePayment(Order order) {
+        List<Product> list = productRepository.findByListId(order.getProducts());
+        if (list.isEmpty()) return null;
+        Utils.setupProductDiscount(list);
+        Utils.recoverCartProductsQuantity(order.getProducts(), list);
+        order.setSubTotal(Utils.calculateCartSubtotal(list));
+        order.setDeliveryCost(new BigDecimal(BigInteger.ZERO));
+        if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
+            order.setDeliveryCost(new BigDecimal(10));
+        }
+        order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
+        return Order.builder()
+                .deliveryCost(order.getDeliveryCost())
+                .subTotal(order.getSubTotal())
+                .total(order.getTotal())
+                .build();
     }
 }

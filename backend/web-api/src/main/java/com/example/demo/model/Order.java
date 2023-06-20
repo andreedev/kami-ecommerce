@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @Setter

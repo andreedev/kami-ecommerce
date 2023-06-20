@@ -1,4 +1,5 @@
 import { CartComponent } from "./components/cart/cart.component";
+import { CheckoutHeaderComponent } from "./components/checkout-header/checkout-header.component";
 import { LoadingComponent } from "./components/loading/loading-component";
 import { LogoutComponent } from "./components/logout/logout.component";
 import { MainFooterComponent } from "./components/main-footer/main-footer.component";
@@ -19,5 +20,6 @@ export const components: any[] = [
     MainHeaderComponent,
     ProductCardComponent,
     ProductModalComponent,
-    CheckoutLayoutComponent
+    CheckoutLayoutComponent,
+    CheckoutHeaderComponent
 ];

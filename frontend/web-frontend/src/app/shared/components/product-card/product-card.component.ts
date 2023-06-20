@@ -8,8 +8,7 @@ import { SearchDataService } from 'app/core/services/data/search-data.service';
 
 @Component({
   selector: 'product-card',
-  templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css']
+  templateUrl: './product-card.component.html'
 })
 export class ProductCardComponent implements OnChanges {
   @Input() product!: Product;

@@ -86,7 +86,7 @@ public class Utils {
         return roles;
     }
 
-    public static void recoverCartProductsAmount(List<Product> req, List<Product> list) {
+    public static void recoverCartProductsQuantity(List<Product> req, List<Product> list) {
         for (Product reqProduct : req) {
             for (Product listProduct : list) {
                 if (reqProduct.getId().equals(listProduct.getId())) {

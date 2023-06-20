@@ -126,6 +126,12 @@ hr {
     content: '';
 }
 
+.accordion-button:not(.collapsed) {
+    color: inherit;
+    background-color: inherit;
+    box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 var(--bs-accordion-border-color);
+}
+
 
 
 /* x ver */

@@ -8,4 +8,5 @@ import com.example.demo.model.validation.VerifyResetPasswordRequest;
 
 public interface OrderService {
     boolean create(Order order);
+    Order calculatePayment(Order order);
 }

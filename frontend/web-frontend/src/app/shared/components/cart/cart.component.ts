@@ -37,11 +37,11 @@ export class CartComponent {
       return this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
     }
     this.dataService.enableLoading();
-    setTimeout(() => {
-      this.dataService.disableLoading()
-    }, 1000);
-    this.cartDataService.displayCart = false;
     this.cartDataService.saveCart();
+    setTimeout(() => {
+      this.dataService.disableLoading();
+    }, 500);
+    this.cartDataService.displayCart = false;
     this.router.navigate([AppRoutes.CHECKOUT_MODULE_ROUTE_NAME]);
   }
 

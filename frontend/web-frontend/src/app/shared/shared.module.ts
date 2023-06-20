@@ -20,6 +20,7 @@ import { GalleriaModule } from 'primeng/galleria';
 import { CarouselModule } from 'primeng/carousel';
 import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   //Components
@@ -48,7 +49,8 @@ import { InputTextModule } from 'primeng/inputtext';
     GalleriaModule,
     CarouselModule,
     DividerModule,
-    InputTextModule 
+    InputTextModule,
+    RadioButtonModule
 
     ,SharedRoutingModule
   ],
@@ -74,7 +76,8 @@ import { InputTextModule } from 'primeng/inputtext';
     GalleriaModule,
     CarouselModule,
     DividerModule,
-    InputTextModule 
+    InputTextModule ,
+    RadioButtonModule
   ]
 })
 export class SharedModule { }
