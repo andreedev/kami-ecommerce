@@ -1,3 +1,4 @@
+import { AddressAddComponent } from "./components/address-add/address-add.component";
 import { AddressesModalComponent } from "./components/addresses-modal/addresses-modal.component";
 import { CartComponent } from "./components/cart/cart.component";
 import { CheckoutHeaderComponent } from "./components/checkout-header/checkout-header.component";
@@ -23,5 +24,6 @@ export const components: any[] = [
     ProductModalComponent,
     CheckoutLayoutComponent,
     CheckoutHeaderComponent,
-    AddressesModalComponent
+    AddressesModalComponent,
+    AddressAddComponent
 ];

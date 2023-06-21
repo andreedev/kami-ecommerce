@@ -35,6 +35,7 @@ export class CartDataService {
   subscribeToProfileLoadedEvent(): void {
     this.authDataService.profileLoadedEvent.subscribe((value) => {
       if (value) {
+        if (!this.authDataService.loggedInCustomer!.cart || !this.authDataService.loggedInCustomer!.cart.products) return;
         if (!(this.authDataService.loggedInCustomer!.cart!.products.length === 0 && this.cart.products.length > 0)) {
           this.cart = this.authDataService.loggedInCustomer!.cart!;
           this.loadingCart = false;

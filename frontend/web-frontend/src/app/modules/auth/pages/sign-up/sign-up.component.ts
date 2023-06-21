@@ -190,7 +190,8 @@ export class SignUpComponent implements OnInit {
       email: "",
       password: "",
       passwordConfirm: "",
-      phoneNumber: ""
+      phoneNumber: "",
+      addresses: []
     };
   }
 

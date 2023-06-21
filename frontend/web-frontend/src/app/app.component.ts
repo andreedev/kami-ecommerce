@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { DataService, CartDataService, SearchDataService, ProductModalDataService, CategoryDataService, AuthDataService } from './core/services';
+import { AddressDataService } from './core/services/data/address-data.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent {
     private categoryDataService: CategoryDataService,
     private authDataService: AuthDataService,
     private cookieService: CookieService,
+    private addressDataService: AddressDataService
   ) { }
   
   debug(): void {
@@ -25,7 +27,7 @@ export class AppComponent {
     console.log(this.searchDataService);
     console.log(this.productModalDataService);
     console.log(this.categoryDataService);
-    this.authDataService.profileLoadedEvent.emit(false);
+    console.log(this.addressDataService);
     // console.log(this.cookieService.get((Constants.SESSION_TOKEN_NAME)));
     // console.log(this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME)));
     

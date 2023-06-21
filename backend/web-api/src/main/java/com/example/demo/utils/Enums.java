@@ -172,4 +172,15 @@ public class Enums {
         private final String value;
     }
 
+    @Getter
+    @AllArgsConstructor
+    public enum SaveAddressResponseCode {
+        SUCCESS(1, "address_successfully_saved"),
+        ERROR(-1, "error_saving_address"),
+        ADDRESS_EXISTS(-2, "address_already_registed"),
+        ADDRESS_LIMIT_REACHED(-2, "address_limit_reached"),
+        ;
+        private final int code;
+        private final String value;
+    }
 }

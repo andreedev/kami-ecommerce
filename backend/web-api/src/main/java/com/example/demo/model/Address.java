@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Address {
     @Id
     private String id;
+    private String customerId;
     @NotEmpty(message = "The address is required")
     private String line;
     private String reference;

@@ -1,7 +1,7 @@
 <ng-container *ngIf="dataService.screenWidth>500; else fullScreen">
-    <p-dialog  [(visible)]="displayModal" [modal]="true" [style]="{ width: '450px' }" [draggable]="false" [resizable]="false" [dismissableMask]="true" [maskStyleClass]="'bg-black-transparent-20'" contentStyleClass="p-0" >
+    <p-dialog  [(visible)]="addressDataService.displayAddressesModal" [modal]="true" [style]="{ width: '450px' }" [draggable]="false" [resizable]="false" [dismissableMask]="true" [maskStyleClass]="'bg-black-transparent-20'" contentStyleClass="p-0">
         <ng-template pTemplate="header">
-            <span class="fs-20px fw-500 mx-3">Mis direcciones</span>
+            <span class="fs-20px fw-500 mx-3"><i class="fa-solid fa-map-location-dot me-2"></i>Mis direcciones</span>
         </ng-template>
         <p class="m-0">
             <ng-container *ngTemplateOutlet="cartTemplate"></ng-container>
@@ -10,13 +10,13 @@
 </ng-container>
 
 <ng-template #fullScreen>
-    <p-sidebar [(visible)]="displayModal" [fullScreen]="true" [showCloseIcon]="false" styleClass="p-0"  [blockScroll]="true">
+    <p-sidebar [(visible)]="addressDataService.displayAddressesModal" [showCloseIcon]="false" styleClass="p-0 h-auto" position="bottom" [blockScroll]="true">
         <div class="d-flex flex-column justify-content-center">
             <div class="border-bottom p-2">
                 <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
-                    <span class="fs-20px fw-500 mx-3">Mis direcciones</span>
+                    <span class="fs-20px fw-500 mx-3"><i class="fa-solid fa-map-location-dot me-2"></i>Mis direcciones</span>
                     <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px text-gray-70"
-                        (click)="displayModal = false"></i>
+                        (click)="addressDataService.displayAddressesModal=false"></i>
                 </div>
             </div>
             <ng-container *ngTemplateOutlet="cartTemplate"></ng-container>
@@ -27,35 +27,46 @@
 <ng-template #cartTemplate>
     <ng-container *ngIf="authDataService.loggedInCustomer!=undefined">
         <div class="m-3">
-            <ul class="list-group list-group-flush mb-2">
-                <li class="list-group-item px-0" 
-                    *ngFor="let address of authDataService.loggedInCustomer.addresses">
-                    <label [for]="address.id" class="w-100">
-                        <div class="d-flex flex-row justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <ng-container *ngIf="selectable">
-                                    <p-radioButton name="address" [value]="address.id"
-                                    [inputId]="address.id" [(ngModel)]="selected"></p-radioButton>
-                                </ng-container>
-                                <div class="d-inline-flex flex-column b-0 fw-500 ms-2">
-                                    <span>{{address.line}}</span>
-                                    <span class="fs-12px text-gray">{{address.reference}}</span>
+            <ng-container *ngIf="authDataService.loggedInCustomer.addresses.length>0">
+                <ul class="list-group list-group-flush mb-2">
+                    <li class="list-group-item px-0" 
+                        *ngFor="let address of authDataService.loggedInCustomer.addresses">
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                        <label [for]="address.id" class="w-100">
+                                <div class="d-flex align-items-center">
+                                    <ng-container *ngIf="selectable">
+                                        <p-radioButton name="address" [value]="address"
+                                        [inputId]="address.id!" [(ngModel)]="orderDataService.order.delivery.shippingAddress"></p-radioButton>
+                                    </ng-container>
+                                    <div class="d-inline-flex flex-column b-0 fw-500 ms-2">
+                                        <span>{{address.line}}</span>
+                                        <span class="fs-12px text-gray">{{address.reference}}</span>
+                                    </div>
                                 </div>
+                            </label>
+                            <div class="hover-transform-scale-115 transition-300ms">
+                                <i class="fa-regular fa-trash-can cp" (click)="deleteAddress(address.id!)"></i>
                             </div>
-                            <div class="cp hover-transform-scale-115 transition-300ms"><i class="fa-regular fa-trash-can"></i></div>
                         </div>
-                    </label>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </ng-container>
+            <ng-container *ngIf="authDataService.loggedInCustomer.addresses.length===0">
+                <p class="text-center my-5">No tienes direcciones registradas.</p>
+            </ng-container>
             <div class="row m-0">
                 <div class="col-6 px-2">
-                    <button type="button" class="btn bg-light w-100" (click)="saveAddress()">
+                    <button type="button" class="btn bg-light w-100" 
+                        [disabled]="authDataService.loggedInCustomer.addresses.length>=5"
+                        (click)="addressDataService.displayAddAddressModal=true; addressDataService.displayAddressesModal=false;">
                         <i class="fa-solid fa-plus me-2"></i>Agregar
                     </button>
                 </div>
                 <div class="col-6 px-2">
                     <ng-container *ngIf="selectable">
-                        <button type="button" class="btn bg-green-with-hover text-white transition-300ms w-100" (click)="addressSelectedEvent.emit(selected)">
+                        <button type="button" class="btn bg-green-with-hover text-white transition-300ms w-100" 
+                        (click)="addressDataService.displayAddressesModal=false;"
+                        [disabled]="authDataService.loggedInCustomer.addresses.length<1 || orderDataService.order.delivery.shippingAddress.id=='' ">
                             Seleccionar
                         </button>
                     </ng-container>

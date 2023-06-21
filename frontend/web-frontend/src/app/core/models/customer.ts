@@ -12,7 +12,7 @@ export interface Customer {
     documentType?: number;
     documentNumber?: string;
     phoneNumber?: string;
-    addresses?: Array<Address>;
+    addresses: Array<Address>;
     createdAt?: string;
     updatedAt?: string;
     cart?: Cart;

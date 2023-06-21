@@ -10,29 +10,39 @@
                     <div class="card-body">
                         <div class="card-text fs-14px mb-2">Tipos de entrega disponibles:</div>
                         <div class="row m-0 p-0">
-                            <div class="col-12 col-md-6 px-0 px-md-2">
+                            <div class="col-12 px-0 px-md-2">
                                 <label
-                                    class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between"
+                                    class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between align items-center"
                                     for="delivery">
-                                    <div><i class="fa-solid fa-truck me-2"></i>
-                                        Delivery
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div><i class="fa-solid fa-truck me-2 fs-24px"></i></div>
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0 text-start">Delivery</p>
+                                            <p class="fs-12px text-gray-60 mb-0">Ingresa tu dirección</p>
+                                        </div>
                                     </div>
                                     <p-radioButton name="deliveryMethod" value="delivery" inputId="delivery"
-                                        [(ngModel)]="order.delivery.deliveryMethod"
+                                        [(ngModel)]="orderDataService.order.delivery.deliveryMethod"
                                         (onClick)="onChangeDeliveryMethod($event)"></p-radioButton>
                                 </label>
                             </div>
-                            <div class="col-12 col-md-6 px-0 px-md-2">
+                            <div class="col-12 px-0 px-md-2">
                                 <label
                                     class="btn bg-white-with-hover border mb-2 py-3 d-flex flex-row justify-content-between"
                                     for="in_store_pickup">
-                                    <div><i class="fa-solid fa-shop me-2"></i>Recojo en local</div>
+                                    <div class="d-flex flex-row align-items-center">
+                                        <div><i class="fa-solid fa-shop me-2 fs-24px"></i></div>
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0 text-start">Recojo en tienda</p>
+                                            <p class="fs-12px text-gray-60 mb-0">Selecciona una tienda</p>
+                                        </div>
+                                    </div>
                                     <p-radioButton name="deliveryMethod" value="in_store_pickup"
-                                        inputId="in_store_pickup" [(ngModel)]="order.delivery.deliveryMethod"
+                                        inputId="in_store_pickup" [(ngModel)]="orderDataService.order.delivery.deliveryMethod"
                                         (onClick)="onChangeDeliveryMethod($event)"></p-radioButton>
                                 </label>
                             </div>
-                            <ng-container *ngIf="order.delivery.deliveryMethod==='delivery'">
+                            <ng-container *ngIf="orderDataService.order.delivery.deliveryMethod==='delivery'">
                                 <div class="card bg-white my-2">
                                     <div class="card-body p-2">
                                         <div class="d-flex">
@@ -41,17 +51,18 @@
                                                 Dirección de entrega
                                             </p>
                                         </div>
-                                        <div class="d-flex justify-content-between">
-                                            <div class="d-flex flex-column b-0 fw-500 ms-2">
-                                                <span>{{order.delivery.shippingAddress.line}}</span>
-                                                <span class="fs-12px text-gray">{{order.delivery.shippingAddress.reference}}</span>
+                                        <div class="d-flex flex-column justify-content-between my-2">
+                                            <a class="cp text-green text-decoration-none text-decoration-underline-hover" 
+                                                (click)="addressDataService.displayAddressesModal=true">Seleccionar</a>
+                                            <div class="d-flex flex-column fw-500">
+                                                <span>{{orderDataService.order.delivery.shippingAddress.line}}</span>
+                                                <span class="fs-12px text-gray">{{orderDataService.order.delivery.shippingAddress.reference}}</span>
                                             </div>
-                                            <a class="cp text-green text-decoration-none text-decoration-underline-hover">Seleccionar</a>
                                         </div>
                                     </div>
                                 </div>
                             </ng-container>
-                            <ng-container *ngIf="order.delivery.deliveryMethod==='in_store_pickup'">
+                            <ng-container *ngIf="orderDataService.order.delivery.deliveryMethod==='in_store_pickup'">
                                 
                             </ng-container>
                         </div>
@@ -75,7 +86,7 @@
                                         <span class="fs-14px">Transferencia bancaria</span>
                                     </div>
                                     <p-radioButton name="paymentMethod" value="bank_transfer" inputId="bank_transfer"
-                                        [(ngModel)]="order.payment.paymentMethod"
+                                        [(ngModel)]="orderDataService.order.payment.paymentMethod"
                                         (onClick)="onChangePaymentMethod($event)"></p-radioButton>
                                 </label>
                             </div>
@@ -85,7 +96,7 @@
                                     for="digital_wallet">
                                     <div><i class="fa-solid fa-wallet me-2"></i>Yape/Plin</div>
                                     <p-radioButton name="paymentMethod" value="digital_wallet" inputId="digital_wallet"
-                                        [(ngModel)]="order.payment.paymentMethod"
+                                        [(ngModel)]="orderDataService.order.payment.paymentMethod"
                                         (onClick)="onChangePaymentMethod($event)"></p-radioButton>
                                 </label>
                             </div>
@@ -113,26 +124,28 @@
                                     </ng-container>
                                 </ng-container>
                             </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <span class="d-flex">Subtotal:</span>
-                                        <span class="d-flex">S/ {{order.subTotal ? order.subTotal : '0.00'}}</span>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <span class="d-flex">Costo de envío:</span>
-                                        <span class="d-flex">S/ {{order.deliveryCost ? order.deliveryCost : '0.00'}}</span>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <span class="d-flex fw-500">Total:</span>
-                                        <span class="d-flex fw-500">S/ {{order.total ? order.total   : '0.00'}}</span>
-                                    </div>
-                                </li>
-                            </ul>
+                            <ng-container *ngIf="orderDataService.order.subTotal && orderDataService.order.deliveryCost && orderDataService.order.total">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="d-flex">Subtotal:</span>
+                                            <span class="d-flex">S/ {{orderDataService.order.subTotal}}</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="d-flex">Costo de envío:</span>
+                                            <span class="d-flex">S/ {{orderDataService.order.deliveryCost}}</span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="d-flex fw-500">Total:</span>
+                                            <span class="d-flex fw-500">S/ {{orderDataService.order.total}}</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
@@ -140,7 +153,7 @@
 
             <div class="d-flex flex-column">
                 <p class="text-center fs-12px m-0 my-1" [class]="messageClass" [innerHTML]="message"></p>
-                <button class="mt-2 btn bg-green-with-hover text-white transition-300ms cp w-100"
+                <button class="mt-1 btn bg-green-with-hover text-white transition-300ms cp w-100"
                     [disabled]="!generateOrderBtnIsActive" (click)="generateOrder()">
                     <span class="fw-bold">Ir a pagar</span>
                 </button>
@@ -152,4 +165,6 @@
 </div>
 
 
-<addresses-modal [displayModal]="displayAddressesModal" (addressSelectedEvent)="onAddressSelectedEvent($event)"></addresses-modal>
+<addresses-modal [selectable]="true"></addresses-modal>
+<address-add></address-add>
+

@@ -7,8 +7,6 @@ import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.utils.Utils;
-import org.bson.codecs.ObjectIdGenerator;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -98,8 +96,14 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
+    public boolean existsAddressByLine(String customerId, String line) {
+        return customerRepository.existsAddressByLine(customerId, line);
+    }
+
+    @Override
     public boolean saveAddress(Customer customer, Address address) {
         address.setActive(true);
+        address.setCustomerId(customer.getId());
         return customerRepository.saveAddress(customer,address);
     }
 

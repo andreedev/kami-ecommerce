@@ -2,15 +2,12 @@ package com.example.demo.repository;
 
 import com.example.demo.model.Address;
 import com.example.demo.model.Customer;
-import com.example.demo.model.Product;
 import com.example.demo.model.VerificationCode;
 import com.example.demo.model.validation.VerifyEmailCodeServiceResult;
 import com.example.demo.model.validation.VerifyResetPasswordRequest;
 import com.example.demo.utils.Enums;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -198,6 +195,14 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 .exclude("status")
         ;
         return mongoTemplate.find(query, Address.class, "addresses");
+    }
+
+    @Override
+    public boolean existsAddressByLine(String customerId, String line) {
+        log.info("existsAddressByLine");
+        Query query = new Query();
+        query.addCriteria(where("line").regex(line, "i").and("customerId").is(customerId));
+        return mongoTemplate.exists(query, Address.class);
     }
 
     @Override

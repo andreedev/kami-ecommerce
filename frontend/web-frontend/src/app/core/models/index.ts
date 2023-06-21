@@ -1,4 +1,5 @@
 export { Payment } from './payment';
+export { ApiResponse } from './rest/api-response';
 export { Delivery } from './delivery';
 export { Order } from './order';
 export { SessionResponse } from './rest/session-response';

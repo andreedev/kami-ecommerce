@@ -23,6 +23,7 @@ public interface CustomerRepository {
     boolean linkToGoogleAccount(Customer customer);
     boolean updateCart(Customer customer);
     List<Address> findByListId(List<Address> req);
+    boolean existsAddressByLine(String customerId, String line);
     boolean saveAddress(Customer customer, Address address);
     boolean deleteAddress(Customer customer, String addressId);
 

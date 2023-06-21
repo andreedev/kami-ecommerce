@@ -26,7 +26,8 @@ export class AuthDataService {
     passwordConfirm: "",
     phoneNumber: "",
     isLinkedToGoogleAccount: false,
-    googleIdToken: ""
+    googleIdToken: "",
+    addresses: []
   };
 
   linkToGoogleAccountRequest: any = {
@@ -68,7 +69,7 @@ export class AuthDataService {
     } else {
       setTimeout(() => {
         this.profileLoadedEvent.emit(false);
-      }, 50);
+      }, 150);
     }
   }
 
