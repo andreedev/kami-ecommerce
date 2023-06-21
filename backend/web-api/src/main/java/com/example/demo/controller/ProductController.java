@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Cart;
-import com.example.demo.model.DynamicReport;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.service.ProductService;

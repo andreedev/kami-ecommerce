@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@JsonIgnoreProperties({"authorities"})
+@JsonIgnoreProperties({"authorities", "accountNonLocked", "accountNonExpired", "credentialsNonExpired", "enabled"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
@@ -44,6 +44,7 @@ public class Customer {
     @LastModifiedDate
     private LocalDateTime updatedAt;
     private Cart cart;
+    private Boolean isLinkedToGoogleAccount;
 
     public Customer(String name, String username, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
         this.name = name;

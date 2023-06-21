@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Customer;
 import com.example.demo.model.Order;
 import com.example.demo.model.Product;
+import com.example.demo.model.validation.DynamicReport;
+import com.example.demo.model.validation.SearchOrdersRequest;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.utils.Enums;
@@ -55,5 +58,20 @@ public class OrderServiceImpl implements OrderService{
                 .subTotal(order.getSubTotal())
                 .total(order.getTotal())
                 .build();
+    }
+
+    @Override
+    public DynamicReport<Order> searchOrders(Customer customer, SearchOrdersRequest request) {
+        return orderRepository.searchOrders(customer, request);
+    }
+
+    @Override
+    public Order findById(String id) {
+        return orderRepository.findById(id);
+    }
+
+    @Override
+    public boolean update(Order order) {
+        return orderRepository.update(order);
     }
 }

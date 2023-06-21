@@ -53,8 +53,8 @@ export class ProductCardComponent implements OnChanges {
   addToCart(product: Product): void {
     const newQuantity = 1;
     this.product.quantity = newQuantity;
-    this.cartDataService.updateCart(product, 'create')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", product.id, "quantity", newQuantity)
+    this.cartDataService.updateCart(product, 'create');
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", product.id, "quantity", newQuantity);
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
@@ -62,7 +62,7 @@ export class ProductCardComponent implements OnChanges {
   increaseQuantity(id: string): void {
     const newQuantity = ++this.product.quantity!;
     this.cartDataService.updateCart({ id, quantity: newQuantity }, 'update')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity)
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity);
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
@@ -70,7 +70,7 @@ export class ProductCardComponent implements OnChanges {
   decreaseQuantity(id: string): void {
     const newQuantity = --this.product.quantity!;
     this.cartDataService.updateCart({ id, quantity: newQuantity }, 'update')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity)
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity);
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }
@@ -79,7 +79,7 @@ export class ProductCardComponent implements OnChanges {
     const newQuantity = 0;
     this.product.quantity = newQuantity;
     this.cartDataService.updateCart({ id, quantity: newQuantity }, 'delete')
-    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity)
+    this.searchDataService.searchResults.data = Utils.updateByAttr(this.searchDataService.searchResults.data, "id", id, "quantity", newQuantity);
     this.recountTotalAmount()
     this.recalculateSubtotal()
   }

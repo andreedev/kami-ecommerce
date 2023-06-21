@@ -35,7 +35,7 @@ public class AwsUtil {
     @Value("${aws.s3.resources.bucket}")
     private String awsS3ResourcesBucket;
 
-    public String uploadFileS3(MultipartFile file) throws IOException {
+    public String uploadFileS3(MultipartFile file, String customName, String path) throws IOException {
         BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(
             awsAccessKeyId,
             awsSecretAccessKey
@@ -44,29 +44,45 @@ public class AwsUtil {
         final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
                 .withRegion(Regions.US_EAST_1).build();
-        logger.info("uploadFileS3 "+file.getOriginalFilename());
+
+        String fileName = generateFileName(file, customName);
+        String filePath = path + fileName;
+
+        logger.info("uploadFileS3 " + file.getOriginalFilename());
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(file.getContentType());
         objectMetadata.setContentLength(file.getSize());
         PutObjectRequest putObjectRequest = new PutObjectRequest(
-            awsS3ResourcesBucket,
-            file.getOriginalFilename(),
-            file.getInputStream(),
-            objectMetadata
+                awsS3ResourcesBucket,
+                filePath,
+                file.getInputStream(),
+                objectMetadata
         );
         file.getInputStream().close();
         putObjectRequest.setCannedAcl(CannedAccessControlList.PublicRead);
-        PutObjectResult resultado = s3.putObject(putObjectRequest);
+        PutObjectResult result = s3.putObject(putObjectRequest);
 
         S3Client s3Client = S3Client.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(awsAccessKeyId, awsSecretAccessKey)))
                 .region(Region.US_EAST_1)
                 .build();
-        GetUrlRequest request = GetUrlRequest.builder().bucket(awsS3ResourcesBucket).key(file.getOriginalFilename()).build();
+        GetUrlRequest request = GetUrlRequest.builder().bucket(awsS3ResourcesBucket).key(filePath).build();
         String url = s3Client.utilities().getUrl(request).toExternalForm();
-        logger.info("result uploadFileS3: " + resultado.getETag() + " | " + resultado.getContentMd5() + " | URL: "+url);
+        logger.info("result uploadFileS3: " + result.getETag() + " | " + result.getContentMd5() + " | URL: " + url);
         return url;
     }
 
+    private String generateFileName(MultipartFile file, String customName) {
+        String originalFilename = file.getOriginalFilename();
+        String fileExtension = extractFileExtension(originalFilename);
+        return customName + fileExtension;
+    }
 
+    private String extractFileExtension(String fileName) {
+        int dotIndex = fileName.lastIndexOf('.');
+        if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+            return fileName.substring(dotIndex);
+        }
+        return "";
+    }
 }

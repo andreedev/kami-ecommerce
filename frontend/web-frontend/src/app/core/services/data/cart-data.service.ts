@@ -60,8 +60,8 @@ export class CartDataService {
           this.updateCartInLocalStorage();
         }
       }
-      this.loadingCart = false
     }
+    this.loadingCart = false
   }
 
   updateCart(product: Product, operation: string): void {

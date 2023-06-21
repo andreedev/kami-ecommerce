@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppRoutes, Constants } from 'app/core/constants';
-import { Utils } from 'app/core/helpers/utils';
+import { AppRoutes } from 'app/core/constants';
 import { DataService } from 'app/core/services';
 import { CartDataService } from 'app/core/services/data/cart-data.service';
 import { SearchDataService } from 'app/core/services/data/search-data.service';
 import { environment } from 'assets/environments/environment';
-import { AuthDataService } from '../../../core/services/data/auth-data.service';
+import { AuthDataService } from 'app/core/services/data/auth-data.service';
 import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({
   selector: 'cart',
-  templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  templateUrl: './cart.component.html'
 })
 export class CartComponent {
-  readonly resourcesUrl: string = environment.resourcesUrl;
+  private readonly resourcesUrl: string = environment.resourcesUrl;
 
   constructor(
     public dataService: DataService,

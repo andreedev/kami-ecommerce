@@ -1,7 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Customer;
-import com.example.demo.model.DynamicReport;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.utils.Enums;
