@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
-import { AuthDataService, DataService, OrderDataService, OrderService } from 'app/core/services';
-import { CartDataService } from 'app/core/services/data/cart-data.service';
-import { Renderer2 } from '@angular/core';
-import { Order } from 'app/core/models';
 import { Utils } from 'app/core/helpers/utils';
+import { AuthDataService, DataService, OrderDataService, OrderService } from 'app/core/services';
 import { AddressDataService } from 'app/core/services/data/address-data.service';
+import { CartDataService } from 'app/core/services/data/cart-data.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -17,15 +15,14 @@ export class CheckoutPageComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
 
-  message: SafeHtml = 'Recuerda elegir un tipo de entrega y de pago';
+  message: SafeHtml = 'Recuerda elegir un tipo de entrega y pago';
   messageClass: string = 'text-dark';
-
-  generateOrderBtnIsActive: boolean = false
 
   constructor(
     public orderDataService: OrderDataService,
     private orderService: OrderService,
     public cartDataService: CartDataService,
+    public dataService: DataService,
     public authDataService: AuthDataService,
     private router: Router,
     private renderer: Renderer2,
@@ -37,55 +34,80 @@ export class CheckoutPageComponent implements OnInit {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
     }
     this.renderer.addClass(document.body, 'bg-light');
+    this.addressDataService.addressSelectedEvent.subscribe((value)=>{
+      this.calculatePayment();
+    })
   }
 
-  generateOrder(): void {
-    
+  async generateOrder(): Promise<void> {
+    if (!this.validate()) return;
+    this.dataService.enableLoading();
+    const response = await this.orderService.createOrder(this.orderDataService.order);
+    this.dataService.disableLoading();
+    if (response===null) {
+      this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
+      return;
+    }
+    if (response===true){
+      this.cartDataService.clearCart();
+      this.router.navigate([AppRoutes.ORDERS_COMPONENT_ROUTE_NAME]);
+    }
   }
 
   async calculatePayment(): Promise<void> {
-    if (!this.validate()) return;
-    const response = await this.orderService.calculatePayment(this.orderDataService.order);
+    const response = await this.orderService.calculatePayment(this.orderDataService.order.delivery.deliveryMethod);
     if (!response) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
       return;
     }
-    this.generateOrderBtnIsActive = true
     this.orderDataService.order.subTotal = response.subTotal
     this.orderDataService.order.deliveryCost = response.deliveryCost
     this.orderDataService.order.total = response.total
+    this.orderDataService.displayPaymentDetails = true
   }
 
-  onChangeShippingAddress(event: any): void {
-
-  }
 
   onChangeDeliveryMethod(event: any): void {
+    if (this.orderDataService.order.delivery.deliveryMethod==='delivery' && this.orderDataService.order.delivery.shippingAddress.id!=''){
+      this.calculatePayment();
+      return;
+    }
+    if (this.orderDataService.order.delivery.deliveryMethod==='in_store_pickup'){
+      this.calculatePayment();
+      return;
+    }
+    this.orderDataService.displayPaymentDetails = false;
   }
 
   onChangePaymentMethod(event: any): void {
+
   }
 
-  onAddressSelectedEvent(event: any): void {
-    console.log(event);
-
-    this.orderDataService.order.delivery.shippingAddress = event
-    this.calculatePayment();
-  }
 
 
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, 'bg-light');
-    this.authDataService.profileLoadedEvent.unsubscribe();
   }
 
   private validate(): boolean {
-    if (Utils.stringIsEmpty(this.orderDataService.order.delivery.deliveryMethod)) return false;
-    if (Utils.stringIsEmpty(this.orderDataService.order.payment.paymentMethod)) return false;
-    if (this.orderDataService.order.delivery.deliveryMethod === 'delivery') {
-      if (Utils.stringIsEmpty(this.orderDataService.order.delivery.shippingAddress.id!)) return false
+    this.messageClass = 'text-red';
+
+    if (Utils.stringIsEmpty(this.orderDataService.order.delivery.deliveryMethod)){
+      this.message = 'Seleccione un tipo de entrega';
+      return false;
     }
-    if (!(this.orderDataService.order.subTotal && this.orderDataService.order.deliveryCost && this.orderDataService.order.total)) return false;
+    if (Utils.stringIsEmpty(this.orderDataService.order.payment.paymentMethod)){
+      this.message = 'Seleccione un método de pago';
+      return false;
+    }
+    if (this.orderDataService.order.delivery.deliveryMethod === 'delivery' &&
+      Utils.stringIsEmpty(this.orderDataService.order.delivery.shippingAddress.id!)
+    ) {
+      this.message = 'Seleccione una dirección';
+      return false;
+    }
+
+    this.message = '';
     return true;
   }
 

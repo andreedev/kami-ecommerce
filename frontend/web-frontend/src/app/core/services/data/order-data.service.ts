@@ -9,7 +9,6 @@ export class OrderDataService {
   order: Order = {
     delivery : {
       deliveryMethod: '',
-      date: '2023-06-01',
       shippingAddress: {
         id: '',
         line: '',
@@ -23,6 +22,8 @@ export class OrderDataService {
     deliveryCost: undefined,
     total: undefined
   }
+
+  displayPaymentDetails: boolean = false;
 
   constructor() { }
 }

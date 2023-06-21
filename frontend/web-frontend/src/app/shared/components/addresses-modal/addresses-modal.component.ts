@@ -41,6 +41,7 @@ export class AddressesModalComponent {
           line: '',
           reference: ''
         }
+        this.orderDataService.displayPaymentDetails = false
       }
     }
     this.dataService.disableLoading();

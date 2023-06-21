@@ -201,7 +201,7 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public boolean existsAddressByLine(String customerId, String line) {
         log.info("existsAddressByLine");
         Query query = new Query();
-        query.addCriteria(where("line").regex(line, "i").and("customerId").is(customerId));
+        query.addCriteria(where("line").regex(line, "i").and("customerId").is(customerId).and("active").is(true));
         return mongoTemplate.exists(query, Address.class);
     }
 

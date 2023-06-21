@@ -65,7 +65,7 @@
                 <div class="col-6 px-2">
                     <ng-container *ngIf="selectable">
                         <button type="button" class="btn bg-green-with-hover text-white transition-300ms w-100" 
-                        (click)="addressDataService.displayAddressesModal=false;"
+                        (click)="addressDataService.displayAddressesModal=false; addressDataService.addressSelectedEvent.emit()"
                         [disabled]="authDataService.loggedInCustomer.addresses.length<1 || orderDataService.order.delivery.shippingAddress.id=='' ">
                             Seleccionar
                         </button>

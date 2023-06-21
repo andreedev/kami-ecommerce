@@ -30,9 +30,12 @@ public class OrderServiceImpl implements OrderService{
         order.setSubTotal(Utils.calculateCartSubtotal(list));
         if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
             order.setDeliveryCost(new BigDecimal(12));
+        } else if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.IN_STORE_PICKUP.getValue())){
+            order.getDelivery().setShippingAddress(null);
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
-        return orderRepository.create(order);
+        orderRepository.create(order);
+        return true;
     }
 
     @Override

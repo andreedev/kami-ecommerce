@@ -16,9 +16,9 @@ export class OrderService {
     private authService: AuthService
   ) { }
 
-  async calculatePayment(order: Order): Promise<Order | null> {
+  async calculatePayment(deliveryMethod: string): Promise<Order | null> {
     try {
-      const body = order
+      const body = {deliveryMethod}
       const headers = this.authService.getAuthHeaders();
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.CALCULATE_PAYMENT), body, {headers})
@@ -28,11 +28,28 @@ export class OrderService {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.calculatePayment(order);
+        return await this.calculatePayment(deliveryMethod);
       }
       throw error;
     }
   }
 
+  async createOrder(order: Order): Promise<boolean | null> {
+    try {
+      const body = order
+      const headers = this.authService.getAuthHeaders();
+      const response: any = await firstValueFrom(
+        this.http.post(Utils.getURL(Endpoints.CREATE_ORDER), body, {headers})
+      );
+      return response;
+    } catch (error: any) {
+      if (error.status === 401) {
+        const tokenRefreshed = await this.authService.refreshToken();
+        if (!tokenRefreshed) return null;
+        return await this.createOrder(order);
+      }
+      throw error;
+    }
+  }
 
 }
