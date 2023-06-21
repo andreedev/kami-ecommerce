@@ -9,7 +9,7 @@ import { AppRoutes } from 'app/core/constants';
 })
 export class CategoryDataService {
 
-  loadingCategories: boolean = true
+  loadingCategories: boolean = false
   categories: Category[] = []
 
   constructor(
@@ -18,9 +18,11 @@ export class CategoryDataService {
   ) {}
 
   async loadCategories(): Promise<any>{
+    if (this.loadingCategories) return;
+    this.loadingCategories = true;
     setTimeout(async () => {
       if (this.categories.length === 0){
-        const response: Category[] | null = await this.categoryService.getCategories()
+        const response: Category[] = await this.categoryService.getCategories()
         if (response !== null) {
           this.categories = response;
           this.loadingCategories = false

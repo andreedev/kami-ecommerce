@@ -15,7 +15,11 @@ export class AuthenticatedGuard implements CanActivate {
     private router: Router
   ) { }
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  // @ts-ignore
+  async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree> {
+    if (this.authDataService.authStatus.value === AuthStatus.LOADING.getName()) {
+      await this.waitForAuthStatusChange();
+    }
     if (this.authDataService.authStatus.value === AuthStatus.NONE.getName()) {
       this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME])
       return false
@@ -23,5 +27,14 @@ export class AuthenticatedGuard implements CanActivate {
     return true
   }
 
-
+  private waitForAuthStatusChange(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const subscription = this.authDataService.authStatus.subscribe((status) => {
+        if (status !== AuthStatus.LOADING.getName()) {
+          subscription.unsubscribe();
+          resolve();
+        }
+      });
+    });
+  }
 }

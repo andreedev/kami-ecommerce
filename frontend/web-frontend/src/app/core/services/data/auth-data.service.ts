@@ -14,7 +14,7 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 export class AuthDataService {
 
   loggedInCustomer: Customer | undefined;
-  authStatus: BehaviorSubject<string> = new BehaviorSubject<string>(AuthStatus.NONE.getName());
+  authStatus: BehaviorSubject<string> = new BehaviorSubject<string>(AuthStatus.LOADING.getName());
 
   customerSignUpRequest: Customer = {
     documentType: 1,
@@ -65,7 +65,9 @@ export class AuthDataService {
       if (response) {
         this.authStatus.next(AuthStatus.LOGGED_IN.getName());
         this.loadProfile()
+        return;
       }
+      this.authStatus.next(AuthStatus.NONE.getName())
     } else {
       setTimeout(() => {
         this.profileLoadedEvent.emit(false);

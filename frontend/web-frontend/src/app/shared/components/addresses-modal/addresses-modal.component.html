@@ -71,7 +71,8 @@
                         </button>
                     </ng-container>
                     <ng-container *ngIf="!selectable">
-                        <button type="button" class="btn bg-color-1-with-hover text-white transition-300ms w-100">
+                        <button type="button" class="btn bg-color-1-with-hover text-white transition-300ms w-100" 
+                            (click)="addressDataService.displayAddressesModal=false;">
                             Cerrar
                         </button>
                     </ng-container>

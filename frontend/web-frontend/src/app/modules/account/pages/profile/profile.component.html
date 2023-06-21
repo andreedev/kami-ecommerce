@@ -1,1 +1,53 @@
-<p>profile works!</p>
+<div class="card bg-white mb-3">
+    <div class="card-header bg-white">
+        <p class="fs-22px m-0 fw-500">
+            Datos personales
+        </p>
+    </div>
+    <div class="card-body">
+        <div class="row gx-3 justify-content-center align-items-center g-2">
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <label class="fs-14px text-gray-60 ps-1">Nombre(s)</label>
+                    <p class="ms-1 mb-0">{{authDataService.loggedInCustomer!.name}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <label class="fs-14px text-gray-60 ps-1">Apellido(s)</label>
+                    <p class="ms-1 mb-0">{{authDataService.loggedInCustomer!.lastName}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-3 justify-content-center align-items-center g-2">
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <label class="fs-14px text-gray-60 ps-1">Correo electrónico</label>
+                    <p class="ms-1 mb-0">{{authDataService.loggedInCustomer!.email}}</p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <label class="fs-14px text-gray-60 ps-1">Celular</label>
+                    <p class="ms-1 mb-0">{{authDataService.loggedInCustomer!.phoneNumber}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-3 justify-content-center align-items-center g-2">
+            <div class="col-12 col-md-6">
+                <div class="mb-1">
+                    <label class="fs-14px text-gray-60 ps-1">Tipo documento</label>
+                    <p class="ms-1 mb-0">
+                        {{ getDocumentTypeLabel(authDataService.customerSignUpRequest.documentType) }}
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="mb-2">
+                    <label class="fs-14px text-gray-60 ps-1">Nro documento</label>
+                    <p class="ms-1 mb-0">{{authDataService.loggedInCustomer!.documentNumber}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

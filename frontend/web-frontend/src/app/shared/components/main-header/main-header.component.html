@@ -27,22 +27,40 @@
             <div class="mx-3">
                 <ng-container *ngIf="(authDataService.authStatus | async) as authStatus">
                     <ng-container *ngIf="authStatus === AUTH_STATUS.LOGGED_IN.getName(); else unathenticated">
-                        <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.PROFILE_COMPONENT_ROUTE_NAME]">
+                        <a role="button" class="link-dark text-decoration-none" (click)="accountOverlay.toggle($event)">
                             <div class="d-flex flex-row align-items-center justify-content-between">
-                                <i class="fa-solid fa-circle-user fs-22px text-gray-60"></i>
+                                <i class="fa-solid fa-circle-user fs-22px text-color-1"></i>
                                 <span class="d-none d-md-block ps-2">Mi cuenta</span>
                             </div>
                         </a>
+                        <p-overlayPanel #accountOverlay>
+                            <ng-template pTemplate="content">
+                                <ul class="list-group list-group-flush border-radius-5px">
+                                    <a class="list-group-item list-group-item-action" [routerLink]="[appRoutes.PROFILE_COMPONENT_ROUTE_NAME]" (click)="accountOverlay.hide()">
+                                        <i class="fa-solid fa-circle-user text-gray-60 me-1"></i>
+                                        Mi perfil
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" [routerLink]="[appRoutes.ORDERS_COMPONENT_ROUTE_NAME]" (click)="accountOverlay.hide()">
+                                        <i class="fa-solid fa-list text-gray-60 me-1"></i>
+                                        Mis órdenes
+                                    </a>
+                                    <a class="list-group-item list-group-item-action" (click)="logout()" 
+                                    (click)="accountOverlay.hide()">
+                                        <i class="fas fa-sign-out-alt text-gray-60 me-1"></i>Cerrar sesión
+                                    </a>
+                                </ul>
+                            </ng-template>
+                        </p-overlayPanel>
                         <!-- <span class="mx-2">|</span>
-                        <i class="fas fa-sign-out-alt"></i>
-                        <a role="button" (click)="logout()" class="ms-2">Cerrar sesión</a> -->
+                        
+                        <a role="button"  class="ms-2">Cerrar sesión</a> -->
                     </ng-container>
                 </ng-container>
                 <ng-template #unathenticated>
                     <a role="button" class="link-dark text-decoration-none" [routerLink]="[appRoutes.LOGIN_COMPONENT_ROUTE_NAME]">
                         <div class="d-flex flex-row align-items-center justify-content-between">
                             <i class="fa-solid fa-circle-user fs-22px text-gray-60"></i>
-                            <span class="d-none d-lg-block ps-2">Ingresar</span>
+                            <span class="d-none d-md-block ps-2">Ingresar</span>
                         </div>
                     </a>
                 </ng-template>

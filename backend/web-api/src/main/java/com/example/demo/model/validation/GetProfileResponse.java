@@ -15,6 +15,11 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetProfileResponse {
     private String name;
+    private String lastName;
+    private String email;
+    private Integer documentType;
+    private String documentNumber;
+    private String phoneNumber;
     private Cart cart;
     private List<Address> addresses;
 }

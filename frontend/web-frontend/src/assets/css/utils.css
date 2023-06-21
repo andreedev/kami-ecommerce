@@ -2939,6 +2939,10 @@ img {
     border-left: 0px solid transparent;
 }
 
+.border-radius-5px{
+    border-radius: 5px;
+}
+
 .flex-fill-9{
     flex: .9 .9 auto!important;
 }

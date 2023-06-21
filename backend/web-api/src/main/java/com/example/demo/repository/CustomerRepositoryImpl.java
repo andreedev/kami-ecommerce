@@ -81,9 +81,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
                 where("email").regex(email, "i")
         ));
         query.fields()
-                .exclude("documentType")
-                .exclude("documentNumber")
-                .exclude("phoneNumber")
+//                .exclude("documentType")
+//                .exclude("documentNumber")
+//                .exclude("phoneNumber")
                 .exclude("createdAt")
                 .exclude("updatedAt")
         ;

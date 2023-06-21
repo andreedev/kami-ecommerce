@@ -32,6 +32,11 @@ public class CustomerController {
         Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         GetProfileResponse response=  GetProfileResponse.builder().build();
         response.setName(customer.getName());
+        response.setLastName(customer.getLastName());
+        response.setEmail(customer.getEmail());
+        response.setDocumentType(customer.getDocumentType());
+        response.setDocumentNumber(customer.getDocumentNumber());
+        response.setPhoneNumber(customer.getPhoneNumber());
         response.setAddresses(customerService.loadAddresses(customer.getAddresses()));
         if (customer.getCart()!=null && customer.getCart().getProducts().size()>0){
             response.setCart(productService.loadCart(Utils.convertToProductList(customer.getCart().getProducts())));

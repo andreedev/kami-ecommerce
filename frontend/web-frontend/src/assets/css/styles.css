@@ -103,18 +103,24 @@
 
 :root {
     --color-1: #FECCCB;
+    --color-1-hover: #FECCCB;
 }
 
 .text-color-1 {
     color: #FECCCB;
 }
 
+.text-color-1-force {
+    color: #FECCCB !important;
+}
+
 .bg-color-1, .bg-color-1-with-hover {
     background-color: #FECCCB;
 }
 
-.bg-color-1-with-hover:hover {
-    background-color: #e2b4b3;
+.bg-color-1-with-hover:hover, .bg-color-1-with-hover:active,
+ .bg-color-1-with-hover:focus-visible{
+    background-color: #e2b4b3 !important;
 }
 
 .bg-outline-color-1, .bg-outline-color-1-with-hover {
@@ -148,48 +154,6 @@ hr {
 
 /* x ver */
 
-.opMisVehiculos {
-    width: 300px;
-}
-
-.info-contacto {
-    font-size: 12px;
-}
-
-@media (min-width: 810px) {
-    .info-contacto {
-        font-size: 13px;
-    }
-}
-
-@media (min-width: 840px) {
-    .info-contacto {
-        font-size: 14px;
-    }
-}
-
-@media (min-width: 878px) {
-    .info-contacto {
-        font-size: 15px;
-    }
-}
-
-@media (min-width: 920px) {
-    .info-contacto {
-        font-size: 16px;
-    }
-}
-
-.header-middle {
-    justify-content: space-between !important;
-}
-
-@media (min-width: 768px) {
-    .header-middle {
-        justify-content: space-evenly !important;
-    }
-}
-
 .amount-items-shopcart {
     --bs-badge-padding-x: 5px;
     --bs-badge-padding-y: 2px;
@@ -202,11 +166,6 @@ hr {
     color: var(--bs-badge-color);
     border-radius: var(--bs-badge-border-radius);
     line-height: 1.2;
-}
-
-
-.text-mi-carrito {
-    font-weight: 500;
 }
 
 .nombre-producto {
@@ -249,6 +208,10 @@ hr {
 
 .p-galleria .p-galleria-indicators .p-galleria-indicator button {
     border-radius: 8px;
+}
+
+.p-overlaypanel .p-overlaypanel-content {
+    padding: 0;
 }
 
 .orden {

@@ -14,7 +14,7 @@ export class CategoryService {
     private http: HttpClient
   ) { }
 
-  async getCategories(): Promise<Category[] | null> {
+  async getCategories(): Promise<Category[]> {
     try {
       const response: any = await firstValueFrom(
         this.http.get(Utils.getURL(Endpoints.CATEGORIES))

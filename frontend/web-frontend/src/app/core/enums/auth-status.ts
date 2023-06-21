@@ -1,4 +1,5 @@
 export class AuthStatus {
+    public static LOADING = new AuthStatus(0, 'loading');
     public static NONE = new AuthStatus(1, 'none');
     public static LOGGED_IN = new AuthStatus(2, 'loggedIn');
 

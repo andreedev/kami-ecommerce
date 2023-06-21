@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
 import { AuthStatus } from 'app/core/enums/auth-status';
@@ -12,7 +12,7 @@ import { environment } from 'assets/environments/environment';
   selector: 'main-header',
   templateUrl: './main-header.component.html'
 })
-export class MainHeaderComponent {
+export class MainHeaderComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly AUTH_STATUS: typeof AuthStatus = AuthStatus;
   readonly resourcesUrl: string = environment.resourcesUrl;
@@ -26,6 +26,9 @@ export class MainHeaderComponent {
     public searchDataService: SearchDataService,
     private router: Router
   ) {
+  }
+  ngOnInit(): void {
+    this.categoryDataService.loadCategories()
   }
 
   search(): void {
