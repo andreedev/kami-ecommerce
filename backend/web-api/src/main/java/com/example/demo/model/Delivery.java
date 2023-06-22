@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.utils.validators.ValidDeliveryMethod;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @Setter

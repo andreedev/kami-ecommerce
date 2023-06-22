@@ -60,8 +60,8 @@ public class Utils {
         BigDecimal subtotal = BigDecimal.ZERO;
         for (Product product : list) {
             BigDecimal price = (product.getDiscount() != null) ? product.getDiscount().getPriceWithDiscountApplied() : product.getPrice();
-            BigDecimal amount = new BigDecimal(product.getQuantity());
-            BigDecimal productSubtotal = price.multiply(amount);
+            BigDecimal quantity = new BigDecimal(product.getQuantity());
+            BigDecimal productSubtotal = price.multiply(quantity);
             subtotal = subtotal.add(productSubtotal);
         }
         return subtotal.setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -86,11 +86,11 @@ public class Utils {
         return roles;
     }
 
-    public static void recoverCartProductsQuantity(List<Product> req, List<Product> list) {
-        for (Product reqProduct : req) {
-            for (Product listProduct : list) {
-                if (reqProduct.getId().equals(listProduct.getId())) {
-                    listProduct.setQuantity(reqProduct.getQuantity());
+    public static void transferProductQuantity(List<Product> target, List<Product> origin) {
+        for (Product targetProduct : target) {
+            for (Product originProduct : origin) {
+                if (targetProduct.getId().equals(originProduct.getId())) {
+                    originProduct.setQuantity(targetProduct.getQuantity());
                     break;
                 }
             }

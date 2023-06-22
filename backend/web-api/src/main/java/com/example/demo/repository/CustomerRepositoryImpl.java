@@ -187,46 +187,4 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         return updateResult.getModifiedCount()==1;
     }
 
-    @Override
-    public List<Address> findByListId(List<Address> req) {
-        List<String> ids = req.stream().map(Address::getId).collect(Collectors.toList());
-        Query query = Query.query(Criteria.where("id").in(ids));
-        query.fields()
-                .exclude("status")
-        ;
-        return mongoTemplate.find(query, Address.class, "addresses");
-    }
-
-    @Override
-    public boolean existsAddressByLine(String customerId, String line) {
-        log.info("existsAddressByLine");
-        Query query = new Query();
-        query.addCriteria(where("line").regex(line, "i").and("customerId").is(customerId).and("active").is(true));
-        return mongoTemplate.exists(query, Address.class);
-    }
-
-    @Override
-    public boolean saveAddress(Customer customer, Address address) {
-        Address result = mongoTemplate.save(address, "addresses");
-        Query query = new Query(Criteria.where("id").is(customer.getId()));
-        Update update = new Update().push("addresses", Address.builder().id(result.getId()).build());
-        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Customer.class);
-        return updateResult.getModifiedCount()==1;
-    }
-
-    @Override
-    public boolean deleteAddress(Customer customer, String addressId) {
-        Query query = new Query(Criteria.where("id").is(addressId));
-        Update update = new Update().set("active", false);
-        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Address.class);
-
-        Query query2 = new Query(Criteria.where("id").is(customer.getId()));
-        Update update2 = new Update().pull("addresses", Address.builder().id(addressId).build());
-        UpdateResult updateResult2 = mongoTemplate.updateFirst(query2, update2, Customer.class);
-
-        return updateResult2.getModifiedCount()==1;
-    }
-
-
-
 }

@@ -1,10 +1,12 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @Setter

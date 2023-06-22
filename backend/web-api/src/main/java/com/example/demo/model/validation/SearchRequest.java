@@ -38,4 +38,6 @@ public class SearchRequest {
     private Boolean inStockFilter;
 
     private Integer pageSize;
+
+    private List<String> excludedIds;
 }

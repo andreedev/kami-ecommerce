@@ -39,8 +39,6 @@ public class Product {
     private Integer rating;
     private String keywords;
     private Integer stock;
-
-    @Transient
     private Integer quantity;
 
     @CreatedDate

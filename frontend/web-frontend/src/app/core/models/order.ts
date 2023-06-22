@@ -10,4 +10,5 @@ export interface Order {
     subTotal?: number
     deliveryCost?: number
     total?: number
+    createdAt?: string
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,13 +34,13 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Cart loadCart(List<Product> req) {
-        List<Product> list = productRepository.findByListId(req);
-        Utils.setupProductDiscount(list);
-        Utils.recoverCartProductsQuantity(req, list);
+        List<Product> dbProductList = productRepository.findByListId(req);
+        Utils.setupProductDiscount(dbProductList);
+        Utils.transferProductQuantity(req, dbProductList);
         Cart cart = Cart.builder()
-                .products(list)
-                .subtotal(Utils.calculateCartSubtotal(list))
-                .totalAmount(Utils.countCartTotalAmount(list))
+                .products(dbProductList)
+                .subtotal(Utils.calculateCartSubtotal(dbProductList))
+                .totalAmount(Utils.countCartTotalAmount(dbProductList))
                 .build();
         return cart;
     }
@@ -61,6 +62,7 @@ public class ProductServiceImpl implements ProductService{
                     .orderFilter(Enums.SearchRequestOrderFilter.RECOMMENDED.getCode())
                     .page(1)
                     .pageSize(missing)
+                    .excludedIds(featuredProducts.stream().map(Product::getId).collect(Collectors.toList()))
                     .build();
             featuredProducts.addAll(productRepository.search(fallbackReq).getData());
         }

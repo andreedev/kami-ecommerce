@@ -1,13 +1,125 @@
 <div class="card bg-white mb-3">
     <div class="card-header bg-white">
         <p class="fs-22px m-0 fw-500">
-            Mis órdenes
+            Mis ordenes
         </p>
         <p class="fs-14px m-0">
-            Aquí puedes hacer seguimiento y procesar tus órdenes.
+            Aquí puedes hacer seguimiento y procesar tus ordenes.
         </p>
     </div>
     <div class="card-body">
-        
+        <div class="row justify-content-between  mx-0 mb-3">
+            <div class="col-12 col-sm-auto mb-2">
+                <div class="input-group">
+                    <input [(ngModel)]="query" name="query" type="text"
+                        class="form-control border border-right-0" placeholder="Buscar por Nº de orden"
+                        (keyup.enter)="searchOrders()" autocomplete="off">
+                    <span class="input-group-text cursor-pointer bg-white text-gray-70 border-left-0 px-16px"
+                        (click)="searchOrders()"><i class="fa-solid fa-magnifying-glass"></i></span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+                <select class="form-select" [(ngModel)]="statusFilter" (change)="searchOrders()">
+                    <option value="" selected>Filtrar por estado</option>
+                    <option value="pending">Pendiente</option>
+                    <option value="payment_in_process">Pago en proceso</option>
+                    <option value="payment_confirmed">Pago confirmado</option>
+                    <option value="shipped">En camino</option>
+                    <option value="delivered">Entregado</option>
+                    <option value="canceled">Cancelado</option>
+                </select>
+            </div>
+        </div>
+        <ng-container *ngIf="searchResults.data.length>0">
+            <div class="card bg-white border-gray mb-3" *ngFor="let order of searchResults.data">
+                <div class="card-body">
+                    <div class="row mx-0 g-0 flex-row justify-content-between align-items-center">
+                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                            Orden<span class="fw-500 ms-1">#{{order.orderNumber }}</span>
+                        </div>
+                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 justify-content-start justify-content-md-end ">
+                            Fecha: {{order.createdAt | date:'dd-MM-YY hh:mm:ss a'}}
+                        </div>
+                    </div>
+                    <div class="row mx-0 g-0 flex-row justify-content-between align-items-center">
+                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                            <span class="me-1">Estado:</span>
+                            <span class="btn btn-sm" [ngClass]="getClassByOrderStatus(order.status!)">
+                                {{getDescriptionByOrderStatus(order.status!)}}
+                            </span>
+                        </div>
+                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 justify-content-start justify-content-md-end ">
+                            {{order.delivery.deliveryMethod ? 'Entrega en tienda' : 'Entrega por delivery' }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <div class="d-inline-flex flex-column">
+                            <!-- <span>{{order.deliveryCost }}</span>
+                            <span>{{order.subTotal }}</span> -->
+                            <span>Total S/{{order.total }}</span>
+                            <!-- <span>{{order.delivery.shippingAddress.line }}</span>
+                        <span>{{order.delivery.shippingAddress.reference }}</span> -->
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button class="mt-1 btn bg-color-1-with-hover text-white transition-300ms cp me-3">
+                            <span class="fw-bold">Detalles</span>
+                        </button>
+                        <button class="mt-1 btn bg-green-with-hover text-white transition-300ms cp" *ngIf="order.status==='pending'">
+                            <span class="fw-bold">Procesar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="searchResults.data.length===0">
+            <p class="text-center my-5">No se encontraron ordenes.</p>
+        </ng-container>
+
+        <div class="row mt-3 justify-content-center">
+            <div class="col-auto">
+                <ul class="pagination pagination-sm">
+                    <li class="page-item">
+                        <ng-container *ngIf="page-1 > 0; else previusPageDisabled">
+                            <span class="page-link cp" (click)="updatePage(page!-1)"><i
+                                    class="fas fa-angle-left"></i></span>
+                        </ng-container>
+                        <ng-template #previusPageDisabled>
+                            <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
+                        </ng-template>
+                    </li>
+                    <li *ngFor="let i of pagesUI" class="page-item" [ngClass]="{'active': i==page}">
+                        <ng-container *ngIf="i !== '-' else noPage">
+                            <ng-container *ngIf="i !== '...' else fillerPage">
+                                <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #noPage>
+                            <span class="page-link">-</span>
+                        </ng-template>
+                        <ng-template #fillerPage>
+                            <span class="page-link">...</span>
+                        </ng-template>
+                    </li>
+
+                    <li class="page-item">
+                        <ng-container *ngIf="page < searchResults.totalPages; else nextPageDisabled">
+                            <span class="page-link cp" (click)="updatePage(page+1)">
+                                <i class="fas fa-angle-right"></i>
+                            </span>
+                        </ng-container>
+                        <ng-template #nextPageDisabled>
+                            <span class="page-link cp"><i class="fas fa-angle-right"></i></span>
+                        </ng-template>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
+
+<ng-template #messageContainer>
+    <p class="text-center fs-12px m-0 my-1" [class]="messageClass" [innerHTML]="message"></p>
+</ng-template>

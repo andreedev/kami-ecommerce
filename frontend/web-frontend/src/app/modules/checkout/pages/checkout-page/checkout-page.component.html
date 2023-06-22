@@ -142,8 +142,8 @@
                             <div class="overflow-y-auto overflow-x-hidden max-h-380px">
                                 <ng-container *ngIf="!cartDataService.loadingCart">
                                     <ng-container *ngFor="let product of cartDataService.cart.products">
-                                        <product-card [displayCartInteractionBtn]="true" [product]="product"
-                                            type="cart-product-list-card"></product-card>
+                                        <product-card [displayCartInteractionBtn]="false" [product]="product"
+                                            type="order-summary-product-list-card"></product-card>
                                     </ng-container>
                                 </ng-container>
                             </div>

@@ -211,5 +211,12 @@ export class Utils {
         return newList
     }
 
+    static validateFileHasValidExtension(value: string, extensions: string[]): boolean {
+        let ext = value.slice((value.lastIndexOf(".") - 1 >>> 0) + 2);
+        ext = ext.toLowerCase();
+        return extensions.includes(ext);
+    }
+    
+
 
 }

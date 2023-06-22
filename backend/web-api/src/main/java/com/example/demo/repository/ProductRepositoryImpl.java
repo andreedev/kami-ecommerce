@@ -4,6 +4,7 @@ import com.example.demo.model.Customer;
 import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
+import com.example.demo.utils.Constants;
 import com.example.demo.utils.Enums;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,8 +35,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     public DynamicReport<Product> search(SearchRequest req) {
         Query query = new Query();
 
-        // Apply filters based on the request parameters
-
         if (req.getQuery() != null && !req.getQuery().isEmpty()) {
             Criteria nameCriteria = Criteria.where("name").regex(req.getQuery(), "i");
             Criteria usernameCriteria = Criteria.where("sku").regex(req.getQuery(), "i");
@@ -49,8 +47,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             query.addCriteria(Criteria.where("categories").all(req.getCategoriesFilter()));
         }
 
-        if (req.getMaxPriceFilter() != null && req.getMaxPriceFilter().compareTo(BigDecimal.valueOf(1991))<=0) {
-            //Decimal128.parse( req.getMaxPriceFilter().toString()))
+        if (req.getMaxPriceFilter() != null && req.getMaxPriceFilter().compareTo(Constants.SEARCH_PRODUCT_MAX_PRICE_FILTER_MAX_VALUE)<=0) {
             query.addCriteria(Criteria.where("price").lte(req.getMaxPriceFilter()));
         }
 
@@ -73,15 +70,13 @@ public class ProductRepositoryImpl implements ProductRepository {
         } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.HIGHEST_PRICE.getCode()){
              sort = Sort.by(Sort.Direction.DESC, "price");
         } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.RECOMMENDED.getCode()){
-             sort = Sort.by(Sort.Direction.ASC, "stock");
+             sort = Sort.by(Sort.Direction.DESC, "stock");
         } else if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.ALPHABETICAL.getCode()){
              sort = Sort.by(Sort.Direction.ASC, "name");
         }
 
         if (req.getOnSaleFilter() != null && req.getOnSaleFilter()) {
             LocalDateTime now = LocalDateTime.now();
-//            ZoneId universalZone = ZoneId.of("UTC");
-//            Instant currentInstant = now.atZone(universalZone).toInstant();
 
             Criteria discountExistsCriteria = Criteria.where("discount").exists(true);
             Criteria startDateCriteria = Criteria.where("discount.startDate").lte(now);
@@ -92,13 +87,16 @@ public class ProductRepositoryImpl implements ProductRepository {
             query.addCriteria(endDateCriteria);
         }
 
+        if (req.getExcludedIds()!=null && !req.getExcludedIds().isEmpty()){
+            query.addCriteria(Criteria.where("id").nin(req.getExcludedIds()));
+        }
+
         query.addCriteria(Criteria.where("status").is(Enums.ProductStatus.PUBLISHED.getCode()));
 
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
         long totalCustomers = mongoTemplate.count(query, Customer.class);
         int totalPages = (int) Math.ceil((double) totalCustomers / 20);
 
-        // Create DynamicReport object with the data and the total number of pages
         return DynamicReport.<Product>builder()
                 .data(list)
                 .totalPages(totalPages)

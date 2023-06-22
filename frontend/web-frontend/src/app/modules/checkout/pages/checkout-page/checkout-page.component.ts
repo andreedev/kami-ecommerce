@@ -42,7 +42,11 @@ export class CheckoutPageComponent implements OnInit {
   async generateOrder(): Promise<void> {
     if (!this.validate()) return;
     this.dataService.enableLoading();
-    const response = await this.orderService.createOrder(this.orderDataService.order);
+    const response = await this.orderService.createOrder(
+      this.orderDataService.order.delivery.deliveryMethod,
+      this.orderDataService.order.delivery.shippingAddress.id!,
+      this.orderDataService.order.payment.paymentMethod
+      );
     this.dataService.disableLoading();
     if (response===null) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
@@ -50,12 +54,16 @@ export class CheckoutPageComponent implements OnInit {
     }
     if (response===true){
       this.cartDataService.clearCart();
+      this.orderDataService.reset();
       this.router.navigate([AppRoutes.ORDERS_COMPONENT_ROUTE_NAME]);
     }
   }
 
   async calculatePayment(): Promise<void> {
-    const response = await this.orderService.calculatePayment(this.orderDataService.order.delivery.deliveryMethod);
+    const response = await this.orderService.calculatePayment(
+      this.orderDataService.order.delivery.deliveryMethod,
+      this.orderDataService.order.delivery.shippingAddress.id!
+    );
     if (!response) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
       return;

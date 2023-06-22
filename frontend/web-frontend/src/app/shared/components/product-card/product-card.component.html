@@ -91,11 +91,11 @@
                 </span>
                 
                 <div class="d-flex flex-row justify-content-between mt-1 mb-2">
-                    <div class="d-block">
+                    <div class="d-flex flex-column">
                         <div class="fs-10px">Stock: {{ product.stock }}</div>
                         <ng-container *ngIf="product.discount; else normal">
                             <div class="d-flex flex-row align-items-center">
-                                <div class="fs-14px fw-bold text-red">
+                                <div class="fs-14px fw-bold text-red me-1">
                                     S/{{ product.discount.priceWithDiscountApplied}}
                                 </div>
                                 <div class="badge bg-danger fs-10px w-35px bg-red text-wrap h-fit-content">
@@ -128,6 +128,44 @@
                                 </ng-template>
                             </div>
                         </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="type==='order-summary-product-list-card'">
+    <div class="d-flex flex-row mx-2 my-1 justify-content-start">
+        <div class="d-flex px-0 py-0 p-sm-1">
+            <img [src]="product.mediaUrls![0]" class="my-auto w-50px">
+        </div>
+        <div class="px-2 py-0 p-sm-1 w-100">
+            <div class="d-flex flex-column">
+                <span class="fs-12px text-overflow-ellipsis transition-300ms">
+                    {{ product.name }}
+                </span>
+                
+                <div class="d-flex flex-row justify-content-between mt-1 mb-2">
+                    <div class="d-flex flex-column">
+                        <ng-container *ngIf="product.discount; else normal">
+                            <div class="d-flex flex-row align-items-center">
+                                <div class="fs-18px fw-500 text-red me-1">
+                                    S/{{ product.discount.priceWithDiscountApplied}}
+                                </div>
+                                <div class="badge bg-danger fs-10px w-35px bg-red text-wrap h-fit-content">
+                                    -{{ product.discount.percentage }}%
+                                </div>
+                            </div>
+                            <span class="fs-12px text-decoration-line-through-v2-force">S/{{ product.price }}</span>
+                        </ng-container>
+                        <ng-template #normal>
+                            <span class="fs-18px fw-500">S/{{ product.price }}</span>
+                        </ng-template>
+                    </div>
+                    <div class="d-flex align-items-end fw-500">
+                        {{ product.quantity }} u.
                     </div>
                 </div>
 

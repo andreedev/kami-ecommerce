@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.utils.validators.ValidPaymentMethod;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 @Getter
 @Setter

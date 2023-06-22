@@ -15,12 +15,12 @@ public class Enums {
     @Getter
     @AllArgsConstructor
     public enum OrderStatus {
-        CREATED(1, "created"),
+        PENDING(1, "pending"),
         PAYMENT_IN_PROCESS(2, "payment_in_process"),
-        PAYMENT_CONFIRMED(2, "payment_confirmed"),
-        SHIPPED(3, "shipped"),
-        DELIVERED(4, "delivered"),
-        CANCELLED(5, "canceled");
+        PAYMENT_CONFIRMED(3, "payment_confirmed"),
+        SHIPPED(4, "shipped"),
+        DELIVERED(5, "delivered"),
+        CANCELED(6, "canceled");
         private final int code;
         private final String value;
     }

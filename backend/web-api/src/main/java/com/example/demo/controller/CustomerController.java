@@ -4,6 +4,7 @@ import com.example.demo.model.Address;
 import com.example.demo.model.Customer;
 import com.example.demo.model.validation.GetProfileResponse;
 import com.example.demo.model.validation.Response;
+import com.example.demo.service.AddressService;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.LocaleService;
 import com.example.demo.service.ProductService;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
+    private final AddressService addressService;
     private final ProductService productService;
     private final LocaleService localeService;
     @GetMapping("profile")
@@ -37,7 +39,7 @@ public class CustomerController {
         response.setDocumentType(customer.getDocumentType());
         response.setDocumentNumber(customer.getDocumentNumber());
         response.setPhoneNumber(customer.getPhoneNumber());
-        response.setAddresses(customerService.loadAddresses(customer.getAddresses()));
+        response.setAddresses(addressService.loadAddresses(customer.getAddresses()));
         if (customer.getCart()!=null && customer.getCart().getProducts().size()>0){
             response.setCart(productService.loadCart(Utils.convertToProductList(customer.getCart().getProducts())));
         }
@@ -54,12 +56,12 @@ public class CustomerController {
             response.setMessage(localeService.getMessage((Enums.SaveAddressResponseCode.ADDRESS_LIMIT_REACHED.getValue())));
             return response;
         };
-        if (customerService.existsAddressByLine(customer.getId(), req.getLine())){
+        if (addressService.existsAddressByLine(customer.getId(), req.getLine())){
             response.setCode(Enums.SaveAddressResponseCode.ADDRESS_EXISTS.getCode());
             response.setMessage(localeService.getMessage((Enums.SaveAddressResponseCode.ADDRESS_EXISTS.getValue())));
             return response;
         }
-        if (!customerService.saveAddress(customer, req)){
+        if (!addressService.saveAddress(customer, req)){
             response.setCode(Enums.SaveAddressResponseCode.ERROR.getCode());
             response.setMessage(localeService.getMessage((Enums.SaveAddressResponseCode.ERROR.getValue())));
             return response;
@@ -75,7 +77,7 @@ public class CustomerController {
         String addressId = req.get("id").toString();
         if (!ObjectId.isValid(addressId)) return false;
         Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return customerService.deleteAddress(customer, addressId);
+        return addressService.deleteAddress(customer, addressId);
     }
 
 

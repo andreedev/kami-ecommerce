@@ -90,26 +90,4 @@ public class CustomerServiceImpl implements CustomerService{
         return customerRepository.updateCart(customer);
     }
 
-    @Override
-    public List<Address> loadAddresses(List<Address> req) {
-        return customerRepository.findByListId(req);
-    }
-
-    @Override
-    public boolean existsAddressByLine(String customerId, String line) {
-        return customerRepository.existsAddressByLine(customerId, line);
-    }
-
-    @Override
-    public boolean saveAddress(Customer customer, Address address) {
-        address.setActive(true);
-        address.setCustomerId(customer.getId());
-        return customerRepository.saveAddress(customer,address);
-    }
-
-    @Override
-    public boolean deleteAddress(Customer customer, String addressId) {
-        return customerRepository.deleteAddress(customer, addressId);
-    }
-
 }

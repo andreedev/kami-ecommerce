@@ -26,4 +26,25 @@ export class OrderDataService {
   displayPaymentDetails: boolean = false;
 
   constructor() { }
+
+  reset():void{
+    this.order = {
+      delivery : {
+        deliveryMethod: '',
+        shippingAddress: {
+          id: '',
+          line: '',
+          reference: ''
+        }
+      },
+      payment : {
+        paymentMethod: ''
+      },
+      subTotal: undefined,
+      deliveryCost: undefined,
+      total: undefined
+    }
+  
+    this.displayPaymentDetails = false;
+  }
 }

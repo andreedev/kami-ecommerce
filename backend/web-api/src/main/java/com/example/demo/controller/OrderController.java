@@ -4,6 +4,7 @@ import com.example.demo.model.*;
 import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.validation.Response;
 import com.example.demo.model.validation.SearchOrdersRequest;
+import com.example.demo.service.AddressService;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.OrderService;
 import com.example.demo.utils.AwsUtil;
@@ -17,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -34,23 +34,41 @@ public class OrderController {
     public Order calculatePayment(@RequestBody Map<String, Object> req){
         log.info("calculatePayment");
         String deliveryMethod = req.get("deliveryMethod").toString();
+        String shippingAddressId = req.get("shippingAddressId").toString();
         Customer customer = getCustomerFromSession();
+        if(customer.getCart()==null || customer.getCart().getProducts()==null || customer.getCart().getProducts().isEmpty()) return null;
         Order order = Order.builder()
-                .customerId(customer.getId())
                 .products(Utils.convertToProductList(customer.getCart().getProducts()))
                 .delivery(Delivery.builder()
                         .deliveryMethod(deliveryMethod)
+                        .shippingAddress(Address.builder()
+                                .id(shippingAddressId)
+                                .build())
                         .build())
                 .build();
         return orderService.calculatePayment(order);
     }
     @PostMapping("create")
-    public boolean createOrder(@RequestBody @Valid Order req){
+    public boolean createOrder(@RequestBody Map<String, Object> req){
         log.info("createOrder");
+        String deliveryMethod = req.get("deliveryMethod").toString();
+        String shippingAddressId = req.get("shippingAddressId").toString();
+        String paymentMethod = req.get("paymentMethod").toString();
         Customer customer = getCustomerFromSession();
-        req.setCustomerId(customer.getId());
-        req.setProducts(Utils.convertToProductList(customer.getCart().getProducts()));
-        boolean result = orderService.create(req);
+        if(customer.getCart()==null || customer.getCart().getProducts()==null || customer.getCart().getProducts().isEmpty()) return false;
+        Order order = Order.builder()
+                .products(Utils.convertToProductList(customer.getCart().getProducts()))
+                .delivery(Delivery.builder()
+                        .deliveryMethod(deliveryMethod)
+                        .shippingAddress(Address.builder()
+                                .id(shippingAddressId)
+                                .build())
+                        .build())
+                .payment(Payment.builder()
+                        .paymentMethod(paymentMethod)
+                        .build())
+                .build();
+        boolean result = orderService.create(order, customer);
         if (result){
             customer.setCart(null);
             customerService.updateCart(customer);
@@ -72,14 +90,17 @@ public class OrderController {
     ) {
         log.info("#processOrder");
         Response response = Response.builder().build();
-        Customer customer = getCustomerFromSession();
         if (!ObjectId.isValid(id)){
             response.setCode(-1);
             return response;
         }
         Order order = orderService.findById(id);
-        if (!order.getStatus().equals(Enums.OrderStatus.CREATED.getValue())){
+        if (order==null){
             response.setCode(-2);
+            return response;
+        }
+        if (!order.getStatus().equals(Enums.OrderStatus.PENDING.getValue())){
+            response.setCode(-3);
             return response;
         }
         String result = null;
@@ -87,8 +108,12 @@ public class OrderController {
             result = awsUtil.uploadFileS3(file, id, "order/voucher/");
         } catch (Exception e) {
             log.error(e.getMessage());
-            response.setCode(-3);
+            response.setCode(-4);
             response.setMessage(e.getMessage());
+            return response;
+        }
+        if (result==null){
+            response.setCode(-5);
             return response;
         }
         order.getPayment().setVoucher(result);
