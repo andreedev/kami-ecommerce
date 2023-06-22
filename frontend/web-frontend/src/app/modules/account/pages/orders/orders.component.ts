@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppRoutes } from 'app/core/constants';
+import { AppRoutes, Constants } from 'app/core/constants';
 import { OrderStatus } from 'app/core/enums/order-status';
 import { Utils } from 'app/core/helpers/utils';
 import { DynamicReport, Order } from 'app/core/models';
@@ -11,6 +11,10 @@ import { AuthDataService, DataService, OrderService } from 'app/core/services';
   templateUrl: './orders.component.html'
 })
 export class OrdersComponent {
+  readonly appRoutes: typeof AppRoutes = AppRoutes;
+  readonly constants: typeof Constants = Constants;
+
+
   searchResults: DynamicReport<Order> = {
     data: [],
     totalPages: 0

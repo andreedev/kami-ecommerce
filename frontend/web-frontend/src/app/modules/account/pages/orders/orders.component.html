@@ -8,12 +8,11 @@
         </p>
     </div>
     <div class="card-body">
-        <div class="row justify-content-between  mx-0 mb-3">
+        <div class="row justify-content-between mx-0 mb-3">
             <div class="col-12 col-sm-auto mb-2">
                 <div class="input-group">
-                    <input [(ngModel)]="query" name="query" type="text"
-                        class="form-control border border-right-0" placeholder="Buscar por Nº de orden"
-                        (keyup.enter)="searchOrders()" autocomplete="off">
+                    <input [(ngModel)]="query" name="query" type="text" class="form-control border border-right-0"
+                        placeholder="Buscar por Nº de orden" (keyup.enter)="searchOrders()" autocomplete="off">
                     <span class="input-group-text cursor-pointer bg-white text-gray-70 border-left-0 px-16px"
                         (click)="searchOrders()"><i class="fa-solid fa-magnifying-glass"></i></span>
                 </div>
@@ -31,44 +30,70 @@
             </div>
         </div>
         <ng-container *ngIf="searchResults.data.length>0">
-            <div class="card bg-white border-gray mb-3" *ngFor="let order of searchResults.data">
+            <div class="card bg-color-1-gradient border-gray mb-3" *ngFor="let order of searchResults.data">
                 <div class="card-body">
-                    <div class="row mx-0 g-0 flex-row justify-content-between align-items-center">
+                    <div class="row mx-0 g-0 flex-row mb-1 justify-content-between align-items-center">
                         <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
                             Orden<span class="fw-500 ms-1">#{{order.orderNumber }}</span>
                         </div>
-                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 justify-content-start justify-content-md-end ">
-                            Fecha: {{order.createdAt | date:'dd-MM-YY hh:mm:ss a'}}
+                        <div
+                            class="d-flex col-12 col-md-6 fs-14px mb-1 mb-md-0 justify-content-start justify-content-md-end ">
+                            Fecha: {{order.createdAt | date:'dd-MM-YY hh:mm a'}}
                         </div>
                     </div>
-                    <div class="row mx-0 g-0 flex-row justify-content-between align-items-center">
-                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                    <hr class="d-block d-md-none my-2">
+                    <div class="row mx-0 g-0 flex-row mb-1">
+                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 align-items-baseline">
                             <span class="me-1">Estado:</span>
                             <span class="btn btn-sm" [ngClass]="getClassByOrderStatus(order.status!)">
                                 {{getDescriptionByOrderStatus(order.status!)}}
                             </span>
                         </div>
-                        <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 justify-content-start justify-content-md-end ">
-                            {{order.delivery.deliveryMethod ? 'Entrega en tienda' : 'Entrega por delivery' }}
+                        <div
+                            class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 justify-content-start justify-content-md-end">
+                            {{order.payment.paymentMethod==='digital_wallet' ? 'Pago con yape/plin' : '' }}
+                            {{order.payment.paymentMethod==='bank_transfer' ? 'Pago con transferencia' : '' }}
                         </div>
                     </div>
-                    
+                    <hr class="d-block d-md-none my-2">
+                    <div class="row mx-0 g-0 flex-row">
+                        <ng-container *ngIf="order.delivery.deliveryMethod==='delivery'">
+                            <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                                Dirección de entrega: {{order.delivery.shippingAddress.line}}
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="order.delivery.deliveryMethod==='in_store_pickup'">
+                            <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                                Recojo en tienda: {{constants.STORE_1_ADDRESS}}
+                            </div>
+                        </ng-container>
+                        <!-- <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0 justify-content-start justify-content-md-end ">
+                            {{order.delivery.deliveryMethod==='delivery' ? 'Entrega a domicilio' : '' }}
+                            {{order.delivery.deliveryMethod==='in_store_pickup' ? 'Recojo en tienda' : '' }}
+                        </div> -->
+                    </div>
+                    <hr class="d-block d-md-none my-2">
                     <div class="d-flex align-items-center">
-                        <div class="d-inline-flex flex-column">
-                            <!-- <span>{{order.deliveryCost }}</span>
-                            <span>{{order.subTotal }}</span> -->
-                            <span>Total S/{{order.total }}</span>
-                            <!-- <span>{{order.delivery.shippingAddress.line }}</span>
-                        <span>{{order.delivery.shippingAddress.reference }}</span> -->
+                        <div class="d-inline-flex flex-column fw-500">
+                            <span>Total: {{order.total | currency:'S/' }}</span>
                         </div>
                     </div>
+                    <ng-container *ngIf="order.status==='pending'">
+                        <p class="text-end text-info fs-14px fw-500 m-0 my-1">Tu orden se encuentra pendiente de pago.</p>
+                    </ng-container>
                     <div class="d-flex justify-content-end">
-                        <button class="mt-1 btn bg-color-1-with-hover text-white transition-300ms cp me-3">
-                            <span class="fw-bold">Detalles</span>
-                        </button>
-                        <button class="mt-1 btn bg-green-with-hover text-white transition-300ms cp" *ngIf="order.status==='pending'">
+                        <ng-container *ngIf="order.status === 'pending'">
+                            <button class="mt-1 btn bg-green-with-hover text-white transition-300ms cp w-100 w-sm-50 w-md-auto">
                             <span class="fw-bold">Procesar</span>
                         </button>
+                        </ng-container>
+                        <ng-container *ngIf="order.status != 'pending'">
+                            <button class="mt-1 btn bg-color-1-with-hover text-white transition-300ms cp w-100 w-sm-50 w-md-auto">
+                            <span class="fw-bold">Detalles</span>
+                        </button>
+                        </ng-container>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -119,7 +144,3 @@
         </div>
     </div>
 </div>
-
-<ng-template #messageContainer>
-    <p class="text-center fs-12px m-0 my-1" [class]="messageClass" [innerHTML]="message"></p>
-</ng-template>

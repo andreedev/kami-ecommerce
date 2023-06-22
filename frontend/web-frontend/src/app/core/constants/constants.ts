@@ -12,4 +12,6 @@ export abstract class Constants {
     static readonly LOGIN_WITH_GOOGLE_STATUS: boolean = true;
 
     static readonly UPDATE_CART_WAIT_TIME: number = 2000;
+
+    static readonly STORE_1_ADDRESS: string = 'Av. Tupac Amaru 4350, Comas, Lima';
 }

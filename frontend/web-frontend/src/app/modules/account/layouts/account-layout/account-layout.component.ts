@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AppRoutes } from 'app/core/constants';
 import { AuthDataService, DataService } from 'app/core/services';
 import { Router } from '@angular/router';
@@ -14,11 +14,12 @@ export class AccountLayoutComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
 
   constructor(
-    private dataService: DataService,
+    public dataService: DataService,
     public authDataService: AuthDataService,
     public addressDataService: AddressDataService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   logout(): void {
     this.authDataService.logout()
