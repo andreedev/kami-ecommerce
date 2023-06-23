@@ -4,14 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRoutes } from './core/constants';
 import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 import { UnauthenticatedGuard } from './core/guards/unauthenticated.guard';
-import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
-import { CheckoutLayoutComponent } from './shared/layouts/checkout-layout/checkout-layout.component';
+import { SecondaryLayoutComponent } from './shared/layouts/secondary-layout/secondary-layout.component';
+import { EmptyLayoutComponent } from './shared/layouts/empty-layout/empty-layout.component';
 
 const routes: Routes = [
   {
     path: AppRoutes.AUTH_MODULE_NAME,
-    component: AuthLayoutComponent,
+    component: EmptyLayoutComponent,
     children: [
       {
         path: '',
@@ -22,12 +22,23 @@ const routes: Routes = [
   },
   {
     path: AppRoutes.CHECKOUT_MODULE_NAME,
-    component: CheckoutLayoutComponent,
+    component: SecondaryLayoutComponent,
     children: [
       {
         path: '',
         loadChildren: () => import('app/modules/checkout/checkout.module').then(m => m.CheckoutModule),
-          canActivate: [AuthenticatedGuard]
+        canActivate: [AuthenticatedGuard]
+      },
+    ],
+  },
+  {
+    path: AppRoutes.ORDER_MODULE_NAME,
+    component: EmptyLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('app/modules/order/order.module').then(m => m.OrderModule),
+        canActivate: [AuthenticatedGuard]
       },
     ],
   },
@@ -38,7 +49,7 @@ const routes: Routes = [
       {
         path: AppRoutes.ACCOUNT_MODULE_NAME,
         loadChildren: () => import('app/modules/account/account.module').then(m => m.AccountModule),
-          canActivate: [AuthenticatedGuard]
+        canActivate: [AuthenticatedGuard]
       },
       {
         path: AppRoutes.SEARCH_MODULE_NAME,

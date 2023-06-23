@@ -1,0 +1,89 @@
+<ng-container *ngIf="dataService.screenWidth>500; else fullScreen">
+    <p-dialog [(visible)]="orderDataService.displayOrderDetailModal" [modal]="true" [style]="{ width: '450px' }" [draggable]="false"
+        [resizable]="false" [dismissableMask]="true" [maskStyleClass]="'bg-black-transparent-20'"
+        contentStyleClass="p-0">
+        <ng-template pTemplate="header">
+            <span class="fs-20px fw-500 mx-3">Detalle de orden</span>
+        </ng-template>
+        <p class="m-0">
+            <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+        </p>
+    </p-dialog>
+</ng-container>
+
+<ng-template #fullScreen>
+    <p-sidebar [(visible)]="orderDataService.displayOrderDetailModal" [showCloseIcon]="false" styleClass="p-0 h-auto" position="bottom"
+        [blockScroll]="true">
+        <div class="d-flex flex-column justify-content-center">
+            <div class="border-bottom p-2">
+                <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
+                    <span class="fs-20px fw-500 mx-3">Detalle de orden</span>
+                    <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px text-gray-70"
+                        (click)="orderDataService.displayOrderDetailModal=false"></i>
+                </div>
+            </div>
+            <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+        </div>
+    </p-sidebar>
+</ng-template>
+
+<ng-template #contentTemplate>
+    <div class="m-3">
+        <div class="card-body">
+            <p class="mb-2">Orden<span class="fw-500 ms-1">#{{orderDataService.order.orderNumber }}</span></p>
+            <p class="mb-2">
+                Estado:
+                <span class="btn btn-sm" [ngClass]="utils.getClassByOrderStatus(orderDataService.order.status!)">
+                    {{utils.getDescriptionByOrderStatus(orderDataService.order.status!)}}
+                </span>
+            </p>
+            <p class="fs-18px fw-500 mb-0">Inicio</p>
+            <p class="mb-0">{{ orderDataService.order.createdAt | date:'EEEE d \'de\' MMMM \'del\' y'  | titlecase}}</p>
+            <p>{{ orderDataService.order.createdAt | date:'hh:mm a' }}</p>
+            <p class="fs-18px fw-500 mb-0">Entrega</p>
+            <div class="row mx-0 g-0 flex-row">
+                <ng-container *ngIf="orderDataService.order.delivery.deliveryMethod==='delivery'">
+                    <p class="mb-0">{{orderDataService.order.delivery.shippingAddress.line}}</p>
+                    <p class="fs-14px">{{orderDataService.order.delivery.shippingAddress.reference}}</p>
+                </ng-container>
+                <ng-container *ngIf="orderDataService.order.delivery.deliveryMethod==='in_store_pickup'">
+                    <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                        Recojo en tienda: {{constants.STORE_1_ADDRESS}}
+                    </div>
+                </ng-container>
+            </div>
+            <p class="fs-18px fw-500 mb-0">Método de pago</p>
+            <div class="d-flex">
+                {{orderDataService.order.payment.paymentMethod==='digital_wallet' ? 'Yape/Plin' : '' }}
+                {{orderDataService.order.payment.paymentMethod==='bank_transfer' ? 'Transferencia bancaria' : '' }}
+            </div>
+            <p class="fs-18px my-2 fw-500">Detalle de productos</p>
+            <ng-container *ngFor="let product of orderDataService.order.products">
+                <product-card [displayCartInteractionBtn]="false" [product]="product"
+                    type="order-summary-product-list-card"></product-card>
+            </ng-container>
+            <p class="fs-18px my-2 fw-500">Costos</p>
+            <div class="d-flex justify-content-between">
+                <span class="d-flex">Subtotal:</span>
+                <span class="d-flex">{{orderDataService.order.subTotal | currency:'S/'}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="d-flex">Costo de envío:</span>
+                <span class="d-flex">{{orderDataService.order.deliveryCost | currency:'S/'}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span class="d-flex fw-500">Total:</span>
+                <span class="d-flex fw-500">{{orderDataService.order.total | currency:'S/'}}</span>
+            </div>
+            <ng-container *ngIf="orderDataService.order.status === 'pending'">
+                <button class="mt-3 btn bg-green-with-hover text-white transition-300ms cp w-100">
+                    <span class="fw-bold">Ir a pagar</span>
+                </button>
+            </ng-container>
+            <button class="mt-3 btn bg-color-1-with-hover text-white transition-300ms cp w-100"
+                [routerLink]="appRoutes.ORDERS_COMPONENT_ROUTE_NAME">
+                <span class="fw-bold">Cerrar</span>
+            </button>
+        </div>
+    </div>
+</ng-template>

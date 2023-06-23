@@ -23,9 +23,9 @@ public class Payment {
     private String paymentMethod;
     private String operationCode;
     private String voucher;
-    private BigDecimal total;
+    private BigDecimal totalPaid;// the actual total customer paid
+    private BigDecimal totalRefunded;//in case customer overpay, there'll be a refund
 //    private String paymentGateway;
 //    private String token;
-    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -152,16 +152,18 @@
                         <ng-container *ngIf="product.discount; else normal">
                             <div class="d-flex flex-row align-items-center">
                                 <div class="fs-18px fw-500 text-red me-1">
-                                    S/{{ product.discount.priceWithDiscountApplied}}
+                                    {{ product.discount.priceWithDiscountApplied|currency:'S/'}}
                                 </div>
-                                <div class="badge bg-danger fs-10px w-35px bg-red text-wrap h-fit-content">
+                                <div class="badge bg-danger fs-10px w-auto bg-red text-wrap h-fit-content">
                                     -{{ product.discount.percentage }}%
                                 </div>
                             </div>
-                            <span class="fs-12px text-decoration-line-through-v2-force">S/{{ product.price }}</span>
+                            <span class="fs-12px text-decoration-line-through-v2-force">
+                                {{ product.price|currency:'S/' }}
+                            </span>
                         </ng-container>
                         <ng-template #normal>
-                            <span class="fs-18px fw-500">S/{{ product.price }}</span>
+                            <span class="fs-18px fw-500">{{ product.price|currency:'S/' }}</span>
                         </ng-template>
                     </div>
                     <div class="d-flex align-items-end fw-500">

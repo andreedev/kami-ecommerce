@@ -1,5 +1,6 @@
 import { environment } from "assets/environments/environment";
 import { Product } from "../models";
+import { OrderStatus } from 'app/core/enums/order-status';
 
 export class Utils {
     static readonly apiEnpoint: string = environment.apiEndpoint;
@@ -216,7 +217,41 @@ export class Utils {
         ext = ext.toLowerCase();
         return extensions.includes(ext);
     }
-    
 
+    static getDescriptionByOrderStatus(value: string): string {
+        if (value === OrderStatus.PENDING.getCode()) {
+            return 'Pendiente'
+        } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
+            return 'Pago en proceso'
+        } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
+            return 'Pago confirmado'
+        } else if (value === OrderStatus.SHIPPED.getCode()) {
+            return 'En camino'
+        } else if (value === OrderStatus.DELIVERED.getCode()) {
+            return 'Entregado';
+        } else if (value === OrderStatus.CANCELLED.getCode()) {
+            return 'Cancelado';
+        } else {
+            return ''
+        }
+    }
+
+    static getClassByOrderStatus(value: string): string {
+        if (value === OrderStatus.PENDING.getCode()) {
+            return 'bg-cyan text-white';
+        } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
+            return 'bg-color-1 text-white';
+        } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
+            return 'bg-orange text-white';
+        } else if (value === OrderStatus.SHIPPED.getCode()) {
+            return 'bg-blue text-white';
+        } else if (value === OrderStatus.DELIVERED.getCode()) {
+            return 'bg-green text-white';
+        } else if (value === OrderStatus.CANCELLED.getCode()) {
+            return 'bg-red text-white';
+        } else {
+            return ''
+        }
+    }
 
 }

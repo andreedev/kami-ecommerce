@@ -31,7 +31,8 @@ public class OrderController {
     private final AwsUtil awsUtil;
 
     @PostMapping("payment/calculate")
-    public Order calculatePayment(@RequestBody Map<String, Object> req){
+    public Order calculatePayment(
+            @RequestBody Map<String, Object> req){
         log.info("calculatePayment");
         String deliveryMethod = req.get("deliveryMethod").toString();
         String shippingAddressId = req.get("shippingAddressId").toString();
@@ -49,13 +50,33 @@ public class OrderController {
         return orderService.calculatePayment(order);
     }
     @PostMapping("create")
-    public boolean createOrder(@RequestBody Map<String, Object> req){
+    public Response createOrder(
+            @RequestParam("deliveryMethod") String deliveryMethod,
+            @RequestParam("shippingAddressId") String shippingAddressId,
+            @RequestParam("paymentMethod") String paymentMethod,
+            @RequestParam("file") MultipartFile file
+    ){
         log.info("createOrder");
-        String deliveryMethod = req.get("deliveryMethod").toString();
-        String shippingAddressId = req.get("shippingAddressId").toString();
-        String paymentMethod = req.get("paymentMethod").toString();
         Customer customer = getCustomerFromSession();
-        if(customer.getCart()==null || customer.getCart().getProducts()==null || customer.getCart().getProducts().isEmpty()) return false;
+        Response response = new Response();
+        if(customer.getCart()==null || customer.getCart().getProducts()==null || customer.getCart().getProducts().isEmpty()){
+            response.setCode(-1);
+            return response;
+        }
+        String uploadVoucherResult = null;
+        String orderNumber = Utils.generateEightDigitsCode();
+        try {
+            uploadVoucherResult = awsUtil.uploadFileS3(file, orderNumber, "order/voucher/");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setCode(-2);
+            response.setMessage(e.getMessage());
+            return response;
+        }
+        if (uploadVoucherResult==null){
+            response.setCode(-3);
+            return response;
+        }
         Order order = Order.builder()
                 .products(Utils.convertToProductList(customer.getCart().getProducts()))
                 .delivery(Delivery.builder()
@@ -66,14 +87,21 @@ public class OrderController {
                         .build())
                 .payment(Payment.builder()
                         .paymentMethod(paymentMethod)
+                        .voucher(uploadVoucherResult)
                         .build())
+                .orderNumber(orderNumber)
+                .status(Enums.OrderStatus.PAYMENT_IN_PROCESS.getValue())
                 .build();
-        boolean result = orderService.create(order, customer);
-        if (result){
-            customer.setCart(null);
-            customerService.updateCart(customer);
+        Order orderCreated = orderService.create(order);
+        if (orderCreated==null){
+            response.setCode(-4);
+            return response;
         }
-        return result;
+        customer.setCart(null);
+        customerService.updateCart(customer);
+        response.setData(orderCreated);
+        response.setCode(1);
+        return response;
     }
 
     @PostMapping("search")
@@ -81,46 +109,6 @@ public class OrderController {
         log.info("getOrders");
         Customer customer = getCustomerFromSession();
         return orderService.searchOrders(customer, request);
-    }
-
-    @PostMapping("process")
-    public Response processOrder (
-            @RequestParam("id") String id,
-            @RequestParam("file") MultipartFile file
-    ) {
-        log.info("#processOrder");
-        Response response = Response.builder().build();
-        if (!ObjectId.isValid(id)){
-            response.setCode(-1);
-            return response;
-        }
-        Order order = orderService.findById(id);
-        if (order==null){
-            response.setCode(-2);
-            return response;
-        }
-        if (!order.getStatus().equals(Enums.OrderStatus.PENDING.getValue())){
-            response.setCode(-3);
-            return response;
-        }
-        String result = null;
-        try {
-            result = awsUtil.uploadFileS3(file, id, "order/voucher/");
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            response.setCode(-4);
-            response.setMessage(e.getMessage());
-            return response;
-        }
-        if (result==null){
-            response.setCode(-5);
-            return response;
-        }
-        order.getPayment().setVoucher(result);
-        order.getPayment().setCreatedAt(LocalDateTime.now());
-        order.setStatus(Enums.OrderStatus.PAYMENT_IN_PROCESS.getValue());
-        orderService.update(order);
-        return response;
     }
 
     private Customer getCustomerFromSession(){

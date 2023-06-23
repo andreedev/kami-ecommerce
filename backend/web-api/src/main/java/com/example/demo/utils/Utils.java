@@ -30,9 +30,9 @@ public class Utils {
         return Integer.toString(code);
     }
 
-    public static String generateSixDigitsCode() {
+    public static String generateEightDigitsCode() {
         Random rand = new Random(System.currentTimeMillis());
-        int code = rand.nextInt(900000) + 100000;
+        int code = rand.nextInt(90000000) + 10000000;
         return Integer.toString(code);
     }
 

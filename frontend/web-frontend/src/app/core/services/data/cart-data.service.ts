@@ -103,12 +103,12 @@ export class CartDataService {
     Utils.updateInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME, cartCopy);
   }
 
-  clearCart(): void {
+  clearCart(updateInDb: boolean=true): void {
     this.cart.products = []
     this.cart.totalAmount = 0
     this.cart.subtotal = 0.00
     Utils.deleteInLocalStorage(Constants.LOCAL_STORAGE_CART_OBJECT_NAME)
-    if (this.authDataService.authStatus.value !== AuthStatus.LOGGED_IN.getName()) return;
+    if (this.authDataService.authStatus.value !== AuthStatus.LOGGED_IN.getName() || !updateInDb) return;
     this.cartService.updateCart([]);
   }
 

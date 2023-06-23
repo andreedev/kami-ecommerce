@@ -32,15 +32,16 @@ public class OrderServiceImpl implements OrderService{
         order.setProducts(dbProductList);
         Utils.setupProductDiscount(order.getProducts());
         order.setSubTotal(Utils.calculateCartSubtotal(order.getProducts()));
-        order.setDeliveryCost(new BigDecimal(BigInteger.ZERO));
         if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
             //calculate delivery cost
             //default value for any address
             order.setDeliveryCost(new BigDecimal("12.50"));
         } else if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.IN_STORE_PICKUP.getValue())){
+            order.setDeliveryCost(new BigDecimal(BigInteger.ZERO));
             order.getDelivery().setShippingAddress(null);
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
+        if (!checkListProductStock(order, dbProductList)) return null;
         return Order.builder()
                 .deliveryCost(order.getDeliveryCost())
                 .subTotal(order.getSubTotal())
@@ -49,14 +50,12 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public boolean create(Order order, Customer customer) {
-        assert !order.getProducts().isEmpty();
+    public Order create(Order order) {
         List<Product> dbProductList = productRepository.findByListId(order.getProducts());
         Utils.transferProductQuantity(order.getProducts(), dbProductList);
         order.setProducts(dbProductList);
         Utils.setupProductDiscount(order.getProducts());
         order.setSubTotal(Utils.calculateCartSubtotal(order.getProducts()));
-        order.setDeliveryCost(new BigDecimal(BigInteger.ZERO));
         if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.DELIVERY.getValue())){
             //calculate delivery cost
             //default value for any address
@@ -70,11 +69,13 @@ public class OrderServiceImpl implements OrderService{
                             .build()
             );
         } else if (order.getDelivery().getDeliveryMethod().equals(Enums.DeliveryMethod.IN_STORE_PICKUP.getValue())){
+            order.setDeliveryCost(new BigDecimal(BigInteger.ZERO));
             order.getDelivery().setShippingAddress(null);
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
         List<Product> productListReadyToBeNestedInOrderObject = order.getProducts().stream().map(value->Product.builder()
                 .id(value.getId())
+                .name(value.getName())
                 .quantity(value.getQuantity())
                 .price(value.getPrice())
                 .discount(value.getDiscount())
@@ -84,11 +85,7 @@ public class OrderServiceImpl implements OrderService{
                 .build()
         ).collect(Collectors.toList());
         order.setProducts(productListReadyToBeNestedInOrderObject);
-        order.setOrderNumber(Utils.generateSixDigitsCode());
-        order.setStatus(Enums.OrderStatus.PENDING.getValue());
-        if (!checkListProductStock(order, dbProductList)) return false;
-        orderRepository.create(order);
-        return true;
+        return orderRepository.create(order);
     }
 
     @Override

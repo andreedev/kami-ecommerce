@@ -175,9 +175,15 @@ img {
 .max-w-350px {	
     max-width: 350px;	
 }
+.max-w-400px {	
+    max-width: 400px;	
+}
 .max-w-415px {	
     max-width: 415px;	
-}	
+}
+.max-w-450px {	
+    max-width: 450px;	
+}
 .w-100vw{	
     width: 100vw !important;	
 }
@@ -2965,6 +2971,22 @@ img {
 
 .border-radius-5px{
     border-radius: 5px;
+}
+
+.border-radius-10px{
+    border-radius: 10px;
+}
+
+.border-radius-15px{
+    border-radius: 15px;
+}
+
+.border-radius-20px{
+    border-radius: 20px;
+}
+
+.border-radius-25px{
+    border-radius: 25px;
 }
 
 .border-gray, .border-gray-50{

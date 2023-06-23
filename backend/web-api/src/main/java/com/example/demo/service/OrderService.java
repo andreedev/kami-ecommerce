@@ -6,7 +6,7 @@ import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.validation.SearchOrdersRequest;
 
 public interface OrderService {
-    boolean create(Order order, Customer customer);
+    Order create(Order order);
     Order calculatePayment(Order order);
     DynamicReport<Order> searchOrders(Customer customer, SearchOrdersRequest request);
     Order findById(String id);

@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
+import { SharedModule } from 'app/shared/shared.module';
 import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
-import { SharedModule } from 'app/shared/shared.module';
 
 
 @NgModule({

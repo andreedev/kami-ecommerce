@@ -33,5 +33,4 @@ export abstract class Endpoints {
     static readonly CALCULATE_PAYMENT: string = `${Endpoints.ORDER}/payment/calculate`
     static readonly CREATE_ORDER: string = `${Endpoints.ORDER}/create`
     static readonly SEARCH_ORDERS: string = `${Endpoints.ORDER}/search`
-    static readonly PROCESS_ORDER: string = `${Endpoints.ORDER}/process`
 }

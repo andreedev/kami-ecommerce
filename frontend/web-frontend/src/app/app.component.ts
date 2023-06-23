@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { DataService, CartDataService, SearchDataService, ProductModalDataService, CategoryDataService, AuthDataService } from './core/services';
+import { DataService, CartDataService, SearchDataService, ProductModalDataService, CategoryDataService, AuthDataService, OrderDataService } from './core/services';
 import { AddressDataService } from './core/services/data/address-data.service';
 
 @Component({
@@ -17,7 +17,8 @@ export class AppComponent {
     private categoryDataService: CategoryDataService,
     private authDataService: AuthDataService,
     private cookieService: CookieService,
-    private addressDataService: AddressDataService
+    private addressDataService: AddressDataService,
+    private orderDataService: OrderDataService
   ) { }
   
   debug(): void {
@@ -28,6 +29,7 @@ export class AppComponent {
     console.log(this.productModalDataService);
     console.log(this.categoryDataService);
     console.log(this.addressDataService);
+    console.log(this.orderDataService);
     // console.log(this.cookieService.get((Constants.SESSION_TOKEN_NAME)));
     // console.log(this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME)));
     

@@ -24,6 +24,8 @@ export class OrderDataService {
   }
 
   displayPaymentDetails: boolean = false;
+  
+  displayOrderDetailModal: boolean = false;
 
   constructor() { }
 

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -9,6 +9,11 @@ import { SharedModule } from './shared/shared.module';
 import { GoogleInitOptions, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'assets/environments/environment';
+import { registerLocaleData } from '@angular/common';
+
+import localeEs from '@angular/common/locales/es-PE';
+
+registerLocaleData(localeEs, 'es');
 
 @NgModule({
   declarations: [
@@ -43,7 +48,8 @@ import { environment } from 'assets/environments/environment';
           console.error(err);
         }
       },
-    }
+    },
+    { provide: LOCALE_ID, useValue: 'es' }
   ],
   bootstrap: [AppComponent]
 })

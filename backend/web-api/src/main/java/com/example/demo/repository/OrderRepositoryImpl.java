@@ -33,10 +33,10 @@ public class OrderRepositoryImpl implements OrderRepository {
         this.mongoTemplate = mongoTemplate;
     }
     @Override
-    public boolean create(Order order) {
+    public Order create(Order order) {
         log.info("registerCustomer");
         Order result = mongoTemplate.save(order, "orders");
-        return true;
+        return result;
     }
 
     @Override

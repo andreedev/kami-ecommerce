@@ -34,7 +34,7 @@ export class OrderService {
     }
   }
 
-  async createOrder(deliveryMethod: string, shippingAddressId: string, paymentMethod: string): Promise<boolean | null> {
+  async createOrder(deliveryMethod: string, shippingAddressId: string, paymentMethod: string): Promise<ApiResponse | null> {
     try {
       const body = {deliveryMethod, shippingAddressId, paymentMethod}
       const headers = this.authService.getAuthHeaders();

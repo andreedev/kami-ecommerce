@@ -4,9 +4,9 @@ import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
   selector: 'checkout-layout',
-  templateUrl: './checkout-layout.component.html'
+  templateUrl: './secondary-layout.component.html'
 })
-export class CheckoutLayoutComponent implements OnInit {
+export class SecondaryLayoutComponent implements OnInit {
 
   constructor(
     private dataService: DataService

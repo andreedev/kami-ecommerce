@@ -18,7 +18,7 @@ export abstract class AppRoutes {
     static readonly LINK_TO_GOOGLE_ACCOUNT_COMPONENT_NAME: string = `link-to-google-account`
     static readonly LINK_TO_GOOGLE_ACCOUNT_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}/${AppRoutes.LINK_TO_GOOGLE_ACCOUNT_COMPONENT_NAME}`
 
-    
+
     static readonly HOME_MODULE_NAME: string = ''
     static readonly HOME_MODULE_ROUTE_NAME: string = `/${AppRoutes.HOME_MODULE_NAME}`
 
@@ -35,12 +35,17 @@ export abstract class AppRoutes {
     static readonly SEARCH_MODULE_NAME: string = 'search'
     static readonly SEARCH_MODULE_ROUTE_NAME: string = `/${AppRoutes.SEARCH_MODULE_NAME}`
 
-    
+
 
     static readonly CHECKOUT_MODULE_NAME: string = "checkout"
-    static readonly CHECKOUT_MODULE_ROUTE_NAME: string = `/${AppRoutes.CHECKOUT_MODULE_NAME}/`
+    static readonly CHECKOUT_MODULE_ROUTE_NAME: string = `/${AppRoutes.CHECKOUT_MODULE_NAME}`
 
-    // static readonly SEARCH_PAGE_COMPONENT_NAME: string = ''
-    // static readonly SEARCH_PAGE_COMPONENT_ROUTE_NAME: string =  `${AppRoutes.SEARCH_MODULE_ROUTE_NAME}${AppRoutes.SEARCH_PAGE_COMPONENT_NAME}`
+
+    static readonly ORDER_MODULE_NAME: string = "order"
+    static readonly ORDER_MODULE_ROUTE_NAME: string = `/${AppRoutes.ORDER_MODULE_NAME}`
+
+
+    static readonly ORDER_DETAIL_COMPONENT_NAME: string = `detail`
+    static readonly ORDER_DETAIL_COMPONENT_ROUTE_NAME: string = `${AppRoutes.ORDER_MODULE_ROUTE_NAME}/${AppRoutes.ORDER_DETAIL_COMPONENT_NAME}`
 
 }
