@@ -14,6 +14,8 @@ export class AddressDataService {
     reference:''
   }
 
+  selectedAddress: Address | undefined;
+
   addressSelectedEvent: EventEmitter<any> = new EventEmitter();
 
 

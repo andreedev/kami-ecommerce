@@ -18,10 +18,10 @@ export class OrderService {
 
   async calculatePayment(deliveryMethod: string, shippingAddressId: string): Promise<Order | null> {
     try {
-      const body = {deliveryMethod, shippingAddressId}
+      const body = { deliveryMethod, shippingAddressId }
       const headers = this.authService.getAuthHeaders();
       const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.CALCULATE_PAYMENT), body, {headers})
+        this.http.post(Utils.getURL(Endpoints.CALCULATE_PAYMENT), body, { headers })
       );
       return response;
     } catch (error: any) {
@@ -34,19 +34,23 @@ export class OrderService {
     }
   }
 
-  async createOrder(deliveryMethod: string, shippingAddressId: string, paymentMethod: string): Promise<ApiResponse | null> {
+  async createOrder(deliveryMethod: string, shippingAddressId: string, paymentMethod: string, input: HTMLInputElement): Promise<ApiResponse | null> {
     try {
-      const body = {deliveryMethod, shippingAddressId, paymentMethod}
+      const formData = new FormData()
+      formData.append("deliveryMethod", deliveryMethod)
+      formData.append("shippingAddressId", shippingAddressId)
+      formData.append("paymentMethod", paymentMethod)
+      formData.append("file", input.files![0])
       const headers = this.authService.getAuthHeaders();
       const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.CREATE_ORDER), body, {headers})
+        this.http.post(Utils.getURL(Endpoints.CREATE_ORDER), formData, { headers })
       );
       return response;
     } catch (error: any) {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.createOrder(deliveryMethod, shippingAddressId, paymentMethod);
+        return await this.createOrder(deliveryMethod, shippingAddressId, paymentMethod, input);
       }
       throw error;
     }
@@ -54,10 +58,10 @@ export class OrderService {
 
   async searchOrders(query: string, page: number, statusFilter: string): Promise<DynamicReport<Order> | null> {
     try {
-      const body = {query, page, statusFilter}
+      const body = { query, page, statusFilter }
       const headers = this.authService.getAuthHeaders();
       const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.SEARCH_ORDERS), body, {headers})
+        this.http.post(Utils.getURL(Endpoints.SEARCH_ORDERS), body, { headers })
       );
       return response;
     } catch (error: any) {
@@ -78,7 +82,7 @@ export class OrderService {
     try {
       const headers = this.authService.getAuthHeaders();
       const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.SEARCH_ORDERS), formData, {headers})
+        this.http.post(Utils.getURL(Endpoints.SEARCH_ORDERS), formData, { headers })
       );
       return response;
     } catch (error: any) {

@@ -37,15 +37,5 @@ export class OrderDetailComponent implements OnInit, OnDestroy {
     console.log(this.orderDataService.order);
   }
 
-  validateProcessOrderRequest(): boolean {
-    this.messageClass = 'text-red';
-    const file: HTMLInputElement = document.querySelector('#file')!
-    if (Utils.validateFileHasValidExtension(file.value, ['png', 'jpg', 'jpeg', 'pdf'])) {
-      this.message = 'La extensión del archivo debe ser en formato png, jpg, jpeg o pdf.';
-      return false
-    }
-
-    this.message = '';
-    return true;
-  }
+  
 }

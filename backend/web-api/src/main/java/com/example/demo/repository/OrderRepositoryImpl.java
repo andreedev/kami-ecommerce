@@ -78,8 +78,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         Query query = new Query(Criteria.where("id").is(order.getId()));
         Update update = new Update()
                 .set("status", order.getStatus())
-                .set("payment.voucher", order.getPayment().getVoucher())
-                .set("payment.createdAt", order.getPayment().getCreatedAt());
+                .set("payment.voucher", order.getPayment().getVoucher());
         UpdateResult updateResult = mongoTemplate.updateFirst(query, update, Order.class);
         return updateResult.getModifiedCount()==1;
     }

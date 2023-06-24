@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
@@ -7,30 +7,19 @@ import { ApiResponse } from 'app/core/models';
 import { AuthDataService, DataService, OrderDataService, OrderService } from 'app/core/services';
 import { AddressDataService } from 'app/core/services/data/address-data.service';
 import { CartDataService } from 'app/core/services/data/cart-data.service';
-import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-checkout-page',
   templateUrl: './checkout-page.component.html'
 })
-export class CheckoutPageComponent implements OnInit {
+export class CheckoutPageComponent implements OnInit, OnDestroy {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
 
-  message: SafeHtml = 'Recuerda elegir un tipo de entrega y pago';
-  messageClass: string = 'text-dark';
+  step: number = 1;
 
-  items: MenuItem[] = [
-    {
-      label: 'Entrega',
-      routerLink: '',
-      icon: 'border-radius-15px'
-    },
-    {
-      label: 'Pago',
-      routerLink: 'payment'
-    },
-  ];
+  message: SafeHtml = 'Recuerda elegir un tipo de entrega';
+  messageClass: string = 'text-dark';
 
   constructor(
     public orderDataService: OrderDataService,
@@ -53,13 +42,24 @@ export class CheckoutPageComponent implements OnInit {
     })
   }
 
+  continue(): void {
+    if (this.step === 1) {
+      if (!this.validateDeliveryData()) return;
+      this.step = 2;
+    } else if (this.step === 2) {
+      if (!this.validatePaymentData()) return;
+      this.generateOrder()
+    }
+  }
+
   async generateOrder(): Promise<void> {
-    if (!this.validate()) return;
     this.dataService.enableLoading();
+    this.message = ''
     const response: ApiResponse | null = await this.orderService.createOrder(
       this.orderDataService.order.delivery.deliveryMethod,
-      this.orderDataService.order.delivery.shippingAddress.id!,
-      this.orderDataService.order.payment.paymentMethod
+      this.orderDataService.order.delivery.shippingAddress!.id!,
+      this.orderDataService.order.payment.paymentMethod,
+      document.querySelector('#file')!
     );
     this.dataService.disableLoading();
     if (response === null) {
@@ -67,7 +67,7 @@ export class CheckoutPageComponent implements OnInit {
       return;
     }
     if (response.code === -1) {
-      //insufficient stock
+
       return;
     }
     if (response.code === 1) {
@@ -79,9 +79,13 @@ export class CheckoutPageComponent implements OnInit {
   }
 
   async calculatePayment(): Promise<void> {
+    let addressId = ''
+    if (this.orderDataService.order.delivery.shippingAddress !== undefined) {
+      addressId = this.orderDataService.order.delivery.shippingAddress!.id!
+    }
     const response = await this.orderService.calculatePayment(
       this.orderDataService.order.delivery.deliveryMethod,
-      this.orderDataService.order.delivery.shippingAddress.id!
+      addressId
     );
     if (!response) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
@@ -95,12 +99,14 @@ export class CheckoutPageComponent implements OnInit {
 
 
   onChangeDeliveryMethod(event: any): void {
-    if (this.orderDataService.order.delivery.deliveryMethod === 'delivery' && this.orderDataService.order.delivery.shippingAddress.id != '') {
+    if (this.orderDataService.order.delivery.deliveryMethod === 'delivery' &&
+      this.orderDataService.order.delivery.shippingAddress != undefined) {
       this.calculatePayment();
       return;
     }
     if (this.orderDataService.order.delivery.deliveryMethod === 'in_store_pickup') {
       this.calculatePayment();
+      this.orderDataService.order.delivery.shippingAddress = undefined
       return;
     }
     this.orderDataService.displayPaymentDetails = false;
@@ -110,25 +116,20 @@ export class CheckoutPageComponent implements OnInit {
 
   }
 
-
-
   ngOnDestroy(): void {
     this.renderer.removeClass(document.body, 'bg-light');
+    this.orderDataService.reset();
   }
 
-  private validate(): boolean {
+  private validateDeliveryData(): boolean {
     this.messageClass = 'text-red';
 
     if (Utils.stringIsEmpty(this.orderDataService.order.delivery.deliveryMethod)) {
       this.message = 'Seleccione un tipo de entrega';
       return false;
     }
-    if (Utils.stringIsEmpty(this.orderDataService.order.payment.paymentMethod)) {
-      this.message = 'Seleccione un método de pago';
-      return false;
-    }
     if (this.orderDataService.order.delivery.deliveryMethod === 'delivery' &&
-      Utils.stringIsEmpty(this.orderDataService.order.delivery.shippingAddress.id!)
+      this.orderDataService.order.delivery.shippingAddress === undefined
     ) {
       this.message = 'Seleccione una dirección';
       return false;
@@ -138,6 +139,22 @@ export class CheckoutPageComponent implements OnInit {
     return true;
   }
 
+  private validatePaymentData(): boolean {
+    this.messageClass = 'text-red';
+    if (Utils.stringIsEmpty(this.orderDataService.order.payment.paymentMethod)) {
+      this.message = 'Seleccione un método de pago';
+      return false;
+    }
+
+    const file: HTMLInputElement = document.querySelector('#file')!
+    if (Utils.validateFileHasValidExtension(file.value, ['png', 'jpg', 'jpeg', 'pdf'])) {
+      this.message = 'La extensión del archivo debe ser en formato png, jpg, jpeg o pdf.';
+      return false
+    }
+
+    this.message = '';
+    return true;
+  }
 
 
 }

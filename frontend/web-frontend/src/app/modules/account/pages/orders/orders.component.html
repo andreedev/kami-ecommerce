@@ -54,7 +54,7 @@
                     <div class="row mx-0 g-0 flex-row">
                         <ng-container *ngIf="order.delivery.deliveryMethod==='delivery'">
                             <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
-                                Dirección de entrega: {{order.delivery.shippingAddress.line}}
+                                Dirección de entrega: {{order.delivery.shippingAddress!.line}}
                             </div>
                         </ng-container>
                         <ng-container *ngIf="order.delivery.deliveryMethod==='in_store_pickup'">

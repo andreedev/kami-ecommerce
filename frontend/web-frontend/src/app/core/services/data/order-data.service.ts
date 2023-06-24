@@ -9,11 +9,7 @@ export class OrderDataService {
   order: Order = {
     delivery : {
       deliveryMethod: '',
-      shippingAddress: {
-        id: '',
-        line: '',
-        reference: ''
-      }
+      shippingAddress: undefined
     },
     payment : {
       paymentMethod: ''
@@ -33,11 +29,7 @@ export class OrderDataService {
     this.order = {
       delivery : {
         deliveryMethod: '',
-        shippingAddress: {
-          id: '',
-          line: '',
-          reference: ''
-        }
+        shippingAddress: undefined
       },
       payment : {
         paymentMethod: ''

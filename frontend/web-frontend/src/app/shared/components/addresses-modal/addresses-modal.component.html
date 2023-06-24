@@ -36,7 +36,7 @@
                                 <div class="d-flex align-items-center">
                                     <ng-container *ngIf="selectable">
                                         <p-radioButton name="address" [value]="address"
-                                        [inputId]="address.id!" [(ngModel)]="orderDataService.order.delivery.shippingAddress"></p-radioButton>
+                                        [inputId]="address.id!" [(ngModel)]="addressDataService.selectedAddress"></p-radioButton>
                                     </ng-container>
                                     <div class="d-inline-flex flex-column b-0 fw-500 ms-2">
                                         <span>{{address.line}}</span>
@@ -65,8 +65,8 @@
                 <div class="col-6 px-2">
                     <ng-container *ngIf="selectable">
                         <button type="button" class="btn bg-green-with-hover text-white transition-300ms w-100" 
-                        (click)="addressDataService.displayAddressesModal=false; addressDataService.addressSelectedEvent.emit()"
-                        [disabled]="authDataService.loggedInCustomer.addresses.length<1 || orderDataService.order.delivery.shippingAddress.id=='' ">
+                        (click)="select()"
+                        [disabled]="!addressDataService.selectedAddress">
                             Seleccionar
                         </button>
                     </ng-container>

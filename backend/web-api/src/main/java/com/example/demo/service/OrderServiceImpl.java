@@ -85,6 +85,7 @@ public class OrderServiceImpl implements OrderService{
                 .build()
         ).collect(Collectors.toList());
         order.setProducts(productListReadyToBeNestedInOrderObject);
+        order.getPayment().setTotalPaid(order.getTotal());
         return orderRepository.create(order);
     }
 

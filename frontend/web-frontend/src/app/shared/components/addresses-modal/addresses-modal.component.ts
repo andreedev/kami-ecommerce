@@ -16,7 +16,7 @@ export class AddressesModalComponent {
   messageClass: string = '';
 
   constructor(
-    public orderDataService: OrderDataService, 
+    public orderDataService: OrderDataService,
     public customerService: CustomerService,
     public dataService: DataService,
     public authDataService: AuthDataService,
@@ -30,12 +30,12 @@ export class AddressesModalComponent {
     const response: boolean | null = await this.customerService.deleteAddress(id);
     if (response === null) {
       this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
-    } else if (response===false) {
+    } else if (response === false) {
       this.messageClass = 'text-red';
-      this.message ='Internal error';
-    } else if (response===true){
+      this.message = 'Internal error';
+    } else if (response === true) {
       this.authDataService.loadProfile();
-      if (this.orderDataService.order.delivery.shippingAddress.id == id){
+      if (this.orderDataService.order.delivery.shippingAddress!.id == id) {
         this.orderDataService.order.delivery.shippingAddress = {
           id: '',
           line: '',
@@ -46,4 +46,14 @@ export class AddressesModalComponent {
     }
     this.dataService.disableLoading();
   }
+
+  select(): void {
+    this.addressDataService.displayAddressesModal = false;
+    if (this.orderDataService.order.delivery.deliveryMethod === 'delivery') {
+      this.orderDataService.order.delivery.shippingAddress = this.addressDataService.selectedAddress!;
+      this.addressDataService.selectedAddress = undefined
+      this.addressDataService.addressSelectedEvent.emit();
+    }
+  }
+
 }

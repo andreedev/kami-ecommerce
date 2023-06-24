@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
 import { CheckoutRoutingModule } from './checkout-routing.module';
 import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
-
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,9 @@ import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.compo
   ],
   imports: [
     SharedModule,
-    CheckoutRoutingModule
+    CheckoutRoutingModule,
+
+    FileUploadModule
   ]
 })
 export class CheckoutModule { }

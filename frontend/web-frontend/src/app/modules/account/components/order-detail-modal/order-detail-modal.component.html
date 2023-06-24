@@ -43,8 +43,8 @@
             <p class="fs-18px fw-500 mb-0">Entrega</p>
             <div class="row mx-0 g-0 flex-row">
                 <ng-container *ngIf="orderDataService.order.delivery.deliveryMethod==='delivery'">
-                    <p class="mb-0">{{orderDataService.order.delivery.shippingAddress.line}}</p>
-                    <p class="fs-14px">{{orderDataService.order.delivery.shippingAddress.reference}}</p>
+                    <p class="mb-0">{{orderDataService.order.delivery.shippingAddress!.line}}</p>
+                    <p class="fs-14px">{{orderDataService.order.delivery.shippingAddress!.reference}}</p>
                 </ng-container>
                 <ng-container *ngIf="orderDataService.order.delivery.deliveryMethod==='in_store_pickup'">
                     <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
