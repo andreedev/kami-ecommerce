@@ -51,10 +51,10 @@ public class OrderController {
     }
     @PostMapping("create")
     public Response createOrder(
-            @RequestParam("deliveryMethod") String deliveryMethod,
-            @RequestParam("shippingAddressId") String shippingAddressId,
-            @RequestParam("paymentMethod") String paymentMethod,
-            @RequestParam("file") MultipartFile file
+            @RequestParam(required = false, name = "deliveryMethod") String deliveryMethod,
+            @RequestParam(required = false, name = "shippingAddressId") String shippingAddressId,
+            @RequestParam(required = false, name = "paymentMethod") String paymentMethod,
+            @RequestParam(required = false, name = "file") MultipartFile file
     ){
         log.info("createOrder");
         Customer customer = getCustomerFromSession();

@@ -238,9 +238,9 @@ export class Utils {
 
     static getClassByOrderStatus(value: string): string {
         if (value === OrderStatus.PENDING.getCode()) {
-            return 'bg-cyan text-white';
-        } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
             return 'bg-color-1 text-white';
+        } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
+            return 'bg-cyan text-white';
         } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
             return 'bg-orange text-white';
         } else if (value === OrderStatus.SHIPPED.getCode()) {

@@ -53,11 +53,15 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   }
 
   async generateOrder(): Promise<void> {
+    let addressId = ''
+    if (this.orderDataService.order.delivery.shippingAddress !== undefined) {
+      addressId = this.orderDataService.order.delivery.shippingAddress!.id!
+    }
     this.dataService.enableLoading();
     this.message = ''
     const response: ApiResponse | null = await this.orderService.createOrder(
       this.orderDataService.order.delivery.deliveryMethod,
-      this.orderDataService.order.delivery.shippingAddress!.id!,
+      addressId,
       this.orderDataService.order.payment.paymentMethod,
       document.querySelector('#file')!
     );
@@ -147,9 +151,24 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     }
 
     const file: HTMLInputElement = document.querySelector('#file')!
-    if (Utils.validateFileHasValidExtension(file.value, ['png', 'jpg', 'jpeg', 'pdf'])) {
-      this.message = 'La extensión del archivo debe ser en formato png, jpg, jpeg o pdf.';
+
+    if (!file.files || file.files.length === 0) {
+      this.message = 'Adjunte el voucher de pago';
+      return false;
+    }
+    
+    if (!Utils.validateFileHasValidExtension(file.value, ['png', 'jpg', 'jpeg', 'pdf'])) {
+      this.message = 'El archivo debe tener un formato de imagen válido como png, jpg, jpeg, también puede enviar un pdf.';
       return false
+    }
+
+    if (file.files && file.files[0]) {
+      const fileSizeInBytes = file.files[0].size;
+      const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
+      if (fileSizeInBytes > maxSizeInBytes) {
+        this.message = 'El tamaño del archivo no puede exceder los 10MB.';
+        return false;
+      }
     }
 
     this.message = '';

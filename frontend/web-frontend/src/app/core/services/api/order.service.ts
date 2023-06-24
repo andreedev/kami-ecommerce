@@ -41,7 +41,7 @@ export class OrderService {
       formData.append("shippingAddressId", shippingAddressId)
       formData.append("paymentMethod", paymentMethod)
       formData.append("file", input.files![0])
-      const headers = this.authService.getAuthHeaders();
+      const headers = this.authService.getMultipartHeaders();
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.CREATE_ORDER), formData, { headers })
       );

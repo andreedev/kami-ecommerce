@@ -51,14 +51,15 @@
                         </div>
                     </div>
                     <hr class="d-block d-md-none my-2">
+                    <p class="fs-18px fw-500 mb-0">Entrega</p>
                     <div class="row mx-0 g-0 flex-row">
                         <ng-container *ngIf="order.delivery.deliveryMethod==='delivery'">
-                            <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                            <div class="d-flex col-12 col-md-12 fs-16px mb-1 mb-md-0">
                                 Dirección de entrega: {{order.delivery.shippingAddress!.line}}
                             </div>
                         </ng-container>
                         <ng-container *ngIf="order.delivery.deliveryMethod==='in_store_pickup'">
-                            <div class="d-flex col-12 col-md-6 fs-16px mb-1 mb-md-0">
+                            <div class="d-flex col-12 col-md-12 fs-16px mb-1 mb-md-0">
                                 Recojo en tienda: {{constants.STORE_1_ADDRESS}}
                             </div>
                         </ng-container>
@@ -68,10 +69,10 @@
                         </div> -->
                     </div>
                     <hr class="d-block d-md-none my-2">
-                    <div class="d-flex">
+                    <!-- <div class="d-flex">
                         {{order.payment.paymentMethod==='digital_wallet' ? 'Pago con yape/plin' : '' }}
                         {{order.payment.paymentMethod==='bank_transfer' ? 'Pago con transferencia' : '' }}
-                    </div>
+                    </div> -->
                     <div class="d-flex align-items-center">
                         <div class="d-inline-flex flex-column fw-500">
                             <span>Total: {{order.total | currency:'S/' }}</span>
@@ -89,13 +90,11 @@
                                 <span class="fw-bold">Ir a pagar</span>
                             </button>
                         </ng-container> -->
-                        <ng-container *ngIf="order.status != 'pending'">
-                            <button
-                                class="mt-1 btn bg-color-1-with-hover text-white transition-300ms cp w-100 w-sm-50 w-md-auto"
-                                (click)="orderDetails(order)">
-                                <span class="fw-bold">Detalles</span>
-                            </button>
-                        </ng-container>
+                        <button
+                            class="mt-1 btn bg-color-1-with-hover text-white transition-300ms cp w-100 w-sm-50 w-md-auto"
+                            (click)="orderDetails(order)">
+                            <span class="fw-bold">Detalles</span>
+                        </button>
                     </div>
                 </div>
             </div>

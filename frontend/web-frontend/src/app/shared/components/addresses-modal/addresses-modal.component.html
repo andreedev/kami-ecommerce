@@ -10,7 +10,8 @@
 </ng-container>
 
 <ng-template #fullScreen>
-    <p-sidebar [(visible)]="addressDataService.displayAddressesModal" [showCloseIcon]="false" styleClass="p-0 h-auto" position="bottom" [blockScroll]="true">
+    <p-sidebar [(visible)]="addressDataService.displayAddressesModal" [showCloseIcon]="false" 
+        styleClass="p-0 h-auto max-h-90vh" position="bottom" [blockScroll]="true">
         <div class="d-flex flex-column justify-content-center">
             <div class="border-bottom p-2">
                 <div class="d-flex justify-content-between align-items-center mt-1 fs-4">

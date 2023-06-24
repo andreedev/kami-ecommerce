@@ -143,4 +143,9 @@ export class AuthService {
       .set('Content-Type', 'application/json')
   }
 
+  getMultipartHeaders(): HttpHeaders {
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${this.cookieService.get(Constants.SESSION_TOKEN_NAME)}`);
+  }  
+
 }

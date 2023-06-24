@@ -60,12 +60,11 @@ export class OrdersComponent {
 
   pay(order: Order): void {
     this.orderDataService.order = order;
-    this.orderDataService.displayOrderDetailModal;
   }
 
   orderDetails(order: Order): void {
     this.orderDataService.order = order;
-    this.orderDataService.displayOrderDetailModal;
+    this.orderDataService.displayOrderDetailModal = true;
   }
 
   

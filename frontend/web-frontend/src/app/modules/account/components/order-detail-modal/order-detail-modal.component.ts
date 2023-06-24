@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { Order } from 'app/core/models';
 import { AuthDataService, CustomerService, DataService, OrderDataService } from 'app/core/services';
 
 @Component({

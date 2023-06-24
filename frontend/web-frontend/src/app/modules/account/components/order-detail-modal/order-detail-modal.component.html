@@ -12,7 +12,8 @@
 </ng-container>
 
 <ng-template #fullScreen>
-    <p-sidebar [(visible)]="orderDataService.displayOrderDetailModal" [showCloseIcon]="false" styleClass="p-0 h-auto" position="bottom"
+    <p-sidebar [(visible)]="orderDataService.displayOrderDetailModal" [showCloseIcon]="false" 
+        styleClass="p-0 h-auto max-h-90vh" position="bottom"
         [blockScroll]="true">
         <div class="d-flex flex-column justify-content-center">
             <div class="border-bottom p-2">

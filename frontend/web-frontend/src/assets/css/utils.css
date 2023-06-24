@@ -546,6 +546,9 @@ img {
 .max-h-380px{	
     max-height: 380px;	
 }
+.max-h-90vh{	
+    max-height: 90vh;	
+}
 
 /*colors*/
 
