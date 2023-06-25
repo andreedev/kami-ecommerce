@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Utils } from 'app/core/helpers/utils';
-import { DynamicReport, Employee } from 'app/core/models';
+import { Address, DynamicReport } from 'app/core/models';
 import { Customer } from 'app/core/models/customer';
-import { DataService } from 'app/core/services';
-import { CustomerService } from 'app/core/services/customer.service';
+import { CustomerDataService, CustomerService, DataService } from 'app/core/services';
 import moment from 'moment';
 
 @Component({
@@ -31,10 +30,11 @@ export class CustomerReportComponent implements OnInit {
 
   constructor(
     public dataService: DataService,
-    public customerService: CustomerService
+    public customerService: CustomerService,
+    public customerDataService: CustomerDataService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     
   }
 
@@ -58,6 +58,11 @@ export class CustomerReportComponent implements OnInit {
   updatePage(page: number): void {
     this.currentPage = page;
     this.getReport();
+  }
+
+  viewAddresses(addresses: Address[]):void{
+    this.customerDataService.addresses = addresses;
+    this.customerDataService.displayAddressesModal = true;
   }
 
 }

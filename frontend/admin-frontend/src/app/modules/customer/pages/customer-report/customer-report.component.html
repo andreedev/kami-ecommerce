@@ -48,13 +48,13 @@
             dataKey="id" [scrollable]="false" tableStyleClass="w-2000px">
             <ng-template pTemplate="colgroup">
                 <colgroup>
-                    <col style="width:150px"> <!-- id -->
+                    <col style="width:160px"> <!-- id -->
 
                     <col style="width:120px">
 
                     <col style="width:120px">
 
-                    <col style="width:100px">
+                    <col style="width:120px">
 
                     <col style="width:140px"><!-- email-->
 
@@ -73,7 +73,6 @@
                 <tr>
                     <th class="fw-bold">ID</th>
                     <th class="fw-bold">STATUS</th>
-                    <th class="fw-bold">USERNAME</th>
                     <th class="fw-bold">NAME</th>
                     <th class="fw-bold">EMAIL</th>
                     <th class="fw-bold">PHONE NUMBER</th>
@@ -100,7 +99,6 @@
                             </div>
                         </container-element>
                     </td>
-                    <td>{{customer.username}}</td>
                     <td>{{customer.name}}</td>
                     <td>{{customer.email}}</td>
                     <td>{{customer.phoneNumber}}</td>
@@ -122,7 +120,15 @@
                         </container-element>
                     </td>
                     <td>{{customer.documentNumber}}</td>
-                    <td><button class="btn btn-sm bg-blue-with-hover text-white">CHECK</button></td>
+                    <td>
+                        <ng-container *ngIf="customer.addresses.length>0; else emptyAddressesList">
+                            <button class="btn btn-sm bg-blue-with-hover text-white"
+                            (click)="viewAddresses(customer.addresses)">VIEW</button>
+                        </ng-container>
+                        <ng-template #emptyAddressesList>
+                            -
+                        </ng-template>
+                    </td>
                     <td>{{customer.createdAt}}</td>
                 </tr>
             </ng-template>
@@ -169,3 +175,5 @@
 <ng-template #empty>
     <td></td>
 </ng-template>
+
+<addresses-modal *ngIf="customerDataService.displayAddressesModal"></addresses-modal>

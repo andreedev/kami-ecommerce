@@ -1,12 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Category;
-import com.example.demo.model.DynamicReport;
-import com.example.demo.model.Product;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.validation.CategoryReportRequest;
-import com.example.demo.model.validation.ProductReportRequest;
 import com.example.demo.repository.CategoryRepository;
-import com.example.demo.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

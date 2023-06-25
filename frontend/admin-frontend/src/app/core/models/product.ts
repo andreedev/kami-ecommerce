@@ -17,5 +17,5 @@ export interface Product {
     updatedAt?: string;
 
     //doesn't persist
-    amount?: number;
+    quantity?: number;
 }

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { AppRoutes } from 'app/core/constants';
 
-import { AuthService } from 'app/core/services/auth.service';
+import { AuthService } from 'app/core/services/api/auth.service';
 import { DataService } from 'app/core/services/data/data.service';
 
 @Component({

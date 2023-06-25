@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Category } from './../../../../core/models/category';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { CategoryService } from 'app/core/services/category.service';
-import { DataService } from 'app/core/services';
+import { CategoryService, DataService } from 'app/core/services';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Utils } from 'app/core/helpers/utils';
 import { CategoryDataService } from 'app/core/services/data/category-data.service';
@@ -26,14 +25,14 @@ export class CategoryCreateComponent {
     public dataService: DataService,
     private categoryService: CategoryService,
     private sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
 
   async create(): Promise<void> {
     if (!this.validate()) return;
     this.dataService.enableLoading();
     const response: any = await this.categoryService.createCategory(this.category);
-    if (response===1) {
+    if (response === 1) {
       this.messageClass = 'text-green';
       this.message = 'Product created successfully';
       this.reset();
@@ -42,7 +41,7 @@ export class CategoryCreateComponent {
         this.categoryDataService.displayCategoryCreateModal = false
         this.message = '';
       }, 1000);
-    } else if(response instanceof HttpErrorResponse) {
+    } else if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-danger';
       const errorMessages = response.error.errorMessages;
       this.message = this.sanitizer.bypassSecurityTrustHtml(
@@ -56,7 +55,7 @@ export class CategoryCreateComponent {
   private validate(): boolean {
     this.messageClass = 'text-danger';
 
-    if (Utils.validateStringIsEmpty(this.category.name!)) {
+    if (Utils.stringIsEmpty(this.category.name!)) {
       this.message = 'The name is required';
       return false;
     }

@@ -1,5 +1,6 @@
 export interface Address {
-    line?: string
+    id?: string
+    line: string
     reference?: string
     status?: number
 }

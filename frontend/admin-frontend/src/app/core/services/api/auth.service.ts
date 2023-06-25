@@ -1,14 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom } from 'rxjs';
-import { AppRoutes, Endpoints } from '../constants';
-import { Constants } from '../constants/constants';
-import { Utils } from '../helpers/utils';
-import { Employee } from '../models';
-import { DataService } from './data/data.service';
-import { LoginResponse } from '../models/rest/login-response';
 import { Router } from '@angular/router';
+import { Constants, Endpoints, AppRoutes } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
+import { LoginResponse, Employee } from 'app/core/models';
+import { DataService } from '..';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +43,7 @@ export class AuthService {
       this.updateSession(response)
       return true
     } catch (error: any) {
-      if (error.status === 401){
+      if (error.status === 401) {
         this.logout()
         this.redirectToLogin()
         return false
@@ -56,7 +54,7 @@ export class AuthService {
 
   async login(username: string, password: string): Promise<LoginResponse | null> {
     try {
-      const body: Employee = { username, password }
+      const body = { username, password }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
       return response
     } catch (error: any) {
@@ -65,8 +63,19 @@ export class AuthService {
     }
   }
 
-  private redirectToLogin():void{
+  private redirectToLogin(): void {
     this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
   }
+
+  getAuthHeaders(): HttpHeaders {
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${this.cookieService.get(Constants.SESSION_TOKEN_NAME)}`)
+      .set('Content-Type', 'application/json')
+  }
+
+  getMultipartHeaders(): HttpHeaders {
+    return new HttpHeaders()
+      .set('Authorization', `Bearer ${this.cookieService.get(Constants.SESSION_TOKEN_NAME)}`);
+  } 
 
 }

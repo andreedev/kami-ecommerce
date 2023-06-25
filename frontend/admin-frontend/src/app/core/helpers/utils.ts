@@ -1,4 +1,5 @@
 import { environment } from "assets/environments/environment";
+import { OrderStatus } from "../enums/order-status";
 
 export class Utils {
     static readonly apiEnpoint: string = environment.apiEndpoint;
@@ -36,12 +37,20 @@ export class Utils {
         return re.test(String(email).toLowerCase());
     }
 
-    static validateStringIsEmpty(str: string): boolean {
+    static stringIsEmpty(str: string): boolean {
         return str.length == 0;
     }
 
-    static validateStringHasLessLengthThanX(str: string, x: number): boolean {
-        return (str.length <= x) ? true : false;
+    static stringHasLength(str: string, x: number): boolean {
+        return (str.length === x) ? true : false;
+    }
+
+    static stringHasLessLengthThan(str: string, x: number): boolean {
+        return (str.length < x) ? true : false;
+    }
+
+    static stringHasMoreLengthThan(str: string, x: number): boolean {
+        return (str.length > x) ? true : false;
     }
 
     static stringHasNumber(myString: string): boolean {
@@ -186,7 +195,7 @@ export class Utils {
 
     static multiply(a: number, b: number): number {
         if (isNaN(a) || isNaN(b)) {
-          throw new Error('Invalid operands. Both operands must be valid numbers.');
+            throw new Error('Invalid operands. Both operands must be valid numbers.');
         }
 
         const result = a * b;
@@ -195,6 +204,46 @@ export class Utils {
     }
 
 
+    static validateFileHasValidExtension(value: string, extensions: string[]): boolean {
+        let ext = value.slice((value.lastIndexOf(".") - 1 >>> 0) + 2);
+        ext = ext.toLowerCase();
+        return extensions.includes(ext);
+    }
 
+    static getDescriptionByOrderStatus(value: string): string {
+        if (value === OrderStatus.PENDING.getCode()) {
+            return 'Pendiente'
+        } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
+            return 'Pago en proceso'
+        } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
+            return 'Pago confirmado'
+        } else if (value === OrderStatus.SHIPPED.getCode()) {
+            return 'En camino'
+        } else if (value === OrderStatus.DELIVERED.getCode()) {
+            return 'Entregado';
+        } else if (value === OrderStatus.CANCELLED.getCode()) {
+            return 'Cancelado';
+        } else {
+            return ''
+        }
+    }
+
+    static getClassByOrderStatus(value: string): string {
+        if (value === OrderStatus.PENDING.getCode()) {
+            return 'bg-color-1 text-white';
+        } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
+            return 'bg-cyan text-white';
+        } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
+            return 'bg-orange text-white';
+        } else if (value === OrderStatus.SHIPPED.getCode()) {
+            return 'bg-blue text-white';
+        } else if (value === OrderStatus.DELIVERED.getCode()) {
+            return 'bg-green text-white';
+        } else if (value === OrderStatus.CANCELLED.getCode()) {
+            return 'bg-red text-white';
+        } else {
+            return ''
+        }
+    }
 
 }

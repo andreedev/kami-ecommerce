@@ -19,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static java.rmi.server.LogStream.log;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Slf4j

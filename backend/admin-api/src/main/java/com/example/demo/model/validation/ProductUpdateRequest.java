@@ -62,7 +62,4 @@ public class ProductUpdateRequest {
     @Min(value = 0, message = "Stock cannot be negative")
     @Digits(integer = 10, message = "Invalid stock", fraction = 0)
     private Integer stock;
-    public Product toProduct() {
-        return new Product(id, status, name, sku, price, discount ==  null ? null : discount.toDiscount(), brand, categories, specifications, mediaUrls, keywords, stock);
-    }
 }

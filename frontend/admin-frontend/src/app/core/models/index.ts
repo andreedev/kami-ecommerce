@@ -1,3 +1,7 @@
+export { Payment } from './payment';
+export { ApiResponse } from './rest/api-response';
+export { Delivery } from './delivery';
+export { Order } from './order';
 export { Product } from './product';
 export { Category } from './category';
 export { Address } from './address';

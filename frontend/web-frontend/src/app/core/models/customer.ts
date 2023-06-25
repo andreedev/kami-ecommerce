@@ -1,6 +1,5 @@
 import { Address } from "./address"
 import { Cart } from "./cart";
-import { Product } from "./product"
 
 export interface Customer {
     id?: string;

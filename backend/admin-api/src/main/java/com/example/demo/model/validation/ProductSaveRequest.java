@@ -5,15 +5,13 @@ import com.example.demo.utils.validators.UniqueProductName;
 import com.example.demo.utils.validators.UniqueProductSku;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Builder
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,14 +47,9 @@ public class ProductSaveRequest {
     @NotEmpty(message = "The mediaUrls list is required")
     @Valid
     private List<@URL(message = "Each mediaUrl must be a valid URL") String> mediaUrls;
-
+    @NotNull(message = "Rating is required")
     private String keywords;
-
     @NotNull(message = "Stock is required")
-    @Min(value = 0, message = "Stock cannot be negative")
-    @Digits(integer = 10, message = "Invalid stock", fraction = 0)
+    @Positive(message = "Stock must be a positive number")
     private Integer stock;
-    public Product toProduct() {
-        return new Product(name, sku, price, discount ==  null ? null : discount.toDiscount(), brand, categories, specifications, mediaUrls, keywords, stock);
-    }
 }

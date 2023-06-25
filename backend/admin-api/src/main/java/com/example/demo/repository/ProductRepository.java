@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.DynamicReport;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Utils } from 'app/core/helpers/utils';
 import { Category, DynamicReport } from 'app/core/models';
 import { DataService } from 'app/core/services';
-import { CategoryService } from 'app/core/services/category.service';
+import { CategoryService } from 'app/core/services/api/category.service';
 import { CategoryDataService } from 'app/core/services/data/category-data.service';
 
 @Component({

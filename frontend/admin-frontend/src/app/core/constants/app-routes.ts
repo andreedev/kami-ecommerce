@@ -1,8 +1,10 @@
 export abstract class AppRoutes {
 
-    static readonly AUTH: string = "/auth/"
+    static readonly AUTH_MODULE_NAME: string = "auth"
+    static readonly AUTH_MODULE_ROUTE_NAME: string = `/${AppRoutes.AUTH_MODULE_NAME}/`
+
     static readonly LOGIN_COMPONENT_NAME: string = `login`
-    static readonly LOGIN_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH}${AppRoutes.LOGIN_COMPONENT_NAME}`
+    static readonly LOGIN_COMPONENT_ROUTE_NAME: string = `${AppRoutes.AUTH_MODULE_ROUTE_NAME}/${AppRoutes.LOGIN_COMPONENT_NAME}`
 
     static readonly HOME_MODULE_NAME: string = `home`
     static readonly HOME_MODULE_ROUTE_NAME: string = `/${AppRoutes.HOME_MODULE_NAME}/`

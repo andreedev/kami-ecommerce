@@ -1,14 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Category;
-import com.example.demo.model.DynamicReport;
-import com.example.demo.model.Product;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.validation.CategoryReportRequest;
-import com.example.demo.model.validation.ProductReportRequest;
-import com.example.demo.model.validation.ProductSaveRequest;
-import com.example.demo.model.validation.ProductUpdateRequest;
 import com.example.demo.service.CategoryService;
-import com.example.demo.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

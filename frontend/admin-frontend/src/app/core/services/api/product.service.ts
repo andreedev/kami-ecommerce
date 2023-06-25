@@ -1,12 +1,11 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Endpoints } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
+import { DynamicReport, Product } from 'app/core/models';
 import { firstValueFrom } from 'rxjs';
-import { Endpoints } from '../constants';
-import { Utils } from '../helpers/utils';
-import { Product } from '../models/product';
-import { AuthService } from './auth.service';
-import { DataService } from './data/data.service';
-import { DynamicReport } from '../models';
+import { AuthService } from '..';
+import { DataService } from '../data/data.service';
 
 @Injectable({
   providedIn: 'root'

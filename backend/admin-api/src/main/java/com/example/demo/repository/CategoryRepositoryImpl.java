@@ -2,10 +2,8 @@ package com.example.demo.repository;
 
 import com.example.demo.model.Category;
 import com.example.demo.model.Customer;
-import com.example.demo.model.DynamicReport;
-import com.example.demo.model.Product;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.validation.CategoryReportRequest;
-import com.example.demo.model.validation.ProductReportRequest;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +18,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Slf4j
 @Component

@@ -1,7 +1,7 @@
 export interface SearchRequest {
     query?: string
     page?: number
-    categoriesFilter?: Array<string>
+    categoriesFilter: Array<string>
     brandFilter?: string
     orderFilter?: number
     onSaleFilter?: boolean

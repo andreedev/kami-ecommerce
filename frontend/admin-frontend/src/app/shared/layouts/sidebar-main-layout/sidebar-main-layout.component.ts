@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AppRoutes } from 'app/core/constants';
+import { EmployeeService } from 'app/core/services';
 import { DataService } from 'app/core/services/data/data.service';
-import { EmployeeService } from 'app/core/services/employee.service';
 
 @Component({
   selector: 'app-sidebar-main-layout',
@@ -11,8 +11,8 @@ export class SidebarMainLayoutComponent implements OnInit {
   readonly appRoutes = AppRoutes;
 
   constructor(
-    @Inject(EmployeeService) private employeeService: EmployeeService,
-    @Inject(DataService) public dataService: DataService
+    private employeeService: EmployeeService,
+    public dataService: DataService
   ) { }
 
   async ngOnInit(): Promise<void> {

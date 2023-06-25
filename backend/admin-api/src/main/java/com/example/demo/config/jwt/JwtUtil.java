@@ -40,6 +40,15 @@ public class JwtUtil implements Serializable {
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY_MIN * 60 * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }
+
+    public String generateJwtRefreshToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder().setClaims(claims)
+                .setSubject(username)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_REFRESH_TOKEN_VALIDITY_MIN * 60 * 1000))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+    }
     public Boolean validateJwtToken(String token, String usernameDb) {
         String username = getUsernameFromToken(token);
         Claims claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();

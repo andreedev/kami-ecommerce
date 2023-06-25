@@ -79,13 +79,13 @@ export class ProductUpdateComponent implements OnInit {
     if (!this.validate()) return;
     this.dataService.enableLoading();
     const response: any = await this.productService.updateProduct(this.product);
-    if (response===1) {
+    if (response === 1) {
       this.messageClass = 'text-green';
       this.message = 'Product update successfully';
       setTimeout(() => {
         this.router.navigate([AppRoutes.PRODUCT_REPORT_COMPONENT_ROUTE_NAME]);
       }, 1000);
-    } else if(response instanceof HttpErrorResponse) {
+    } else if (response instanceof HttpErrorResponse) {
       this.messageClass = 'text-danger';
       const errorMessages = response.error.errorMessages;
       this.message = this.sanitizer.bypassSecurityTrustHtml(
@@ -99,17 +99,17 @@ export class ProductUpdateComponent implements OnInit {
   private validate(): boolean {
     this.messageClass = 'text-danger';
 
-    if (Utils.validateStringIsEmpty(this.product.name!)) {
+    if (Utils.stringIsEmpty(this.product.name!)) {
       this.message = 'The name is required';
       return false;
     }
 
-    if (Utils.validateStringIsEmpty(this.product.sku!)) {
+    if (Utils.stringIsEmpty(this.product.sku!)) {
       this.message = 'The sku is required';
       return false;
     }
 
-    if (Utils.validateStringIsEmpty(this.product.brand!)) {
+    if (Utils.stringIsEmpty(this.product.brand!)) {
       this.message = 'The brand is required';
       return false;
     }
@@ -120,7 +120,7 @@ export class ProductUpdateComponent implements OnInit {
         return false;
       }
       this.product.discount.startDate = this.dateRange.startDate.format("YYYY-MM-DD HH:mm:ss");
-      this.product.discount.endDate = this.dateRange.endDate.format("YYYY-MM-DD HH:mm:ss")  
+      this.product.discount.endDate = this.dateRange.endDate.format("YYYY-MM-DD HH:mm:ss")
     }
 
 
@@ -176,9 +176,5 @@ export class ProductUpdateComponent implements OnInit {
     this.product.mediaUrls!.push(str.trim());
   }
 
-
-  debug(): void {
-    console.log(this.product);
-  }
 
 }

@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Customer;
-import com.example.demo.model.DynamicReport;
+import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
 import com.mongodb.client.result.UpdateResult;
@@ -61,8 +60,8 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
-        long totalCustomers = mongoTemplate.count(query, Customer.class);
-        int totalPages = (int) Math.ceil((double) totalCustomers / 10);
+        long totalCustomers = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
+        int totalPages = (int) Math.ceil((double) totalCustomers / 20);
 
         // Create DynamicReport object with the data and the total number of pages
         return DynamicReport.<Product>builder()

@@ -31,7 +31,7 @@ public class DiscountSaveRequest {
 //        return new Discount(percentage, startDateColombia.toLocalDateTime(), endDateColombia.toLocalDateTime());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse(startDate, formatter);
-        LocalDateTime endDateTime = LocalDateTime.parse(startDate, formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse(endDate, formatter);
         return new Discount(percentage, startDateTime, endDateTime);
     }
 }

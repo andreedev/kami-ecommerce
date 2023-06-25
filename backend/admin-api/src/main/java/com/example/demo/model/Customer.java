@@ -11,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class Customer {
     @Id
     private String id;
     private String name;
+    private String lastName;
     private String username;
     private String password;
     private String email;
@@ -37,13 +39,13 @@ public class Customer {
     private Integer documentType;
     private String documentNumber;
     private String phoneNumber;
-    private Collection<String> roles;
+    private List<String> roles;
     private List<Address> addresses;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
-    private Cart cart;
+    private CustomerCart cart;
     private Boolean isLinkedToGoogleAccount;
 
     public Customer(String name, String username, String password, String email, Integer documentType, String documentNumber, String phoneNumber) {
@@ -56,7 +58,7 @@ public class Customer {
         this.phoneNumber= phoneNumber;
         this.addresses=new ArrayList<>();
         this.roles = new ArrayList<>(Collections.singleton(Enums.Roles.ROLE_CUSTOMER.getValue()));
-        this.status = Enums.CustomerStatus.REGISTERED.getCode();
+        this.status = Enums.CustomerStatus.UNVERIFIED_EMAIL.getCode();
     }
 
     public Collection<GrantedAuthority> getAuthorities(){

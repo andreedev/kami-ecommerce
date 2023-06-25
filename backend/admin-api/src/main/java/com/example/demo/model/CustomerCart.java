@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.model.validation.SimplifiedProduct;
 import lombok.*;
 
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DynamicReport<T> {
-    private List<T> data;
-    private Integer totalPages;
+public class CustomerCart {
+    private List<SimplifiedProduct> products;
 }
