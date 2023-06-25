@@ -119,9 +119,44 @@
                                 <ng-container *ngIf="orderDataService.order.payment.paymentMethod!=''">
                                     <ng-container *ngIf="orderDataService.order.payment.paymentMethod==='bank_transfer'">
                                         <p>Puedes transferir a cualquiera de nuestras cuentas BCP, Interbank, BBVA o Scotiabank.</p>
+                                        <div class="row m-0">
+                                            <div class="col-12 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/bcp-logo.png" class="w-auto">
+                                                <p class="fs-14px mb-0">Cuenta Ahorros Soles:</p>
+                                                <p class="fs-14px">000 000 00000 000000</p>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/ibk-logo.png" class="w-auto">
+                                                <p class="fs-14px mb-0">Cuenta Ahorros Soles:</p>
+                                                <p class="fs-14px">000 000 00000 000000</p>
+                                            </div>
+                                        </div>
+                                        <div class="row m-0">
+                                            <div class="col-12 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/bbva-logo.png" class="w-auto">
+                                                <p class="fs-14px mb-0">Cuenta Ahorros Soles:</p>
+                                                <p class="fs-14px">000 000 00000 000000</p>
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/scotiabank-logo.png" class="w-auto">
+                                                <p class="fs-14px mb-0">Cuenta Ahorros Soles:</p>
+                                                <p class="fs-14px">000 000 00000 000000</p>
+                                            </div>
+                                        </div>
+                                        <p>A nombre de: Company Name</p>
                                     </ng-container>
                                     <ng-container *ngIf="orderDataService.order.payment.paymentMethod==='digital_wallet'">
                                         <p>Puedes yapear o plinear a nuestro Yape o Plin.</p>
+                                        <div class="row m-0">
+                                            <div class="col-12 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/bcp-logo.png" class="w-auto">
+                                            </div>
+                                            <div class="col-12 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/ibk-logo.png" class="w-auto">
+                                            </div>
+                                        </div>
+                                        <p class="mb-0">Número: 000 000 000</p>
+                                        <p>A nombre de: Company Name</p>
                                     </ng-container>
                                     <div class="mb-3">
                                         <label for="file" class="form-label">Adjuntar voucher:</label>
