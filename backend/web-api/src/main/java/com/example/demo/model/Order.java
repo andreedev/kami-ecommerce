@@ -37,7 +37,7 @@ public class Order {
     private Payment payment;
     @Null(message = "The product list is not required")
     private List<Product> products;
-    private BigDecimal subTotal;//products total
+    private BigDecimal subTotal;
     private BigDecimal deliveryCost;
     private BigDecimal total;
     private Integer rate;

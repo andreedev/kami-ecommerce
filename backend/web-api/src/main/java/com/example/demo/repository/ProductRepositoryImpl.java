@@ -94,7 +94,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         query.addCriteria(Criteria.where("status").is(Enums.ProductStatus.PUBLISHED.getCode()));
 
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
-        long totalCustomers = mongoTemplate.count(query, Customer.class);
+        long totalCustomers = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
         int totalPages = (int) Math.ceil((double) totalCustomers / 20);
 
         return DynamicReport.<Product>builder()

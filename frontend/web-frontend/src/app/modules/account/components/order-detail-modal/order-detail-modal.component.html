@@ -82,7 +82,7 @@
                 </button>
             </ng-container>
             <button class="mt-3 btn bg-color-1-with-hover text-white transition-300ms cp w-100"
-                [routerLink]="appRoutes.ORDERS_COMPONENT_ROUTE_NAME">
+                (click)="orderDataService.displayOrderDetailModal=false">
                 <span class="fw-bold">Cerrar</span>
             </button>
         </div>

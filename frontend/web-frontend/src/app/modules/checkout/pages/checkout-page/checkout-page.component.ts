@@ -65,21 +65,28 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.orderDataService.order.payment.paymentMethod,
       document.querySelector('#file')!
     );
-    this.dataService.disableLoading();
     if (response === null) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
       return;
     }
-    if (response.code === -1) {
-
+    if (response.code === -2 || response.code === -3) {
+      this.messageClass = 'text-red';
+      this.message = 'Error al subir voucher';
+      return;
+    }
+    if (response.code === -4) {
+      this.messageClass = 'text-red';
+      this.message = 'Internal error';
       return;
     }
     if (response.code === 1) {
       this.cartDataService.clearCart(false);
       this.orderDataService.reset();
       this.orderDataService.order = response.data;
-      this.router.navigate([AppRoutes.ORDER_DETAIL_COMPONENT_ROUTE_NAME]);
+      this.dataService.disableLoading();
+      this.router.navigate([AppRoutes.ORDERS_COMPONENT_ROUTE_NAME]);
     }
+    this.dataService.disableLoading();
   }
 
   async calculatePayment(): Promise<void> {

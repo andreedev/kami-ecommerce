@@ -48,7 +48,7 @@ export class OrdersComponent {
     this.pagesUI = Utils.generatePagesUIArray(response.totalPages, this.page);
     this.loadingOrders = false;
     this.dataService.disableLoading();
-
+    console.log(response);
   }
 
   updatePage(page: number): void {

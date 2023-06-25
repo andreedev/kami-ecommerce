@@ -41,11 +41,11 @@ export abstract class AppRoutes {
     static readonly CHECKOUT_MODULE_ROUTE_NAME: string = `/${AppRoutes.CHECKOUT_MODULE_NAME}`
 
 
-    static readonly ORDER_MODULE_NAME: string = "order"
-    static readonly ORDER_MODULE_ROUTE_NAME: string = `/${AppRoutes.ORDER_MODULE_NAME}`
+    // static readonly ORDER_MODULE_NAME: string = "order"
+    // static readonly ORDER_MODULE_ROUTE_NAME: string = `/${AppRoutes.ORDER_MODULE_NAME}`
 
 
-    static readonly ORDER_DETAIL_COMPONENT_NAME: string = `detail`
-    static readonly ORDER_DETAIL_COMPONENT_ROUTE_NAME: string = `${AppRoutes.ORDER_MODULE_ROUTE_NAME}/${AppRoutes.ORDER_DETAIL_COMPONENT_NAME}`
+    // static readonly ORDER_DETAIL_COMPONENT_NAME: string = `detail`
+    // static readonly ORDER_DETAIL_COMPONENT_ROUTE_NAME: string = `${AppRoutes.ORDER_MODULE_ROUTE_NAME}/${AppRoutes.ORDER_DETAIL_COMPONENT_NAME}`
 
 }

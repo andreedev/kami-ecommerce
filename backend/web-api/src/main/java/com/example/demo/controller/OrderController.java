@@ -78,6 +78,7 @@ public class OrderController {
             return response;
         }
         Order order = Order.builder()
+                .customerId(customer.getId())
                 .products(Utils.convertToProductList(customer.getCart().getProducts()))
                 .delivery(Delivery.builder()
                         .deliveryMethod(deliveryMethod)

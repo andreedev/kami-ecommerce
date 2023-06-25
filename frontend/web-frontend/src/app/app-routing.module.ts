@@ -31,17 +31,17 @@ const routes: Routes = [
       },
     ],
   },
-  {
-    path: AppRoutes.ORDER_MODULE_NAME,
-    component: EmptyLayoutComponent,
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('app/modules/order/order.module').then(m => m.OrderModule),
-        canActivate: [AuthenticatedGuard]
-      },
-    ],
-  },
+  // {
+  //   path: AppRoutes.ORDER_MODULE_NAME,
+  //   component: EmptyLayoutComponent,
+  //   children: [
+  //     {
+  //       path: '',
+  //       loadChildren: () => import('app/modules/order/order.module').then(m => m.OrderModule),
+  //       canActivate: [AuthenticatedGuard]
+  //     },
+  //   ],
+  // },
   {
     path: '',
     component: MainLayoutComponent,

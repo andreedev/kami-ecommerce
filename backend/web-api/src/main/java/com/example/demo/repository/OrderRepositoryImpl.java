@@ -8,6 +8,7 @@ import com.example.demo.model.validation.SearchOrdersRequest;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,12 +16,16 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -28,7 +33,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Component
 public class OrderRepositoryImpl implements OrderRepository {
     private final MongoTemplate mongoTemplate;
-    @Autowired
+
     public OrderRepositoryImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
@@ -53,17 +58,23 @@ public class OrderRepositoryImpl implements OrderRepository {
             query.addCriteria(new Criteria().orOperator(nameCriteria, usernameCriteria));
         }
 
-        int page = (req.getPage() != null) ? req.getPage() - 1 : 0;
+        query.addCriteria(where("customerId").is(customer.getId()));
+
+        int page = req.getPage() - 1;
         Pageable pageable = PageRequest.of(page, 5);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        List<Order> list = mongoTemplate.find(query.with(pageable).with(sort), Order.class, "orders");
-        long totalCustomers = mongoTemplate.count(query, Customer.class);
-        int totalPages = (int) Math.ceil((double) totalCustomers / 10);
+        query.with(pageable).with(sort);
+
+        List<Order> list = mongoTemplate.find(query, Order.class, "orders");
+        Stream<Order> orderStream = Streamable.of(list).stream();
+
+        Page<Order> orderPage = PageableExecutionUtils.getPage(orderStream.collect(Collectors.toList()), pageable,
+                () -> mongoTemplate.count(query.skip(0).limit(0), Order.class, "orders"));
 
         return DynamicReport.<Order>builder()
-                .data(list)
-                .totalPages(totalPages)
+                .data(orderPage.getContent())
+                .totalPages(orderPage.getTotalPages())
                 .build();
     }
 
