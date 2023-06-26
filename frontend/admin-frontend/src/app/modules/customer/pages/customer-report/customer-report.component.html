@@ -17,7 +17,7 @@
                 Filter by status:
             </span>
             <select class="form-select form-select-sm" [(ngModel)]="statusFilter" (change)="getReport()">
-                <option value="null">Ninguno</option>
+                <option value="null">None</option>
                 <option value="1">Registered</option>
                 <option value="2">Email verified</option>
                 <option value="3">Disabled</option>
@@ -50,7 +50,7 @@
                 <colgroup>
                     <col style="width:160px"> <!-- id -->
 
-                    <col style="width:120px">
+                    <col style="width:140px">
 
                     <col style="width:120px">
 
@@ -89,10 +89,10 @@
                     <td>
                         <container-element [ngSwitch]="customer.status">
                             <div *ngSwitchCase="1">
-                                <a class="btn btn-sm btn-light fs-12px">REGISTERED</a>
+                                <a class="btn btn-sm btn-light fs-12px">UNVERIFIED EMAIL</a>
                             </div>
                             <div *ngSwitchCase="2">
-                                <a class="btn btn-sm btn-success fs-12px">EMAIL_VERIFIED</a>
+                                <a class="btn btn-sm btn-success fs-12px">EMAIL VERIFIED</a>
                             </div>
                             <div *ngSwitchCase="3">
                                 <a class="btn btn-sm btn-dark border fs-12px">DISABLED</a>

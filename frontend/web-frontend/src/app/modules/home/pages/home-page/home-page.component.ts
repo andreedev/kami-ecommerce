@@ -24,8 +24,8 @@ export class HomePageComponent implements OnInit {
     private productService: ProductService,
     public categoryDataService: CategoryDataService,
   ) {
-    this.loadFeaturedProducts()
-    this.categoryDataService.loadCategories()
+    this.loadFeaturedProducts();
+    this.categoryDataService.loadCategories();
   }
 
   async loadFeaturedProducts(): Promise<any>{
@@ -36,7 +36,6 @@ export class HomePageComponent implements OnInit {
         this.loadingFeaturedProducts = false
       }
     }, 1000);
-    
   }
   
   ngOnInit(): void {

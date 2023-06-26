@@ -114,22 +114,36 @@
         </div>
         <hr class="m-0">
         <div class="ps-3 py-3">
-            <span class="fs-10px">CATEGORÍAS</span>
+            <span class="fs-12px">CATEGORÍAS</span>
         </div>
-        <div class="list-group list-group-flush mb-3" >
-            <a *ngFor="let item of categoryDataService.categories" class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false; categoryDataService.filterByCategory(item.name)">
-                {{item.name | uppercase}}
-            </a>
-        </div>
+        <ng-container *ngIf="!categoryDataService.loadingCategories">
+            <div class="list-group list-group-flush mb-3" >
+                <a *ngFor="let item of categoryDataService.categories" class="list-group-item list-group-item-action cp" 
+                    (click)="dataService.displayMobileMenu = false; categoryDataService.filterByCategory(item.name)">
+                    {{item.name | uppercase}}
+                </a>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="categoryDataService.loadingCategories">
+            <div class="m-3" >
+                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+                <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+            </div>
+        </ng-container>
+        
         <hr class="m-0">
         <div class="ps-3 py-3">
             <span class="fs-10px">MI INFORMACIÓN</span>
         </div>  
         <div class="list-group list-group-flush mb-3">
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+            <a class="list-group-item list-group-item-action cp" [routerLink]="[appRoutes.PROFILE_COMPONENT_ROUTE_NAME]"
+            (click)="dataService.displayMobileMenu = false">
                 Mi perfil
             </a>
-            <a class="list-group-item list-group-item-action cp" (click)="dataService.displayMobileMenu = false">
+            <a class="list-group-item list-group-item-action cp" [routerLink]="[appRoutes.ORDERS_COMPONENT_ROUTE_NAME]"
+            (click)="dataService.displayMobileMenu = false">
                 Mis órdenes
             </a>
         </div>

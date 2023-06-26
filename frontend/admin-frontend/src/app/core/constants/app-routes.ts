@@ -34,4 +34,11 @@ export abstract class AppRoutes {
     static readonly CATEGORY_REPORT_COMPONENT_NAME: string = `report`
     static readonly CATEGORY_REPORT_COMPONENT_ROUTE_NAME: string = `${AppRoutes.CATEGORY_MODULE_ROUTE_NAME}${AppRoutes.CATEGORY_REPORT_COMPONENT_NAME}`
 
+
+    static readonly ORDER_MODULE_NAME: string = `order`
+    static readonly ORDER_MODULE_ROUTE_NAME: string = `/${AppRoutes.ORDER_MODULE_NAME}/`
+
+    static readonly ORDER_REPORT_COMPONENT_NAME: string = `report`
+    static readonly ORDER_REPORT_COMPONENT_ROUTE_NAME: string = `${AppRoutes.ORDER_MODULE_ROUTE_NAME}${AppRoutes.ORDER_REPORT_COMPONENT_NAME}`
+
 }

@@ -9,7 +9,7 @@
 }
 
 
-/* primeng table */
+/* primeng custom css */
 
 .p-datatable-scrollable-header-box {
     padding-right: 0px !important;
@@ -27,6 +27,32 @@
 .p-datatable .p-datatable-tbody>tr.p-highlight {
     background: #007bff70 !important;
     color: #181818 !important;
+}
+
+.p-sidebar .p-sidebar-close {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+}
+
+.p-sidebar .p-sidebar-header,
+.p-sidebar .p-sidebar-content {
+    padding: 0px !important;
+}
+
+.p-dialog .p-dialog-header {
+    padding: 0.5rem;
+}
+
+.p-sidebar .p-sidebar-footer {
+    padding: 0;
+}
+
+.p-galleria .p-galleria-indicators .p-galleria-indicator button {
+    border-radius: 8px;
+}
+
+.p-overlaypanel .p-overlaypanel-content {
+    padding: 0;
 }
 
 /* Custom css ngx date range picker*/
@@ -78,7 +104,7 @@
 .debugger {
     width: 30px;
     height: 30px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 5px;
     cursor: pointer;

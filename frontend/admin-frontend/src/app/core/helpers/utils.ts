@@ -62,7 +62,7 @@ export class Utils {
     }
 
     static validatePrice(num: number): boolean {
-        let regex = /^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/;
+        let regex = /^[1-9]\d*((\.\d{0,2})?)$/;
         return regex.test(String(num));
     }
 
@@ -80,7 +80,7 @@ export class Utils {
         return `${this.apiEnpoint}${route}`;
     }
 
-    static prepareDateToSendBack(rangoFechas: any): any {
+    static formatDate(rangoFechas: any): any {
         return rangoFechas.format('YYYY-MM-DD');
     }
 

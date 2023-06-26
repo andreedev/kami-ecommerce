@@ -72,19 +72,26 @@ export class ProductCreateComponent {
     if (!this.validate()) return;
     this.dataService.enableLoading();
     const response: any = await this.productService.createProduct(this.product);
-    if (response === 1) {
+    if (response instanceof HttpErrorResponse) {
+      if (response.status === 400) {
+        this.messageClass = 'text-red';
+        const errorMessages = response.error.errorMessages;
+        this.message = this.sanitizer.bypassSecurityTrustHtml(
+          errorMessages.join('<br>')
+        );
+      } else {
+        this.messageClass = 'text-red';
+        this.message = 'Internal error'
+      }
+    } else if (response === null) {
+      this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
+    } else if (response === 1) {
       this.messageClass = 'text-green';
       this.message = 'Product created successfully';
       this.reset();
       setTimeout(() => {
         this.router.navigate([AppRoutes.PRODUCT_REPORT_COMPONENT_ROUTE_NAME]);
-      }, 1000);
-    } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-danger';
-      const errorMessages = response.error.errorMessages;
-      this.message = this.sanitizer.bypassSecurityTrustHtml(
-        errorMessages.join('<br>')
-      );
+      }, 1500);
     }
     this.dataService.disableLoading();
   }

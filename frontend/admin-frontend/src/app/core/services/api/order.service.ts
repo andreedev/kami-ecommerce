@@ -1,28 +1,27 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from '..';
 import { Endpoints } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { DynamicReport, Customer, Address } from 'app/core/models';
+import { DynamicReport, Order, Product } from 'app/core/models';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '..';
-import { DataService } from '../data/data.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomerService {
+export class OrderService {
 
   constructor(
     private http: HttpClient,
     private authService: AuthService
   ) { }
 
-  async customerReport(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Customer> | null> {
+  async report(query: string, page: number, statusFilter: string, dateFilter: {}): Promise<DynamicReport<Order> | null | HttpErrorResponse> {
     try {
       const headers = this.authService.getAuthHeaders();
       const body = { query, page, statusFilter, dateFilter }
       const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.CUSTOMER_REPORT), body, { headers })
+        this.http.post(Utils.getURL(Endpoints.ORDER_REPORT), body, { headers })
       );
       return response;
 
@@ -30,32 +29,27 @@ export class CustomerService {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.customerReport(query, page, statusFilter, dateFilter);
+        return await this.report(query, page, statusFilter, dateFilter);
       }
-      throw error;
+      return error;
     }
   }
 
-  async findAddresses(addresses: Address[]): Promise<Address[] | null> {
+
+  async update(request: Order): Promise<any> {
     try {
-      const body = addresses
       const headers = this.authService.getAuthHeaders();
-      const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.FIND_ADDRESSES), body, {headers})
+      const response = await firstValueFrom(
+        this.http.post(Utils.getURL(Endpoints.ORDER_UPDATE), request, { headers })
       );
       return response;
     } catch (error: any) {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.findAddresses(addresses);
+        return await this.update(request);
       }
-      throw error;
+      return error;
     }
   }
-
-
-
-
-
 }

@@ -6,6 +6,7 @@ import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 import { UnauthenticatedGuard } from './core/guards/unauthenticated.guard';
 import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
+import { OrderModule } from './modules/order/order.module';
 
 const routes: Routes = [
   {
@@ -16,6 +17,11 @@ const routes: Routes = [
         path: AppRoutes.CUSTOMER_MODULE_NAME,
         loadChildren: () =>
           import('app/modules/customer/customer.module').then(m => m.CustomerModule)
+      },
+      {
+        path: AppRoutes.ORDER_MODULE_NAME,
+        loadChildren: () =>
+          import('app/modules/order/order.module').then(m => m.OrderModule)
       },
       {
         path: AppRoutes.PRODUCT_MODULE_NAME,

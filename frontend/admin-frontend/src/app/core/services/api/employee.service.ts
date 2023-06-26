@@ -14,13 +14,12 @@ export class EmployeeService {
 
   constructor(
     private http: HttpClient,
-    private dataService: DataService,
     private authService: AuthService
   ) { }
 
   async getEmployee(): Promise<Employee | null> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const response = await firstValueFrom(
         this.http.get(Utils.getURL(Endpoints.GET_EMPLOYEE), { headers })
       );

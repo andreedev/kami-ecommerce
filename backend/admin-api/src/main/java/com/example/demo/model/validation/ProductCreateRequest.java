@@ -1,6 +1,5 @@
 package com.example.demo.model.validation;
 
-import com.example.demo.model.Product;
 import com.example.demo.utils.validators.UniqueProductName;
 import com.example.demo.utils.validators.UniqueProductSku;
 import jakarta.validation.Valid;
@@ -15,7 +14,7 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductSaveRequest {
+public class ProductCreateRequest {
     @UniqueProductName
     @NotBlank(message = "The name is required")
     @Size(min = 4, max = 120, message = "The product name must be between 4 and 120 characters.")

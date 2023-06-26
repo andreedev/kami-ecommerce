@@ -1,8 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Customer;
+import com.example.demo.model.Order;
+import com.example.demo.model.Product;
 import com.example.demo.model.validation.DynamicReport;
-import com.example.demo.model.validation.CustomerReportRequest;
+import com.example.demo.model.validation.ProductReportRequest;
+import com.example.demo.model.validation.ReportRequest;
+import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -11,38 +14,42 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 @Slf4j
 @Component
-public class CustomerRepositoryImpl implements CustomerRepository {
+public class OrderRepositoryImpl implements OrderRepository {
+
     private final MongoTemplate mongoTemplate;
+
     @Autowired
-    public CustomerRepositoryImpl(MongoTemplate mongoTemplate) {
+    public OrderRepositoryImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
     @Override
-    public DynamicReport<Customer> getCustomerReport(CustomerReportRequest req) {
+    public DynamicReport<Order> report(ReportRequest req) throws ParseException {
         Query query = new Query();
 
-        // Apply filters based on the request parameters
-        if (req.getStatusFilter() != null) {
+        if (req.getStatusFilter() != null && !req.getStatusFilter().isEmpty()) {
             query.addCriteria(Criteria.where("status").is(req.getStatusFilter()));
         }
 
         if (req.getQuery() != null && !req.getQuery().isEmpty()) {
             query.addCriteria(new Criteria().orOperator(
                     Criteria.where("id").is(req.getQuery()),
-                    Criteria.where("name").regex(req.getQuery(), "i"),
-                    Criteria.where("username").regex(req.getQuery(), "i"),
-                    Criteria.where("email").regex(req.getQuery(), "i"),
-                    Criteria.where("documentNumber").regex(req.getQuery(), "i")
+                    Criteria.where("customerId").regex(req.getQuery(), "i"),
+                    Criteria.where("orderNumber").regex(req.getQuery(), "i"),
+                    Criteria.where("total").regex(req.getQuery(), "i")
             ));
         }
 
@@ -55,14 +62,22 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         Pageable pageable = PageRequest.of(page, 10);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        List<Customer> customers = mongoTemplate.find(query.with(pageable).with(sort), Customer.class, "customers");
-        long totalCustomers = mongoTemplate.count(query, Customer.class);
-        int totalPages = (int) Math.ceil((double) totalCustomers / 10);
+        List<Order> list = mongoTemplate.find(query.with(pageable).with(sort), Order.class, "orders");
+        long totalCustomers = mongoTemplate.count(query.skip(0).limit(0), Order.class, "orders");
+        int totalPages = (int) Math.ceil((double) totalCustomers / 20);
 
-        // Create DynamicReport object with the data and the total number of pages
-        return DynamicReport.<Customer>builder()
-                .data(customers)
+        return DynamicReport.<Order>builder()
+                .data(list)
                 .totalPages(totalPages)
                 .build();
+    }
+
+    @Override
+    public Integer update(Order order) {
+        Query query = new Query(Criteria.where("id").is(order.getId()));
+        Update update = new Update();
+        update.set("status", order.getStatus());
+        UpdateResult result = mongoTemplate.updateFirst(query, update, Order.class);
+        return (int) result.getModifiedCount();
     }
 }

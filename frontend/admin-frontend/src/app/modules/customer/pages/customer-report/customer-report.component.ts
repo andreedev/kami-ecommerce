@@ -12,13 +12,13 @@ import moment from 'moment';
 export class CustomerReportComponent implements OnInit {
   query: string = '';
   loading: boolean = true;
-  statusFilter: number|null=null;
+  statusFilter: number | null = null;
   dateFilter: { startDate: any, endDate: any } = {
     startDate: moment().subtract(1, 'months'),
     endDate: moment(),
   };
   maxDate: any
-   = moment().format('YYYY-MM-DD');
+    = moment().format('YYYY-MM-DD');
 
   customersList: Array<Customer> | undefined;
   selectedCustomer: Customer | undefined;
@@ -35,32 +35,32 @@ export class CustomerReportComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+
   }
 
-  async getReport(e:any=null): Promise<void>{
+  async getReport(e: any = null): Promise<void> {
     const dateFilter = {
-      startDate: Utils.prepareDateToSendBack(this.dateFilter.startDate),
-      endDate: Utils.prepareDateToSendBack(this.dateFilter.endDate)
+      startDate: Utils.formatDate(this.dateFilter.startDate),
+      endDate: Utils.formatDate(this.dateFilter.endDate)
     }
     this.dataService.enableLoading();
-    this.loading=true;
+    this.loading = true;
     const response: DynamicReport<Customer> | null = await this.customerService.customerReport(this.query, this.currentPage, this.statusFilter, dateFilter);
-    if (response!.data.length!==0) {
-      this.customersList=response!.data;
-      this.loading=false;
+    if (response!.data.length !== 0) {
+      this.customersList = response!.data;
+      this.loading = false;
       Utils.generatePagesUIArray(response!.totalPages, this.currentPage);
     }
     this.dataService.disableLoading();
   }
-  
+
 
   updatePage(page: number): void {
     this.currentPage = page;
     this.getReport();
   }
 
-  viewAddresses(addresses: Address[]):void{
+  viewAddresses(addresses: Address[]): void {
     this.customerDataService.addresses = addresses;
     this.customerDataService.displayAddressesModal = true;
   }

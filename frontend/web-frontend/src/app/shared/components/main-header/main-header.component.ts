@@ -26,9 +26,13 @@ export class MainHeaderComponent implements OnInit {
     public searchDataService: SearchDataService,
     private router: Router
   ) {
+    setTimeout(() => {
+      this.categoryDataService.loadCategories()
+    }, 3000);
   }
+
   ngOnInit(): void {
-    this.categoryDataService.loadCategories()
+    
   }
 
   search(): void {

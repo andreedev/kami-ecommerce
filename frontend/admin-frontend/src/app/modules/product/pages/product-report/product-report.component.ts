@@ -17,13 +17,13 @@ export class ProductReportComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   query: string = '';
   loading: boolean = true;
-  statusFilter: number|null=null;
+  statusFilter: number | null = null;
   dateFilter: { startDate: any, endDate: any } = {
     startDate: moment().subtract(1, 'months'),
     endDate: moment(),
   };
   maxDate: any
-   = moment().format('YYYY-MM-DD');
+    = moment().format('YYYY-MM-DD');
 
   productsList: Array<Product> | undefined;
   selectedProduct: Product | undefined;
@@ -46,22 +46,22 @@ export class ProductReportComponent implements OnInit {
     this.dataService.selectedProduct = undefined
   }
 
-  async getReport(e:any=null): Promise<void>{
+  async getReport(e: any = null): Promise<void> {
     const dateFilter = {
-      startDate: Utils.prepareDateToSendBack(this.dateFilter.startDate),
-      endDate: Utils.prepareDateToSendBack(this.dateFilter.endDate)
+      startDate: Utils.formatDate(this.dateFilter.startDate),
+      endDate: Utils.formatDate(this.dateFilter.endDate)
     }
     this.dataService.enableLoading();
-    this.loading=true;
+    this.loading = true;
     const response: DynamicReport<Product> | null = await this.productService.productReport(this.query, this.currentPage, this.statusFilter, dateFilter);
-    if (response!.data.length!==0) {
-      this.productsList=response!.data;
-      this.loading=false;
+    if (response!.data.length !== 0) {
+      this.productsList = response!.data;
+      this.loading = false;
       Utils.generatePagesUIArray(response!.totalPages, this.currentPage);
     }
     this.dataService.disableLoading();
   }
-  
+
 
   updatePage(page: number): void {
     this.currentPage = page;
@@ -70,7 +70,7 @@ export class ProductReportComponent implements OnInit {
 
   switchDisplayProductImages(mediaUrls: string[]): void {
     this.selectedProductImages = mediaUrls;
-    this.displayImagesPopUp=true;
+    this.displayImagesPopUp = true;
   }
 
   updateProduct(product: Product): void {

@@ -35,11 +35,6 @@ export class DataService {
     setTimeout(() => { this.loading = false }, 0)
   }
 
-  getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders()
-      .set('Authorization', `Bearer ${this.cookieService.get(Constants.SESSION_TOKEN_NAME)}`)
-      .set('Content-Type', 'application/json')
-  }
 
   clearData(): void {
     this.loggedInEmployee = null

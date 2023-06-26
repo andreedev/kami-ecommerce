@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
-import com.example.demo.model.validation.ProductSaveRequest;
+import com.example.demo.model.validation.ProductCreateRequest;
 import com.example.demo.model.validation.ProductUpdateRequest;
 import com.example.demo.service.ProductService;
 import com.example.demo.utils.Enums;
@@ -28,12 +28,12 @@ public class ProductController {
 
     @PostMapping("report")
     public DynamicReport<Product> report(@Valid @RequestBody ProductReportRequest req) throws ParseException {
-        log.info("report");
+        log.info("productReport");
         return productService.getProductReport(req);
     }
 
     @PostMapping("create")
-    ResponseEntity<?> create(@Valid @RequestBody ProductSaveRequest req) {
+    ResponseEntity<?> create(@Valid @RequestBody ProductCreateRequest req) {
         log.info("createProduct");
         return ResponseEntity.ok(productService.createProduct(
                 Product.builder()

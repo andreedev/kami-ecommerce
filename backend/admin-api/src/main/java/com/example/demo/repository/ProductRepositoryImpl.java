@@ -43,11 +43,12 @@ public class ProductRepositoryImpl implements ProductRepository {
         }
 
         if (req.getQuery() != null && !req.getQuery().isEmpty()) {
-            Criteria nameCriteria = Criteria.where("id").regex(req.getQuery(), "i");
-            Criteria usernameCriteria = Criteria.where("name").regex(req.getQuery(), "i");
-            Criteria emailCriteria = Criteria.where("sku").regex(req.getQuery(), "i");
-            Criteria documentNumberCriteria = Criteria.where("keywords").regex(req.getQuery(), "i");
-            query.addCriteria(new Criteria().orOperator(nameCriteria, usernameCriteria, emailCriteria, documentNumberCriteria));
+            query.addCriteria(new Criteria().orOperator(
+                Criteria.where("id").is(req.getQuery()),
+                Criteria.where("name").regex(req.getQuery(), "i"),
+                Criteria.where("sku").regex(req.getQuery(), "i"),
+                Criteria.where("keywords").regex(req.getQuery(), "i")
+            ));
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -63,7 +64,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         long totalCustomers = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
         int totalPages = (int) Math.ceil((double) totalCustomers / 20);
 
-        // Create DynamicReport object with the data and the total number of pages
         return DynamicReport.<Product>builder()
                 .data(list)
                 .totalPages(totalPages)

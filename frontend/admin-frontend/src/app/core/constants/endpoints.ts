@@ -21,4 +21,8 @@ export abstract class Endpoints {
     static readonly CATEGORY_CREATE: string = `${Endpoints.CATEGORY}/create`
     static readonly CATEGORY_UPDATE: string = `${Endpoints.CATEGORY}/update`
     static readonly CATEGORY_DELETE: string = `${Endpoints.CATEGORY}/delete`
+
+    static readonly ORDER: string = 'admin/order'
+    static readonly ORDER_REPORT: string = `${Endpoints.ORDER}/report`
+    static readonly ORDER_UPDATE: string = `${Endpoints.ORDER}/update`
 }

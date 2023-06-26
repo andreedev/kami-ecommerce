@@ -14,13 +14,12 @@ export class CategoryService {
 
   constructor(
     private http: HttpClient,
-    private dataService: DataService,
     private authService: AuthService
   ) { }
 
   async categoryReport(query: string, page: number): Promise<DynamicReport<Category> | null> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const body = { query, page }
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.CATEGORY_REPORT), body, { headers })
@@ -39,7 +38,7 @@ export class CategoryService {
 
   async createCategory(category: Category): Promise<any> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const response = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.CATEGORY_CREATE), category, { headers })
       );
@@ -57,7 +56,7 @@ export class CategoryService {
 
   async updateCategory(category: Category): Promise<any> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const response = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.CATEGORY_UPDATE), category, { headers })
       );
@@ -75,7 +74,7 @@ export class CategoryService {
 
   async deleteCategory(category: Category): Promise<any> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const body = category;
       const response = await firstValueFrom(
         this.http.delete(Utils.getURL(Endpoints.CATEGORY_DELETE), { headers, body })

@@ -9,7 +9,7 @@ import { AppRoutes } from 'app/core/constants';
 })
 export class CategoryDataService {
 
-  loadingCategories: boolean = false
+  loadingCategories: boolean = true
   categories: Category[] = []
 
   constructor(
@@ -18,17 +18,12 @@ export class CategoryDataService {
   ) {}
 
   async loadCategories(): Promise<any>{
-    if (this.loadingCategories) return;
-    this.loadingCategories = true;
-    setTimeout(async () => {
-      if (this.categories.length === 0){
-        const response: Category[] = await this.categoryService.getCategories()
-        if (response !== null) {
-          this.categories = response;
-          this.loadingCategories = false
-        }
-      }
-    }, 500);
+    if (this.loadingCategories && this.categories.length>0) return;
+    if (this.categories.length === 0){
+      const response = await this.categoryService.getCategories()
+      this.categories = response;
+      this.loadingCategories = false;
+    }
   }
 
   filterByCategory(categoryName: string):void{

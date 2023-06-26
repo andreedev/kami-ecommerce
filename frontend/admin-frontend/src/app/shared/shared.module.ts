@@ -14,6 +14,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { TableModule } from 'primeng/table';
 import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   //Components
@@ -28,6 +29,8 @@ import { ChipsModule } from 'primeng/chips';
     FormsModule,
     ReactiveFormsModule,
 
+    SharedRoutingModule,
+
     //Ui modules,(
     NgxDaterangepickerMd.forRoot(),
     BlockUIModule,
@@ -37,8 +40,7 @@ import { ChipsModule } from 'primeng/chips';
     ScrollPanelModule,
     DialogModule,
     ChipsModule,
-
-    SharedRoutingModule
+    ToastModule
   ],
 
   //Components and modules exports
@@ -57,7 +59,8 @@ import { ChipsModule } from 'primeng/chips';
     TableModule,
     ScrollPanelModule,
     DialogModule,
-    ChipsModule
+    ChipsModule,
+    ToastModule
   ]
 })
 export class SharedModule { }

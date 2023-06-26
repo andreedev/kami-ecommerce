@@ -79,25 +79,32 @@ export class ProductUpdateComponent implements OnInit {
     if (!this.validate()) return;
     this.dataService.enableLoading();
     const response: any = await this.productService.updateProduct(this.product);
-    if (response === 1) {
+    if (response instanceof HttpErrorResponse) {
+      if (response.status === 400) {
+        this.messageClass = 'text-red';
+        const errorMessages = response.error.errorMessages;
+        this.message = this.sanitizer.bypassSecurityTrustHtml(
+          errorMessages.join('<br>')
+        );
+      } else {
+        this.messageClass = 'text-red';
+        this.message = 'Internal error'
+      }
+    } else if (response === null) {
+      this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
+    } else if (response === 1) {
       this.messageClass = 'text-green';
       this.message = 'Product update successfully';
       setTimeout(() => {
         this.router.navigate([AppRoutes.PRODUCT_REPORT_COMPONENT_ROUTE_NAME]);
       }, 1000);
-    } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-danger';
-      const errorMessages = response.error.errorMessages;
-      this.message = this.sanitizer.bypassSecurityTrustHtml(
-        errorMessages.join('<br>')
-      );
     }
     this.dataService.disableLoading();
   }
 
 
   private validate(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
 
     if (Utils.stringIsEmpty(this.product.name!)) {
       this.message = 'The name is required';

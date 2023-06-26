@@ -34,7 +34,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         Query query = new Query();
 
         if (req.getQuery() != null && !req.getQuery().isEmpty()) {
-            Criteria nameCriteria = Criteria.where("id").regex(req.getQuery(), "i");
+            Criteria nameCriteria = Criteria.where("id").is(req.getQuery());
             Criteria usernameCriteria = Criteria.where("name").regex(req.getQuery(), "i");
             query.addCriteria(new Criteria().orOperator(nameCriteria, usernameCriteria));
         }

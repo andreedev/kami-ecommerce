@@ -14,13 +14,12 @@ export class ProductService {
 
   constructor(
     private http: HttpClient,
-    private dataService: DataService,
     private authService: AuthService
   ) { }
 
   async productReport(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Product> | null> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const body = { query, page, statusFilter, dateFilter }
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.PRODUCT_REPORT), body, { headers })
@@ -39,7 +38,7 @@ export class ProductService {
 
   async createProduct(product: Product): Promise<any> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const response = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.PRODUCT_CREATE), product, { headers })
       );
@@ -50,14 +49,13 @@ export class ProductService {
         if (!tokenRefreshed) return null;
         return await this.createProduct(product);
       }
-      if (error.status === 400) return error;
-      throw error;
+      return error;
     }
   }
 
   async updateProduct(product: Product): Promise<any> {
     try {
-      const headers = this.dataService.getAuthHeaders();
+      const headers = this.authService.getAuthHeaders();
       const response = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.PRODUCT_UPDATE), product, { headers })
       );
@@ -68,8 +66,7 @@ export class ProductService {
         if (!tokenRefreshed) return null;
         return await this.updateProduct(product);
       }
-      if (error.status === 400) return error;
-      throw error;
+      return error;
     }
   }
 

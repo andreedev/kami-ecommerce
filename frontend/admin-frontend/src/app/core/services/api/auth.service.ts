@@ -38,7 +38,7 @@ export class AuthService {
     try {
       const refreshToken = this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME))
       const body = { refreshToken }
-      const headers = this.dataService.getAuthHeaders()
+      const headers = this.getAuthHeaders()
       const response: LoginResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }))
       this.updateSession(response)
       return true
