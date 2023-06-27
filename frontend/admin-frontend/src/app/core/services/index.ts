@@ -1,3 +1,4 @@
+export { OrderDataService } from './data/order-data.service';
 export { OrderService } from './api/order.service';
 export { CustomerDataService } from './data/customer-data.service';
 export { CategoryService } from './api/category.service';

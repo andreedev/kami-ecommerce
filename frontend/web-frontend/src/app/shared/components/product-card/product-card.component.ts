@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models';
 import { DataService } from 'app/core/services';
@@ -10,7 +10,7 @@ import { SearchDataService } from 'app/core/services/data/search-data.service';
   selector: 'product-card',
   templateUrl: './product-card.component.html'
 })
-export class ProductCardComponent implements OnChanges {
+export class ProductCardComponent implements OnChanges, OnInit {
   @Input() product!: Product;
   @Input() type!: string;
   @Input() displayCartInteractionBtn: boolean = false;

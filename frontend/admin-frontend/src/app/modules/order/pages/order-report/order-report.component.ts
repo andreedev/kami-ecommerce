@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { Order } from 'app/core/models';
-import { DataService, OrderService } from 'app/core/services';
+import { Order, Product } from 'app/core/models';
+import { DataService, OrderDataService, OrderService } from 'app/core/services';
 import moment from 'moment';
 import { MessageService } from 'primeng/api';
 
@@ -39,10 +39,11 @@ export class OrderReportComponent implements OnInit {
     public dataService: DataService,
     public orderService: OrderService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public orderDataService: OrderDataService
   ) { }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.dataService.selectedProduct = undefined
   }
 
@@ -76,5 +77,10 @@ export class OrderReportComponent implements OnInit {
 
   update(item: any): void {
 
+  }
+
+  viewProducts(list: Product[]): void {
+    this.orderDataService.orderProducts = list;
+    this.orderDataService.displayOrderProductsModal = true;
   }
 }

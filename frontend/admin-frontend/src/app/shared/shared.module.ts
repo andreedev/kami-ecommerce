@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import * as fromComponents from './index';
+import {components} from './index';
 
 //UI
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
@@ -19,7 +19,7 @@ import { ToastModule } from 'primeng/toast';
 @NgModule({
   //Components
   declarations: [
-    ...fromComponents.components
+    ...components,
   ],
 
   //Modules imports
@@ -45,7 +45,7 @@ import { ToastModule } from 'primeng/toast';
 
   //Components and modules exports
   exports: [
-    ...fromComponents.components,
+    ...components,
     CommonModule,
     HttpClientModule,
     FormsModule,

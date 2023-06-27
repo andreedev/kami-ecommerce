@@ -110,7 +110,7 @@
                         </div>
                     </td>
                     <td>
-                        <a class="btn btn-sm bg-blue-with-hover text-white cp">
+                        <a class="btn btn-sm bg-blue-with-hover text-white cp" (click)="viewProducts(item.products)">
                             <i class="fas fa-cubes"></i>
                         </a>
                     </td>
@@ -194,3 +194,5 @@
 </ng-template>
 
 <p-toast [breakpoints]="{'480px': {width: '100%', right: '0', left: '0'}}"></p-toast>
+
+<order-products-modal></order-products-modal>
