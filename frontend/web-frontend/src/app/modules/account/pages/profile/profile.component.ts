@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AuthDataService } from 'app/core/services';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'profile',
   templateUrl: './profile.component.html'
 })
 export class ProfileComponent {

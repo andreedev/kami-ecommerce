@@ -3,7 +3,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
-  selector: 'app-main-layout',
+  selector: 'main-layout',
   templateUrl: './main-layout.component.html'
 })
 export class MainLayoutComponent implements OnInit {

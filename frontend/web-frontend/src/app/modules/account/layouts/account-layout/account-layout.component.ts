@@ -2,13 +2,11 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AppRoutes } from 'app/core/constants';
 import { AuthDataService, DataService } from 'app/core/services';
 import { Router } from '@angular/router';
-import { AddressDataService } from '../../../../core/services/data/address-data.service';
+import { AddressDataService } from 'app/core/services/data/address-data.service';
 
 @Component({
-  selector: 'app-account-layout',
+  selector: 'account-layout',
   templateUrl: './account-layout.component.html',
-  styles: [
-  ]
 })
 export class AccountLayoutComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;

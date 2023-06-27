@@ -126,13 +126,15 @@
                     <td>
                         <span class="fs-14px fw-500">{{item.total | currency:'S/'}}</span>
                     </td>
-                    <td>
-                        <div class="d-flex justify-content-center">
-                            <a class="btn btn-sm bg-green-with-hover text-white cp">
-                                <i class="fa-regular fa-eye"></i>
-                            </a>
-                        </div>
-                    </td>
+                    <ng-container *ngIf="item.payment.voucher; else emptyTd">
+                        <td>
+                            <div class="d-flex justify-content-center">
+                                <a href="{{item.payment.voucher}}" target="_blank" class="btn btn-sm bg-green-with-hover text-white cp">
+                                    <i class="fa-regular fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </ng-container>
                     <td>{{item.payment.totalPaid | currency:'S/'}}</td>
                     <ng-container *ngIf="item.payment.totalRefunded; else emptyTd">
                         {{item.payment.totalRefunded | currency:'S/'}}

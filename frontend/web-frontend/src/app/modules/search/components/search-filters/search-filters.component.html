@@ -30,7 +30,7 @@
                     [checked]="searchDataService.searchRequest.categoriesFilter[0]===item.name"
                     >
                 <label class="form-check-label" [for]="item.name">
-                    {{  item.name }}
+                    {{  item.name | titlecase }}
                 </label>
             </div>
         </ng-container>

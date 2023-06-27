@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes, Constants } from 'app/core/constants';
-import { OrderStatus } from 'app/core/enums/order-status';
 import { Utils } from 'app/core/helpers/utils';
 import { DynamicReport, Order } from 'app/core/models';
 import { AuthDataService, DataService, OrderDataService, OrderService } from 'app/core/services';
 
 @Component({
-  selector: 'app-orders',
+  selector: 'orders',
   templateUrl: './orders.component.html'
 })
 export class OrdersComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly constants: typeof Constants = Constants;
   readonly utils: typeof Utils = Utils;
-
 
   searchResults: DynamicReport<Order> = {
     data: [],
@@ -48,7 +46,6 @@ export class OrdersComponent {
     this.pagesUI = Utils.generatePagesUIArray(response.totalPages, this.page);
     this.loadingOrders = false;
     this.dataService.disableLoading();
-    console.log(response);
   }
 
   updatePage(page: number): void {

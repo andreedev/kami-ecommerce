@@ -6,7 +6,7 @@ import { CustomerDataService, CustomerService, DataService } from 'app/core/serv
 import moment from 'moment';
 
 @Component({
-  selector: 'app-customer-report',
+  selector: 'customer-report',
   templateUrl: './customer-report.component.html'
 })
 export class CustomerReportComponent implements OnInit {

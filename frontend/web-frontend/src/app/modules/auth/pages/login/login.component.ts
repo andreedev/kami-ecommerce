@@ -12,7 +12,7 @@ import { AuthDataService } from 'app/core/services/data/auth-data.service';
 import { DataService } from 'app/core/services/data/data.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {

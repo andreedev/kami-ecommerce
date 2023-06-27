@@ -8,10 +8,8 @@ import { AuthStatus } from 'app/core/enums/auth-status';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-link-to-google-account',
-  templateUrl: './link-to-google-account.component.html',
-  styles: [
-  ]
+  selector: 'link-to-google-account',
+  templateUrl: './link-to-google-account.component.html'
 })
 export class LinkToGoogleAccountComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;

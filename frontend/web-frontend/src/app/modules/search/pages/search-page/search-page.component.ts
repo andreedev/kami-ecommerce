@@ -9,7 +9,7 @@ import { SearchDataService } from 'app/core/services/data/search-data.service';
 import { environment } from 'assets/environments/environment';
 
 @Component({
-  selector: 'app-search-page',
+  selector: 'search-page',
   templateUrl: './search-page.component.html'
 })
 export class SearchPageComponent {

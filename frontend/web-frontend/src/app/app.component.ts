@@ -4,7 +4,7 @@ import { DataService, CartDataService, SearchDataService, ProductModalDataServic
 import { AddressDataService } from './core/services/data/address-data.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'root',
   templateUrl: './app.component.html'
 })
 export class AppComponent {

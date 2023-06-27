@@ -9,7 +9,7 @@ import { AddressDataService } from 'app/core/services/data/address-data.service'
 import { CartDataService } from 'app/core/services/data/cart-data.service';
 
 @Component({
-  selector: 'app-checkout-page',
+  selector: 'checkout-page',
   templateUrl: './checkout-page.component.html'
 })
 export class CheckoutPageComponent implements OnInit, OnDestroy {
@@ -65,6 +65,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.orderDataService.order.payment.paymentMethod,
       document.querySelector('#file')!
     );
+    this.dataService.disableLoading();
     if (response === null) {
       this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
       return;
@@ -83,10 +84,8 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
       this.cartDataService.clearCart(false);
       this.orderDataService.reset();
       this.orderDataService.order = response.data;
-      this.dataService.disableLoading();
       this.router.navigate([AppRoutes.ORDERS_COMPONENT_ROUTE_NAME]);
     }
-    this.dataService.disableLoading();
   }
 
   async calculatePayment(): Promise<void> {

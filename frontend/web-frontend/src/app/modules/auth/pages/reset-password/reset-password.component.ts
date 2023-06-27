@@ -7,7 +7,7 @@ import { Utils } from 'app/core/helpers/utils';
 import { AuthService, AuthDataService, DataService } from 'app/core/services';
 
 @Component({
-  selector: 'app-reset-password',
+  selector: 'reset-password',
   templateUrl: './reset-password.component.html'
 })
 export class ResetPasswordComponent {

@@ -8,7 +8,7 @@ import { Utils } from 'app/core/helpers/utils';
 import { AuthService, AuthDataService, DataService } from 'app/core/services';
 
 @Component({
-  selector: 'app-verify-email',
+  selector: 'verify-email',
   templateUrl: './verify-email.component.html'
 })
 export class VerifyEmailComponent implements OnInit{

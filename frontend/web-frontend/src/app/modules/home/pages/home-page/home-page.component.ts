@@ -4,7 +4,7 @@ import { DataService, ProductService } from 'app/core/services';
 import { CategoryDataService } from 'app/core/services/data/category-data.service';
 
 @Component({
-  selector: 'app-home-page',
+  selector: 'home-page',
   templateUrl: './home-page.component.html'
 })
 export class HomePageComponent implements OnInit {

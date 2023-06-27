@@ -8,10 +8,8 @@ import { DataService, ProductService } from 'app/core/services';
 import moment from 'moment';
 
 @Component({
-  selector: 'app-product-report',
-  templateUrl: './product-report.component.html',
-  styles: [
-  ]
+  selector: 'product-report',
+  templateUrl: './product-report.component.html'
 })
 export class ProductReportComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;

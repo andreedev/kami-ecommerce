@@ -10,10 +10,8 @@ import { AuthDataService } from 'app/core/services/data/auth-data.service';
 import { AuthStatus } from 'app/core/enums/auth-status';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styles: [
-  ]
+  selector: 'sign-up',
+  templateUrl: './sign-up.component.html'
 })
 export class SignUpComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
