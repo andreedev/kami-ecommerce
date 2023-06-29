@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -57,7 +56,7 @@ public class Product {
         this.mediaUrls = mediaUrls;
         this.keywords = keywords;
         this.stock = stock;
-        this.status = Enums.ProductStatus.CREATED.getCode();
+        this.status = Enums.ProductStatus.UNPUBLISHED.getCode();
         this.rating = 0;
     }
 

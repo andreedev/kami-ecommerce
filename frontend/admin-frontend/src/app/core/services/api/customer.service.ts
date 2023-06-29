@@ -17,7 +17,7 @@ export class CustomerService {
     private authService: AuthService
   ) { }
 
-  async customerReport(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Customer> | null> {
+  async report(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Customer> | null> {
     try {
       const headers = this.authService.getAuthHeaders();
       const body = { query, page, statusFilter, dateFilter }
@@ -30,9 +30,9 @@ export class CustomerService {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.customerReport(query, page, statusFilter, dateFilter);
+        return await this.report(query, page, statusFilter, dateFilter);
       }
-      throw error;
+      return error;
     }
   }
 
@@ -41,7 +41,7 @@ export class CustomerService {
       const body = addresses
       const headers = this.authService.getAuthHeaders();
       const response: any = await firstValueFrom(
-        this.http.post(Utils.getURL(Endpoints.FIND_ADDRESSES), body, {headers})
+        this.http.post(Utils.getURL(Endpoints.FIND_ADDRESSES), body, { headers })
       );
       return response;
     } catch (error: any) {

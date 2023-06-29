@@ -1,15 +1,20 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Utils } from 'app/core/helpers/utils';
 import { Address, DynamicReport } from 'app/core/models';
 import { Customer } from 'app/core/models/customer';
 import { CustomerDataService, CustomerService, DataService } from 'app/core/services';
 import moment from 'moment';
+import { AppRoutes } from 'app/core/constants/app-routes';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'customer-report',
-  templateUrl: './customer-report.component.html'
+  templateUrl: './customer-report.component.html',
+  providers: [MessageService]
 })
-export class CustomerReportComponent implements OnInit {
+export class CustomerReportComponent{
   query: string = '';
   loading: boolean = true;
   statusFilter: number | null = null;
@@ -31,12 +36,10 @@ export class CustomerReportComponent implements OnInit {
   constructor(
     public dataService: DataService,
     public customerService: CustomerService,
-    public customerDataService: CustomerDataService
+    public customerDataService: CustomerDataService,
+    private router: Router,
+    private messageService: MessageService,
   ) { }
-
-  ngOnInit() {
-
-  }
 
   async getReport(e: any = null): Promise<void> {
     const dateFilter = {
@@ -45,8 +48,16 @@ export class CustomerReportComponent implements OnInit {
     }
     this.dataService.enableLoading();
     this.loading = true;
-    const response: DynamicReport<Customer> | null = await this.customerService.customerReport(this.query, this.currentPage, this.statusFilter, dateFilter);
-    if (response!.data.length !== 0) {
+    const response: any = await this.customerService.report(this.query, this.currentPage, this.statusFilter, dateFilter);
+    if (response instanceof HttpErrorResponse) {
+      if (response.status === 401) {
+        this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
+        return;
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Internal error' });
+        this.dataService.disableLoading();
+      }
+    }if (response!.data.length !== 0) {
       this.customersList = response!.data;
       this.loading = false;
       Utils.generatePagesUIArray(response!.totalPages, this.currentPage);

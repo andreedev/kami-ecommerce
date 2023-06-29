@@ -47,7 +47,7 @@ public class ProductController {
                         .mediaUrls(req.getMediaUrls())
                         .keywords(req.getKeywords())
                         .stock(req.getStock())
-                        .status(Enums.ProductStatus.CREATED.getCode())
+                        .status(Enums.ProductStatus.UNPUBLISHED.getCode())
                         .rating(0)
                         .build()
         ));

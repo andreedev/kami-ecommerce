@@ -1,9 +1,4 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { Constants } from '../../constants';
-import { Employee } from 'app/core/models';
 import { Product } from '../../models/product';
 
 @Injectable({
@@ -18,13 +13,9 @@ export class DataService {
 
   displayMobileMenu: boolean = false
 
-  loggedInEmployee: Employee | null = null;
-
   selectedProduct: Product | undefined;
 
-  constructor(
-    private cookieService: CookieService,
-  ) {
+  constructor() {
     this.screenWidth = window.innerWidth;
   }
   /* loading */
@@ -33,13 +24,6 @@ export class DataService {
   }
   disableLoading(): void {
     setTimeout(() => { this.loading = false }, 0)
-  }
-
-
-  clearData(): void {
-    this.loggedInEmployee = null
-    this.displayMobileMenu = false
-
   }
 
 }

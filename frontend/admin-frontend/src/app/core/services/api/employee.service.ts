@@ -4,7 +4,6 @@ import { Endpoints } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { Employee } from 'app/core/models';
 import { firstValueFrom } from 'rxjs';
-import { DataService } from '../data/data.service';
 import { AuthService } from './auth.service';
 
 @Injectable({

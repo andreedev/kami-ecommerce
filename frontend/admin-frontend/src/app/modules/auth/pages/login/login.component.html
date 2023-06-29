@@ -8,7 +8,7 @@
             <div class="mb-3">
                 <input type="password" class="form-control" placeholder="password" [(ngModel)]="password" (keyup.enter)="login()">
             </div>
-            <p class="text-danger text-center fs-12px">{{ message }}</p>
+            <p class="text-red text-center fs-12px" [ngClass]="messageClass">{{ message }}</p>
             <div class="d-grid gap-2">
                 <button class="btn btn-primary btn-block" (click)="login()">LOGIN</button>
             </div>

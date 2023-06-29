@@ -7,6 +7,7 @@ import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models/product';
 import { DataService, ProductService } from 'app/core/services';
+// @ts-ignore
 import * as moment from 'moment';
 
 @Component({

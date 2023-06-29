@@ -1,10 +1,13 @@
-import { Component, Inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
-import { AuthService, DataService } from 'app/core/services';
+import { AuthStatus } from 'app/core/enums/auth-status';
+import { AuthService, DataService, EmployeeService } from 'app/core/services';
+import { AuthDataService } from 'app/core/services/data/auth-data.service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
@@ -13,26 +16,33 @@ export class LoginComponent {
   username: string = ''
   password: string = ''
   message: string = ''
+  messageClass: string = ''
 
   constructor(
-    @Inject(AuthService) private authService: AuthService,
-    @Inject(DataService) private dataService: DataService,
-    @Inject(Router) private router: Router
+    private authService: AuthService,
+    private authDataService: AuthDataService,
+    private dataService: DataService,
+    private router: Router
   ) { }
 
-  login(): void {
+  async login(): Promise<void> {
     this.message = ''
     this.dataService.enableLoading()
-    this.authService.login(this.username, this.password).then(res => {
-      this.dataService.disableLoading()
-      if (!res) {
-        this.message = 'Invalid credentials'
-        return
+    const response: any = await this.authService.login(this.username, this.password);
+    if (response instanceof HttpErrorResponse) {
+      if (response.error.code === -1 && response.status === 401) {
+        this.messageClass = 'text-red';
+        this.message = 'Invalid credentials';
+      } else {
+        this.messageClass = 'text-red';
+        this.message = 'Internal error';
       }
-      this.authService.updateSession(res)
-      this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME])
+    } else if (response.code === 1) {
+      this.authDataService.updateSession(response);
+      this.authDataService.authStatus.next(AuthStatus.LOGGED_IN.getName());
+      this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
     }
-    )
+    this.dataService.disableLoading()
   }
 
 }

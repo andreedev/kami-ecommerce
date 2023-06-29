@@ -5,7 +5,7 @@ export abstract class Endpoints {
     static readonly REFRESH: string = `${Endpoints.AUTH}/refresh`
 
     static readonly EMPLOYEE: string = 'admin/employee'
-    static readonly GET_EMPLOYEE: string = `${Endpoints.EMPLOYEE}/getEmployee`
+    static readonly GET_EMPLOYEE: string = `${Endpoints.EMPLOYEE}/get`
 
     static readonly CUSTOMER: string = 'admin/customer'
     static readonly CUSTOMER_REPORT: string = `${Endpoints.CUSTOMER}/report`

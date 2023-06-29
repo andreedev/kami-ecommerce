@@ -54,6 +54,7 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public Customer registerCustomer(Customer customer) {
         if (!customer.getIsLinkedToGoogleAccount()) customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setEmail(customer.getEmail().toLowerCase());
         return customerRepository.registerCustomer(customer);
     }
 

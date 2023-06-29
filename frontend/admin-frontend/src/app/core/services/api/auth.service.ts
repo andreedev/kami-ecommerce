@@ -1,12 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Constants, Endpoints } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
+import { JwtResponse } from 'app/core/models';
 import { CookieService } from 'ngx-cookie-service';
 import { firstValueFrom } from 'rxjs';
-import { Router } from '@angular/router';
-import { Constants, Endpoints, AppRoutes } from 'app/core/constants';
-import { Utils } from 'app/core/helpers/utils';
-import { LoginResponse, Employee } from 'app/core/models';
-import { DataService } from '..';
 
 @Injectable({
   providedIn: 'root'
@@ -15,56 +13,36 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private cookieService: CookieService,
-    private dataService: DataService,
-    private router: Router
+    private cookieService: CookieService
   ) { }
-
-  updateSession = (res: LoginResponse): void => {
-    this.cookieService.set(Constants.SESSION_TOKEN_NAME, res.token!)
-    this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, res.refreshToken!)
-  }
-
-  logout(): void {
-    this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
-    this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
-  }
-
-  verifyUserIsAuthenticated(): boolean {
-    return this.cookieService.check(Constants.REFRESH_SESSION_TOKEN_NAME)
-  }
 
   async refreshToken(): Promise<boolean> {
     try {
-      const refreshToken = this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME))
-      const body = { refreshToken }
-      const headers = this.getAuthHeaders()
-      const response: LoginResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }))
-      this.updateSession(response)
+      const refreshToken = this.cookieService.get((Constants.REFRESH_SESSION_TOKEN_NAME));
+      const body = { refreshToken };
+      const headers = this.getAuthHeaders();
+      const response: JwtResponse = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.REFRESH), body, { headers }));
+      this.cookieService.set(Constants.SESSION_TOKEN_NAME, response.token!)
+      this.cookieService.set(Constants.REFRESH_SESSION_TOKEN_NAME, response.refreshToken!)
       return true
     } catch (error: any) {
       if (error.status === 401) {
-        this.logout()
-        this.redirectToLogin()
-        return false
+        this.cookieService.delete(Constants.SESSION_TOKEN_NAME);
+        this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME);
+        window.location.reload();
       }
-      throw error
+      return false
     }
   }
 
-  async login(username: string, password: string): Promise<LoginResponse | null> {
+  async login(username: string, password: string): Promise<JwtResponse | any> {
     try {
       const body = { username, password }
       const response: any = await firstValueFrom(this.http.post(Utils.getURL(Endpoints.LOGIN), body))
       return response
     } catch (error: any) {
-      if (error.status === 401) return null
-      throw error
+      return error;
     }
-  }
-
-  private redirectToLogin(): void {
-    this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
   }
 
   getAuthHeaders(): HttpHeaders {

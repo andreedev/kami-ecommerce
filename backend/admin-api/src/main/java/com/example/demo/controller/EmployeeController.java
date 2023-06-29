@@ -24,9 +24,9 @@ public class EmployeeController {
         return employeeService.save(req.toEmployee());
     }
 
-    @GetMapping("getEmployee")
+    @GetMapping("get")
     public Object getEmployee(){
-        log.info("save");
+        log.info("getEmployee");
         Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return Employee.builder().name(employee.getName()).build();
     }

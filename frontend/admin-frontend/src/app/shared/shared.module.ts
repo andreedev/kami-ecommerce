@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { SharedRoutingModule } from './shared-routing.module';
 import { ChipsModule } from 'primeng/chips';
 import { ToastModule } from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   //Components
@@ -40,7 +41,8 @@ import { ToastModule } from 'primeng/toast';
     ScrollPanelModule,
     DialogModule,
     ChipsModule,
-    ToastModule
+    ToastModule,
+    SkeletonModule
   ],
 
   //Components and modules exports
@@ -60,7 +62,8 @@ import { ToastModule } from 'primeng/toast';
     ScrollPanelModule,
     DialogModule,
     ChipsModule,
-    ToastModule
+    ToastModule,
+    SkeletonModule
   ]
 })
 export class SharedModule { }

@@ -3,6 +3,7 @@ package com.example.demo.config.jwt;
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,12 +53,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.getUsernameFromToken(token);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+                e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 return;
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            } catch (Exception e){
+                e.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return;
             }
         } else {

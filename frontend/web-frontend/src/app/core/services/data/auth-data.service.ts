@@ -69,6 +69,7 @@ export class AuthDataService {
       }
       this.authStatus.next(AuthStatus.NONE.getName())
     } else {
+      this.authStatus.next(AuthStatus.NONE.getName())
       setTimeout(() => {
         this.profileLoadedEvent.emit(false);
       }, 150);
@@ -81,8 +82,8 @@ export class AuthDataService {
   }
 
   logout(): void {
-    this.cookieService.delete(Constants.SESSION_TOKEN_NAME)
-    this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME)
+    this.cookieService.delete(Constants.SESSION_TOKEN_NAME);
+    this.cookieService.delete(Constants.REFRESH_SESSION_TOKEN_NAME);
     this.authStatus.next(AuthStatus.NONE.getName());
   }
 

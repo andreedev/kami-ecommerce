@@ -9,5 +9,5 @@ export { Customer } from './customer';
 export { Discount } from './discount';
 export { Employee } from "./employee";
 export { DynamicReport } from './rest/dynamic-report';
-export { LoginResponse } from './rest/login-response';
+export { JwtResponse } from './rest/jwt-response';
 export { SearchRequest } from './rest/search-request';

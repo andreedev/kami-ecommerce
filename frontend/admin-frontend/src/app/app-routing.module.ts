@@ -6,9 +6,20 @@ import { AuthenticatedGuard } from './core/guards/authenticated.guard';
 import { UnauthenticatedGuard } from './core/guards/unauthenticated.guard';
 import { AuthLayoutComponent } from './shared/layouts/auth-layout/auth-layout.component';
 import { MainLayoutComponent } from './shared/layouts/main-layout/main-layout.component';
-import { OrderModule } from './modules/order/order.module';
 
 const routes: Routes = [
+  {
+    path: 'auth',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./modules/auth/auth.module').then(m => m.AuthModule)
+      }
+    ],
+    canActivate: [UnauthenticatedGuard]
+  },
   {
     path: '',
     component: MainLayoutComponent,
@@ -41,18 +52,6 @@ const routes: Routes = [
       { path: '', pathMatch: "full", redirectTo: AppRoutes.HOME_MODULE_NAME }
     ],
     canActivate: [AuthenticatedGuard]
-  },
-  {
-    path: 'auth',
-    component: AuthLayoutComponent,
-    children: [
-      {
-        path: '',
-        loadChildren: () =>
-          import('./modules/auth/auth.module').then(m => m.AuthModule)
-      }
-    ],
-    canActivate: [UnauthenticatedGuard]
   },
   { path: "", pathMatch: "full", redirectTo: "" },
   { path: "**", redirectTo: "" }

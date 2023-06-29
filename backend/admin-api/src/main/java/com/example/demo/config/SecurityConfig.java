@@ -40,7 +40,6 @@ public class SecurityConfig {
             corsConfiguration.applyPermitDefaultValues();
             corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090","http://localhost:4200","http://localhost:4201", "http://kamistore.com.s3-website-us-east-1.amazonaws.com"));
-//            corsConfiguration.setAllowedOrigins(Collections.singletonList("*"));
             return corsConfiguration;
         });
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -1,26 +1,34 @@
 <div class="border-2 border-end border-light">
     <div class="d-flex justify-content-center w-120px mx-auto my-3">
-        <img src="https://picsum.photos/100/50" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="cursor-pointer" (click)="closeMobileMenu()">
+        <img src="https://picsum.photos/100/50" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME" class="cursor-pointer" 
+            (click)="closeMobileMenu()">
     </div>
     <div class="d-flex">
-        <div class="btn-group mb-3 mx-auto">
-            <button type="button" class="btn btn-light btn-sm dropdown-toggle cp" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="fas fa-user-shield"></i>
-                {{ dataService.loggedInEmployee ? dataService.loggedInEmployee.name : '' }}
-            </button>
-            <ul class="dropdown-menu">
-                <li class="cp">
-                    <a class="dropdown-item" (click)="closeMobileMenu()">
-                        <i class="fas fa-cog"></i>
-                        Profile
-                    </a>
-                </li>
-                <li class="cp">
-                    <app-logout></app-logout>
-                </li>
-            </ul>
-        </div>
+        <ng-container *ngIf="authDataService.authStatus.value===AuthStatus.LOADING.getName() || !authDataService.loggedInEmployee">
+            <div class="d-flex justify-content-center w-100 mb-3">
+                <p-skeleton width="6em" height="2rem"></p-skeleton>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="authDataService.authStatus.value===AuthStatus.LOGGED_IN.getName() && authDataService.loggedInEmployee">
+            <div class="btn-group mb-3 mx-auto">
+                <button type="button" class="btn btn-light btn-sm dropdown-toggle cp" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <i class="fas fa-user-shield"></i>
+                    {{ authDataService.loggedInEmployee!.name }}
+                </button>
+                <ul class="dropdown-menu">
+                    <li class="cp">
+                        <a class="dropdown-item" (click)="closeMobileMenu()">
+                            <i class="fas fa-cog"></i>
+                            Profile
+                        </a>
+                    </li>
+                    <li class="cp">
+                        <app-logout></app-logout>
+                    </li>
+                </ul>
+            </div>
+        </ng-container>
     </div>
     <div class="list-group w-155px">
         <a class="list-group-item list-group-item-action cp" [routerLink]="appRoutes.HOME_MODULE_ROUTE_NAME"

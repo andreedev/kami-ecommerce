@@ -15,8 +15,7 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-  ) {
-  }
+  ) {}
 
   async refreshToken(): Promise<boolean> {
     try {

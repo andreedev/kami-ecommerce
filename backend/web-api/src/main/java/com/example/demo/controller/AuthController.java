@@ -17,6 +17,7 @@ import com.example.demo.utils.Enums;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -122,9 +123,9 @@ public class AuthController {
     }
 
     @PostMapping("refresh")
-    public ResponseEntity<Object> refreshToken (@RequestBody JwtTokenRefreshRequest request) {
+    public ResponseEntity<Object> refreshToken (@RequestBody Map<String, String> request) {
         try {
-            String refreshToken = request.getRefreshToken();
+            String refreshToken = request.get("refreshToken");
             String username = jwtUtil.getUsernameFromToken(refreshToken);
             Customer customer = customerService.findByEmail(username);
             if (customer==null)
@@ -137,9 +138,12 @@ public class AuthController {
             String jwtToken = jwtUtil.generateJwtToken(customer.getEmail(), new ArrayList<>(customer.getRoles()));
             log.info("User: "+username+ " refreshed token successfully");
             return ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken));
+        } catch (DataAccessResourceFailureException e) {
+            System.out.println(e.getMessage());
+            throw e;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().build();
+            throw e;
         }
     }
 

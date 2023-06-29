@@ -77,13 +77,8 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public Customer findByEmail(String email) {
         log.info("findByEmail");
         Query query = new Query();
-        query.addCriteria(new Criteria().andOperator(
-                where("email").regex(email, "i")
-        ));
+        query.addCriteria(where("email").is(email.toLowerCase()));
         query.fields()
-//                .exclude("documentType")
-//                .exclude("documentNumber")
-//                .exclude("phoneNumber")
                 .exclude("createdAt")
                 .exclude("updatedAt")
         ;

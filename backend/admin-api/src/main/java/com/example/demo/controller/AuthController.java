@@ -6,17 +6,22 @@ import com.example.demo.config.jwt.model.JwtRequest;
 import com.example.demo.config.jwt.model.JwtResponse;
 import com.example.demo.config.jwt.model.JwtTokenRefreshRequest;
 import com.example.demo.model.Employee;
+import com.example.demo.model.validation.SessionResponse;
 import com.example.demo.service.EmployeeService;
+import com.example.demo.utils.Enums;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,20 +49,28 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<Object> createToken(@RequestBody JwtRequest request) throws Exception {
+    public ResponseEntity<SessionResponse> createToken(@RequestBody JwtRequest request) {
+        Authentication authentication;
+        SessionResponse sessionResponse = new SessionResponse();
         try {
-            UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
-            final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            final String jwtToken = jwtUtil.generateJwtToken(userDetails.getUsername(), userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-            final String refreshJwtToken =  jwtUtil.generateJwtRefreshToken(userDetails);
-            log.info("User logged succesfully: "+request.getUsername());
-            return ResponseEntity.ok(new JwtResponse(jwtToken, refreshJwtToken));
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (BadCredentialsException | UsernameNotFoundException e) {
+            System.out.println(e.getMessage());
+            sessionResponse.setCode(-1);
+            sessionResponse.setMessage("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(sessionResponse);
         }
+        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        final String jwtToken = jwtUtil.generateJwtToken(userDetails.getUsername(), userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+        final String refreshJwtToken =  jwtUtil.generateJwtRefreshToken(userDetails);
+        log.info("User logged succesfully: "+request.getUsername());
+        SessionResponse response = SessionResponse.builder()
+                .code(1)
+                .data(new JwtResponse(jwtToken, refreshJwtToken))
+                .build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("refresh")

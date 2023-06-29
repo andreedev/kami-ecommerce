@@ -45,7 +45,7 @@ public class Enums {
     @Getter
     @AllArgsConstructor
     public enum ProductStatus {
-        CREATED(1, "created"),
+        UNPUBLISHED(1, "unpublished"),
         PUBLISHED(2, "published"),
         DISABLED(3, "disabled");
         private final int code;
