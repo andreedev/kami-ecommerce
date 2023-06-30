@@ -214,6 +214,10 @@ hr {
     padding: 0;
 }
 
+.p-galleria .p-galleria-indicators {
+    padding: 8px 0px;
+}
+
 .orden {
     width: 143px;
 }

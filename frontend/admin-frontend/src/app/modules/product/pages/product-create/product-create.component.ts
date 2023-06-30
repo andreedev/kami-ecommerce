@@ -18,6 +18,7 @@ export class ProductCreateComponent {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
 
   product: Product = {
+    isAvailable: true,
     name: '',
     sku: '',
     price: 0.00,

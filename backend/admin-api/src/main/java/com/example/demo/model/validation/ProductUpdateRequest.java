@@ -1,8 +1,6 @@
 package com.example.demo.model.validation;
 
-import com.example.demo.model.Product;
 import com.example.demo.utils.validators.ExistingProductId;
-import com.example.demo.utils.validators.ValidProductStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -22,9 +20,8 @@ public class ProductUpdateRequest {
     @NotBlank(message = "The id is required")
     private String id;
 
-    @ValidProductStatus
-    @NotNull(message = "The status is required")
-    private Integer status;
+    @NotNull(message = "The availability is required")
+    private Boolean isAvailable;
 
     @NotBlank(message = "The name is required")
     @Size(min = 4, max = 120, message = "The product name must be between 4 and 120 characters.")

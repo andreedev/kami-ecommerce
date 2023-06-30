@@ -20,6 +20,9 @@ public class ProductCreateRequest {
     @Size(min = 4, max = 120, message = "The product name must be between 4 and 120 characters.")
     private String name;
 
+    @NotNull(message = "The availability is required")
+    private Boolean isAvailable;
+
     @UniqueProductSku
     @NotBlank(message = "The sku is required")
     private String sku;

@@ -36,7 +36,7 @@ export class MainHeaderComponent implements OnInit {
   }
 
   search(): void {
-    // if (this.searchDataService.searchRequest.query!.length < Constants.QUERY_SEARCH_MIN_LENGTH) return;
+    if (this.searchDataService.searchRequest.query!.length < Constants.QUERY_SEARCH_MIN_LENGTH) return;
     const queryParams = {
       query : this.searchDataService.searchRequest.query
     };

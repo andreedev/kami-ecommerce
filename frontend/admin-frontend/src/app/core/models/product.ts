@@ -1,7 +1,7 @@
 import { Discount } from './discount';
 export interface Product {
     id?: string
-    status?: string
+    isAvailable?: boolean,
     name?: string
     sku?: string
     price?: number

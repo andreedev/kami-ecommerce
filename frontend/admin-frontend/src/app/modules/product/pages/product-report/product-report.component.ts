@@ -15,7 +15,7 @@ export class ProductReportComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   query: string = '';
   loading: boolean = true;
-  statusFilter: number | null = null;
+  availabilityFilter: boolean | null = null;
   dateFilter: { startDate: any, endDate: any } = {
     startDate: moment().subtract(1, 'months'),
     endDate: moment(),
@@ -29,7 +29,7 @@ export class ProductReportComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
 
-  uiPaginationArray: any[] = [];
+  pagesUI: any[] = [];
 
   displayImagesPopUp: boolean = false;
   selectedProductImages: string[] = [];
@@ -44,18 +44,21 @@ export class ProductReportComponent implements OnInit {
     this.dataService.selectedProduct = undefined
   }
 
-  async getReport(e: any = null): Promise<void> {
+  async report(e: any = null): Promise<void> {
     const dateFilter = {
       startDate: Utils.formatDate(this.dateFilter.startDate),
       endDate: Utils.formatDate(this.dateFilter.endDate)
     }
     this.dataService.enableLoading();
     this.loading = true;
-    const response: DynamicReport<Product> | null = await this.productService.productReport(this.query, this.currentPage, this.statusFilter, dateFilter);
-    if (response!.data.length !== 0) {
-      this.productsList = response!.data;
+    const response: DynamicReport<Product> | null = await this.productService.productReport(this.query, this.currentPage, this.availabilityFilter, dateFilter);
+    if (response === null){
+      this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
+    } else if (response.data.length !== 0) {
+      this.productsList = response.data;
       this.loading = false;
-      Utils.generatePagesUIArray(response!.totalPages, this.currentPage);
+      this.pagesUI = Utils.generatePagesUIArray(response.totalPages, this.currentPage);
+      this.totalPages = response.totalPages;
     }
     this.dataService.disableLoading();
   }
@@ -63,7 +66,7 @@ export class ProductReportComponent implements OnInit {
 
   updatePage(page: number): void {
     this.currentPage = page;
-    this.getReport();
+    this.report();
   }
 
   switchDisplayProductImages(mediaUrls: string[]): void {

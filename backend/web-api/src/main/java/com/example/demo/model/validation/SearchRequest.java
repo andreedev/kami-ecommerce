@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SearchRequest {
     @NotNull(message = "The query is required")
-//    @Size(min = 3, max = 150, message = "The query must be between 3 and 150 characters.")
+    @Size(min = 3, max = 150, message = "The query must be between 3 and 150 characters.")
     private String query;
 
     @NotNull(message = "Page is required")

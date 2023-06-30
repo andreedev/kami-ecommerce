@@ -22,7 +22,6 @@ export class AuthDataService {
     ) {
     this.authStatus.subscribe((value:any)=>{
       if (value===AuthStatus.LOGGED_IN.getName()){
-        console.log(value);
         this.loadEmployee();
       }
     });

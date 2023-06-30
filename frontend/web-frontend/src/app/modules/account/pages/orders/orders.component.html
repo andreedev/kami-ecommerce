@@ -108,7 +108,7 @@
                 <ul class="pagination pagination-sm">
                     <li class="page-item">
                         <ng-container *ngIf="page-1 > 0; else previusPageDisabled">
-                            <span class="page-link cp" (click)="updatePage(page!-1)"><i
+                            <span class="page-link cp" (click)="updatePage(page-1)"><i
                                     class="fas fa-angle-left"></i></span>
                         </ng-container>
                         <ng-template #previusPageDisabled>

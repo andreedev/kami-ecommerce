@@ -117,12 +117,11 @@
                             </li>
 
                             <li class="page-item">
-                                <!-- <ng-container
-                                    *ngIf="searchDataService.searchRequest.page < searchDataService.searchRequest?.data.length; else nextPageDisabled">
-                                    <span class="page-link cp"
-                                        (click)="updatePage(searchDataService.searchRequest.page+1)"><i
-                                            class="fas fa-angle-right"></i></span>
-                                </ng-container> -->
+                                <ng-container *ngIf="searchDataService.searchRequest.page! < searchDataService.searchResults.totalPages; else nextPageDisabled">
+                                    <span class="page-link cp" (click)="updatePage(searchDataService.searchRequest.page!+1)">
+                                        <i class="fas fa-angle-right"></i>
+                                    </span>
+                                </ng-container>
                                 <ng-template #nextPageDisabled>
                                     <span class="page-link cp"><i class="fas fa-angle-right"></i></span>
                                 </ng-template>

@@ -12,7 +12,7 @@ import lombok.*;
 public class ProductReportRequest {
     private String query;
     private Integer page;
-    private Integer statusFilter;
+    private Boolean availabilityFilter;
     @NotNull(message = "dateFilter must not be null")
     @Valid
     private DateFilter dateFilter;

@@ -20,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.demo.utils.Constants.PRODUCT_SEARCH_PAGE_SIZE;
+
 @Slf4j
 @Component
 public class ProductRepositoryImpl implements ProductRepository {
@@ -36,11 +38,12 @@ public class ProductRepositoryImpl implements ProductRepository {
         Query query = new Query();
 
         if (req.getQuery() != null && !req.getQuery().isEmpty()) {
-            Criteria nameCriteria = Criteria.where("name").regex(req.getQuery(), "i");
-            Criteria usernameCriteria = Criteria.where("sku").regex(req.getQuery(), "i");
-            Criteria emailCriteria = Criteria.where("keywords").regex(req.getQuery(), "i");
-            Criteria brandCriteria = Criteria.where("brand").regex(req.getQuery(), "i");
-            query.addCriteria(new Criteria().orOperator(nameCriteria, usernameCriteria, emailCriteria, brandCriteria));
+            query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("name").regex(req.getQuery(), "i"),
+                    Criteria.where("sku").regex(req.getQuery(), "i"),
+                    Criteria.where("keywords").regex(req.getQuery(), "i"),
+                    Criteria.where("brand").regex(req.getQuery(), "i")
+            ));
         }
 
         if (req.getCategoriesFilter() != null && !req.getCategoriesFilter().isEmpty()) {
@@ -58,9 +61,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         if (req.getBrandFilter() != null && !req.getBrandFilter().isEmpty()) {
              query.addCriteria(Criteria.where("brand").regex(req.getBrandFilter(), "i"));
         }
-
-        int page = req.getPage() - 1;
-        Pageable pageable = PageRequest.of(page, req.getPageSize());
 
         Sort sort = null;
         if (req.getOrderFilter() == Enums.SearchRequestOrderFilter.DEFAULT.getCode()){
@@ -91,11 +91,14 @@ public class ProductRepositoryImpl implements ProductRepository {
             query.addCriteria(Criteria.where("id").nin(req.getExcludedIds()));
         }
 
-        query.addCriteria(Criteria.where("status").is(Enums.ProductStatus.PUBLISHED.getCode()));
+        query.addCriteria(Criteria.where("isAvailable").is(true));
+
+        int page = req.getPage() - 1;
+        Pageable pageable = PageRequest.of(page, PRODUCT_SEARCH_PAGE_SIZE);
 
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
-        long totalCustomers = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
-        int totalPages = (int) Math.ceil((double) totalCustomers / 20);
+        long total = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
+        int totalPages = (int) Math.ceil((double) total / PRODUCT_SEARCH_PAGE_SIZE);
 
         return DynamicReport.<Product>builder()
                 .data(list)

@@ -44,9 +44,9 @@ export class SearchPageComponent {
           return;
         }
         const query: string = params["query"];
-        // if (!query || query.length < Constants.QUERY_SEARCH_MIN_LENGTH) {
-        //   return this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
-        // }
+        if (!query || query.length < Constants.QUERY_SEARCH_MIN_LENGTH) {
+          return this.router.navigate([AppRoutes.HOME_MODULE_ROUTE_NAME]);
+        }
         this.queryCopy = query;
         this.searchDataService.searchRequest.query = query;
 
@@ -78,7 +78,7 @@ export class SearchPageComponent {
   }
 
   applyFilters(): void {
-    // if (this.dataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH)
+    if (this.searchDataService.searchRequest.query!.length >= Constants.QUERY_SEARCH_MIN_LENGTH)
     this.search();
   }
 

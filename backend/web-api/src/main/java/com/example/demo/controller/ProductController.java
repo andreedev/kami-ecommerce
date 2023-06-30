@@ -25,7 +25,6 @@ public class ProductController {
 
     @PostMapping("search")
     public DynamicReport<Product> search(@RequestBody @Valid SearchRequest req){
-        req.setPageSize(20);
         return productService.search(req);
     }
 

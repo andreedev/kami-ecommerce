@@ -1,8 +1,10 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Order;
 import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
+import com.example.demo.utils.Constants;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +40,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         Query query = new Query();
 
         // Apply filters based on the request parameters
-        if (req.getStatusFilter() != null) {
-            query.addCriteria(Criteria.where("status").is(req.getStatusFilter()));
+        if (req.getAvailabilityFilter() != null) {
+            query.addCriteria(Criteria.where("isAvailable").is(req.getAvailabilityFilter()));
         }
 
         if (req.getQuery() != null && !req.getQuery().isEmpty()) {
@@ -56,13 +58,14 @@ public class ProductRepositoryImpl implements ProductRepository {
         LocalDate endDate = LocalDate.parse(req.getDateFilter().getEndDate(), formatter);
         query.addCriteria(Criteria.where("createdAt").gte(startDate.atStartOfDay()).lte(endDate.atTime(LocalTime.MAX)));
 
-        int page = (req.getPage() != null) ? req.getPage() - 1 : 0;
-        Pageable pageable = PageRequest.of(page, 10);
+        int page = req.getPage() - 1;
+        Pageable pageable = PageRequest.of(page, Constants.PRODUCT_REPORT_PAGE_SIZE);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
-        long totalCustomers = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
-        int totalPages = (int) Math.ceil((double) totalCustomers / 20);
+
+        long total = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
+        int totalPages = (int) Math.ceil((double) total / Constants.PRODUCT_REPORT_PAGE_SIZE);
 
         return DynamicReport.<Product>builder()
                 .data(list)
@@ -117,7 +120,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public Integer updateProduct(Product product) {
         Query query = new Query(Criteria.where("id").is(product.getId()));
         Update update = new Update();
-        update.set("status", product.getStatus());
+        update.set("isAvailable", product.getIsAvailable());
         update.set("name", product.getName());
         update.set("sku", product.getSku());
         update.set("price", product.getPrice());

@@ -17,10 +17,10 @@ export class ProductService {
     private authService: AuthService
   ) { }
 
-  async productReport(query: string, page: number, statusFilter: number | null, dateFilter: {}): Promise<DynamicReport<Product> | null> {
+  async productReport(query: string, page: number, availabilityFilter: any, dateFilter: {}): Promise<DynamicReport<Product> | null> {
     try {
       const headers = this.authService.getAuthHeaders();
-      const body = { query, page, statusFilter, dateFilter }
+      const body = { query, page, availabilityFilter, dateFilter }
       const response: any = await firstValueFrom(
         this.http.post(Utils.getURL(Endpoints.PRODUCT_REPORT), body, { headers })
       );
@@ -30,7 +30,7 @@ export class ProductService {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.productReport(query, page, statusFilter, dateFilter);
+        return await this.productReport(query, page, availabilityFilter, dateFilter);
       }
       throw error;
     }

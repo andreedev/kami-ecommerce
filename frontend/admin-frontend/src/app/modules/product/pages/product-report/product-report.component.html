@@ -9,18 +9,17 @@
                 Search:
             </span>
             <input [(ngModel)]="query" id="buscarProducto" name="q" type="text" class="form-control form-control-sm"
-                (keyup.enter)="getReport()">
+                (keyup.enter)="report()">
         </div>
         <div class="d-flex flex-column mx-4">
             <span class="p-2">
                 <i class="fas fa-filter"></i>
-                Filter by status:
+                Filter by availability:
             </span>
-            <select class="form-select form-select-sm" [(ngModel)]="statusFilter" (change)="getReport()">
-                <option value="null">Ninguno</option>
-                <option value="1">Created</option>
-                <option value="2">Published</option>
-                <option value="3">Disabled</option>
+            <select class="form-select form-select-sm" [(ngModel)]="availabilityFilter" (change)="report()">
+                <option value="null">None</option>
+                <option value="true">Available</option>
+                <option value="false">Unavailable</option>
             </select>
         </div>
         <div class="d-flex flex-column mx-4">
@@ -29,12 +28,12 @@
                 Filter by date:
             </span>
             <input type="text" ngxDaterangepickerMd [(ngModel)]="dateFilter" class="form-control form-control-sm"
-                (change)="getReport($event)" [alwaysShowCalendars]="true" [showDropdowns]="true"
+                (change)="report($event)" [alwaysShowCalendars]="true" [showDropdowns]="true"
                 [locale]="{applyLabel: 'ok', format: 'DD-MM-YYYY'}" [maxDate]="maxDate" />
         </div>
         <div class="d-flex flex-column mx-4">
             <span class="d-none d-md-block p-2 invisible">.</span>
-            <a class="mt-3 mt-md-0 btn btn-sm btn-info" (click)="getReport()">
+            <a class="mt-3 mt-md-0 btn btn-sm btn-info" (click)="report()">
                 <i class="fas fa-sync-alt"></i>
                 Refresh
             </a>
@@ -57,7 +56,7 @@
             <ng-template pTemplate="colgroup">
                 <colgroup>
                     <col style="width:170px">  <!-- id -->
-                    <col style="width:90px">   <!-- status -->
+                    <col style="width:90px">   <!-- availability -->
                     <col style="width:100px">  <!-- sku -->
                     <col style="width:150px">  <!-- name -->
                     <col style="width:70px">   <!-- stock -->
@@ -76,7 +75,7 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th class="fw-bold">ID</th>
-                    <th class="fw-bold">STATUS</th>
+                    <th class="fw-bold">AVAILABLE</th>
                     <th class="fw-bold">SKU</th>
                     <th class="fw-bold">NAME</th>
                     <th class="fw-bold">STOCK</th>
@@ -96,17 +95,18 @@
                 <tr [pSelectableRow]="product">
                     <td>{{product.id}}</td>
                     <td>
-                        <container-element [ngSwitch]="product.status">
-                            <div *ngSwitchCase="1">
-                                <a class="btn btn-sm btn-light border fs-12px">CREATED</a>
+                        <div class="d-flex justify-content-center">
+                            <div *ngIf="product.isAvailable">
+                                <a class="btn btn-sm bg-green-with-hover text-white border fs-12px">
+                                    <i class="fa-solid fa-check"></i>
+                                </a>
                             </div>
-                            <div *ngSwitchCase="2">
-                                <a class="btn btn-sm btn-primary fs-12px">PUBLISHED</a>
+                            <div *ngIf="!product.isAvailable">
+                                <a class="btn btn-sm bg-red-with-hover text-white fs-12px">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
                             </div>
-                            <div *ngSwitchCase="3">
-                                <a class="btn btn-sm btn-warning fs-12px">DISABLED</a>
-                            </div>
-                        </container-element>
+                        </div>
                     </td>
                     <td>{{product.sku}}</td>
                     <td>{{product.name}}</td>
@@ -122,9 +122,9 @@
                     </td>
                     <td>
                         <ng-container *ngIf="product.discount; else empty">
-                            <div class="text-center fs-16px">{{product.discount.percentage}}%</div>
-                            <div class="text-center">{{product.discount.startDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
-                           <div class="text-center">{{product.discount.endDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                            <div class="text-center fs-16px text-red fw-500">{{product.discount.percentage}}%</div>
+                            <div class="text-center text-blue">{{product.discount.startDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
+                           <div class="text-center text-blue">{{product.discount.endDate | date: 'yyyy-MM-dd HH:mm:ss'}}</div>
                         </ng-container>
                     </td>
 
@@ -136,7 +136,12 @@
                     </ng-container>
                     <ng-container *ngIf="product.specifications.length!==0; else empty">
                         <td>
-                            <div *ngFor="let specification of product.specifications">{{specification}}</div>
+                            <div class="max-h-100px overflow-y-auto">
+                                <div class="mb-1" *ngFor="let specification of product.specifications; let last = last">
+                                    {{specification}}
+                                    <hr *ngIf="!last">
+                                </div>
+                            </div>
                         </td>
                     </ng-container>
                     <td>
@@ -171,7 +176,7 @@
                         <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
                     </ng-template>
                 </li>
-                <li *ngFor="let i of uiPaginationArray" class="page-item" [ngClass]="{'active': i==currentPage}">
+                <li *ngFor="let i of pagesUI" class="page-item" [ngClass]="{'active': i==currentPage}">
                     <ng-container *ngIf="i != '...'; else noActivePage">
                         <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
                     </ng-container>

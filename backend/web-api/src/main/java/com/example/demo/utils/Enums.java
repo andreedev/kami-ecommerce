@@ -42,15 +42,6 @@ public class Enums {
         private final String value;
     }
 
-    @Getter
-    @AllArgsConstructor
-    public enum ProductStatus {
-        UNPUBLISHED(1, "unpublished"),
-        PUBLISHED(2, "published"),
-        DISABLED(3, "disabled");
-        private final int code;
-        private final String value;
-    }
 
     @Getter
     @AllArgsConstructor
