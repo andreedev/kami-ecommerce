@@ -52,11 +52,11 @@ public class ProductServiceImpl implements ProductService{
                 .orderFilter(Enums.SearchRequestOrderFilter.RECOMMENDED.getCode())
                 .onSaleFilter(true)
                 .page(1)
-                .pageSize(8)
+                .pageSize(12)
                 .build();
         List<Product> featuredProducts = productRepository.search(req).getData();
         if (featuredProducts.size() < 8){
-            int missing = 8 - featuredProducts.size();
+            int missing = 12 - featuredProducts.size();
             SearchRequest fallbackReq  = SearchRequest.builder()
                     .query("")
                     .orderFilter(Enums.SearchRequestOrderFilter.RECOMMENDED.getCode())

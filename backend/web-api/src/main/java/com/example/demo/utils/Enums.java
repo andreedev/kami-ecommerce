@@ -15,7 +15,7 @@ public class Enums {
     @Getter
     @AllArgsConstructor
     public enum OrderStatus {
-        PENDING(1, "pending"),
+//        PENDING(1, "pending")
         PAYMENT_IN_PROCESS(2, "payment_in_process"),
         PAYMENT_CONFIRMED(3, "payment_confirmed"),
         SHIPPED(4, "shipped"),

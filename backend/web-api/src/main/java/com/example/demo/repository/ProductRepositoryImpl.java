@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.demo.utils.Constants.MAX_PRODUCT_SEARCH_PAGE_SIZE;
 import static com.example.demo.utils.Constants.PRODUCT_SEARCH_PAGE_SIZE;
 
 @Slf4j
@@ -93,12 +94,19 @@ public class ProductRepositoryImpl implements ProductRepository {
 
         query.addCriteria(Criteria.where("isAvailable").is(true));
 
+        if (req.getPageSize()==null){
+            req.setPageSize(PRODUCT_SEARCH_PAGE_SIZE);
+        } else {
+            if (req.getPageSize()>MAX_PRODUCT_SEARCH_PAGE_SIZE){
+                req.setPageSize(PRODUCT_SEARCH_PAGE_SIZE);
+            }
+        }
         int page = req.getPage() - 1;
-        Pageable pageable = PageRequest.of(page, PRODUCT_SEARCH_PAGE_SIZE);
+        Pageable pageable = PageRequest.of(page, req.getPageSize());
 
         List<Product> list = mongoTemplate.find(query.with(pageable).with(sort), Product.class, "products");
         long total = mongoTemplate.count(query.skip(0).limit(0), Product.class, "products");
-        int totalPages = (int) Math.ceil((double) total / PRODUCT_SEARCH_PAGE_SIZE);
+        int totalPages = (int) Math.ceil((double) total / req.getPageSize());
 
         return DynamicReport.<Product>builder()
                 .data(list)
