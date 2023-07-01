@@ -212,17 +212,17 @@ export class Utils {
 
     static getDescriptionByOrderStatus(value: string): string {
         if (value === OrderStatus.PENDING.getCode()) {
-            return 'Pendiente'
+            return 'Pending'
         } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
-            return 'Pago en proceso'
+            return 'Payment in process'
         } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
-            return 'Pago confirmado'
+            return 'Payment confirmed'
         } else if (value === OrderStatus.SHIPPED.getCode()) {
-            return 'En camino'
+            return 'Shipped'
         } else if (value === OrderStatus.DELIVERED.getCode()) {
-            return 'Entregado';
-        } else if (value === OrderStatus.CANCELLED.getCode()) {
-            return 'Cancelado';
+            return 'Delivered';
+        } else if (value === OrderStatus.CANCELED.getCode()) {
+            return 'Canceled';
         } else {
             return ''
         }
@@ -230,16 +230,16 @@ export class Utils {
 
     static getClassByOrderStatus(value: string): string {
         if (value === OrderStatus.PENDING.getCode()) {
-            return 'bg-color-1 text-white';
+            return 'bg-gray text-white';
         } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
-            return 'bg-cyan text-white';
+            return 'bg-yellow';
         } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
-            return 'bg-orange text-white';
-        } else if (value === OrderStatus.SHIPPED.getCode()) {
             return 'bg-blue text-white';
+        } else if (value === OrderStatus.SHIPPED.getCode()) {
+            return 'bg-cyan text-white';
         } else if (value === OrderStatus.DELIVERED.getCode()) {
             return 'bg-green text-white';
-        } else if (value === OrderStatus.CANCELLED.getCode()) {
+        } else if (value === OrderStatus.CANCELED.getCode()) {
             return 'bg-red text-white';
         } else {
             return ''

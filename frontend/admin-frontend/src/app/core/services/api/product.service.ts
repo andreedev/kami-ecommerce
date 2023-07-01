@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Endpoints } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
@@ -17,7 +17,7 @@ export class ProductService {
     private authService: AuthService
   ) { }
 
-  async productReport(query: string, page: number, availabilityFilter: any, dateFilter: {}): Promise<DynamicReport<Product> | null> {
+  async productReport(query: string, page: number, availabilityFilter: any, dateFilter: {}): Promise<DynamicReport<Product> | null | HttpErrorResponse> {
     try {
       const headers = this.authService.getAuthHeaders();
       const body = { query, page, availabilityFilter, dateFilter }

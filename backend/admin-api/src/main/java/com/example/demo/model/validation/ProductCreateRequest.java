@@ -51,7 +51,8 @@ public class ProductCreateRequest {
     private List<@URL(message = "Each mediaUrl must be a valid URL") String> mediaUrls;
     @NotNull(message = "Rating is required")
     private String keywords;
-    @NotNull(message = "Stock is required")
-    @Positive(message = "Stock must be a positive number")
-    private Integer stock;
+    @NotNull(message = "Available stock is required")
+    @Min(value = 0, message = "Available stock cannot be negative")
+    @Digits(integer = 10, message = "Invalid available stock", fraction = 0)
+    private Integer availableStock;
 }

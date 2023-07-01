@@ -12,10 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -34,6 +31,18 @@ public class Utils {
         Random rand = new Random(System.currentTimeMillis());
         int code = rand.nextInt(90000000) + 10000000;
         return Integer.toString(code);
+    }
+
+    public static Collection<GrantedAuthority> parseToGrantedAuthorityCollection(List<String> roles){
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        roles.forEach(role -> { authorities.add(new SimpleGrantedAuthority(role)); });
+        return authorities;
+    }
+
+    public static List<String> parseToStringList(Collection<? extends GrantedAuthority> authorities) {
+        List<String> roles = new ArrayList<>();
+        authorities.forEach(authority -> roles.add(authority.getAuthority()));
+        return roles;
     }
 
     public static List<Product> convertToProductList(List<SimplifiedProduct> products) {
@@ -74,17 +83,7 @@ public class Utils {
         return totalAmount;
     }
 
-    public static Collection<GrantedAuthority> parseToGrantedAuthorityCollection(List<String> roles){
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        roles.forEach(role -> { authorities.add(new SimpleGrantedAuthority(role)); });
-        return authorities;
-    }
 
-    public static List<String> parseToStringList(Collection<? extends GrantedAuthority> authorities) {
-        List<String> roles = new ArrayList<>();
-        authorities.forEach(authority -> roles.add(authority.getAuthority()));
-        return roles;
-    }
 
     public static void transferProductQuantity(List<Product> target, List<Product> origin) {
         for (Product targetProduct : target) {
@@ -112,5 +111,15 @@ public class Utils {
                 product.setDiscount(null);
             }
         }
+    }
+
+    public static List<Product> updateStockOfProductsOfOrderInPaymentInProcess(List<Product> list){
+        List<Product> newList = new ArrayList<>(list);
+        newList = newList.stream().map(value -> Product.builder()
+                .id(value.getId())
+                .availableStock(value.getAvailableStock() - value.getQuantity())
+                .reservedStock(value.getReservedStock() + value.getQuantity())
+                .build()).collect(Collectors.toList());
+        return newList;
     }
 }

@@ -31,7 +31,7 @@ export class CustomerReportComponent{
   currentPage: number = 1;
   totalPages: number = 1;
 
-  uiPaginationArray: any[] = [];
+  pagesUI: any[] = [];
 
   constructor(
     public dataService: DataService,
@@ -60,7 +60,8 @@ export class CustomerReportComponent{
     }if (response!.data.length !== 0) {
       this.customersList = response!.data;
       this.loading = false;
-      Utils.generatePagesUIArray(response!.totalPages, this.currentPage);
+      this.pagesUI = Utils.generatePagesUIArray(response.totalPages, this.currentPage);
+      this.totalPages = response.totalPages;
     }
     this.dataService.disableLoading();
   }

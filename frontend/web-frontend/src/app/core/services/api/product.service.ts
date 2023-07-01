@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { Endpoints } from '../../constants';
-import { Utils } from '../../helpers/utils';
-import { DynamicReport } from '../../models/rest/dynamic-report';
+import { Endpoints } from 'app/core/constants';
+import { Utils } from 'app/core/helpers/utils';
+import { DynamicReport } from 'app/core/models/rest/dynamic-report';
 import { AuthService } from './auth.service';
 import { DataService } from '../data/data.service';
-import { Product, SearchRequest } from '../../models';
+import { Product, SearchRequest } from 'app/core/models';
 import { Cart } from 'app/core/models/cart';
 
 @Injectable({
@@ -15,9 +15,7 @@ import { Cart } from 'app/core/models/cart';
 export class ProductService {
 
   constructor(
-    private http: HttpClient,
-    private dataService: DataService,
-    private authService: AuthService
+    private http: HttpClient
   ) { }
 
   async search(searchRequest: SearchRequest): Promise<DynamicReport<Product> | null> {

@@ -36,7 +36,9 @@ public class Product {
     private List<String> mediaUrls;
     private Integer rating;
     private String keywords;
-    private Integer stock;
+    private Integer availableStock;
+    private Integer reservedStock;
+    private Integer soldStock;
     private Integer quantity;
 
     @CreatedDate

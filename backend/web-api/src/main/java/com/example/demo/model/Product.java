@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import com.example.demo.utils.Enums;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -37,7 +36,9 @@ public class Product {
     private List<String> mediaUrls;
     private Integer rating;
     private String keywords;
-    private Integer stock;
+    private Integer availableStock;
+    private Integer reservedStock;
+    private Integer soldStock;
     private Integer quantity;
 
     @CreatedDate

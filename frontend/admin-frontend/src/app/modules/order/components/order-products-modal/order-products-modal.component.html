@@ -9,7 +9,7 @@
             </span>
         </ng-template>
         <p class="m-0">
-            <ng-container *ngTemplateOutlet="cartTemplate"></ng-container>
+            <ng-container *ngTemplateOutlet="mainTemplate"></ng-container>
         </p>
     </p-dialog>
 </ng-container>
@@ -28,12 +28,12 @@
                         (click)="orderDataService.displayOrderProductsModal=false"></i>
                 </div>
             </div>
-            <ng-container *ngTemplateOutlet="cartTemplate"></ng-container>
+            <ng-container *ngTemplateOutlet="mainTemplate"></ng-container>
         </div>
     </p-sidebar>
 </ng-template>
 
-<ng-template #cartTemplate>
+<ng-template #mainTemplate>
     <div class="m-3">
         <ul class="list-group list-group-flush mb-2">
             <ng-container *ngFor="let item of orderDataService.orderProducts">
@@ -42,7 +42,7 @@
         </ul>
         <button type="button" class="btn btn-primary text-white transition-300ms w-100"
             (click)="orderDataService.displayOrderProductsModal=false;">
-            Cerrar
+            Close
         </button>
     </div>
 </ng-template>

@@ -1,0 +1,102 @@
+<ng-container *ngIf="dataService.screenWidth>500; else fullScreen">
+    <p-dialog [(visible)]="orderDataService.displayUpdateOrderStatusModal" [modal]="true" [style]="{ width: '350px' }"
+        [draggable]="false" [resizable]="false" [dismissableMask]="true" [maskStyleClass]="'bg-black-transparent-20'"
+        contentStyleClass="p-0">
+        <ng-template pTemplate="header">
+            <span class="fs-20px fw-500 mx-3">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                Update status
+            </span>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="mainTemplate"></ng-container>
+    </p-dialog>
+</ng-container>
+
+<ng-template #fullScreen>
+    <p-sidebar [(visible)]="orderDataService.displayUpdateOrderStatusModal" [showCloseIcon]="false"
+        styleClass="p-0 h-auto max-h-90vh" position="bottom" [blockScroll]="true">
+        <div class="d-flex flex-column justify-content-center">
+            <div class="border-bottom p-2">
+                <div class="d-flex justify-content-between align-items-center mt-1 fs-4">
+                    <span class="fs-20px fw-500 mx-3">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        Update status
+                    </span>
+                    <i class="fa-regular fa-circle-xmark cursor-pointer fs-20px text-gray-70"
+                        (click)="orderDataService.displayUpdateOrderStatusModal=false"></i>
+                </div>
+            </div>
+            <ng-container *ngTemplateOutlet="mainTemplate"></ng-container>
+        </div>
+    </p-sidebar>
+</ng-template>
+
+<ng-template #mainTemplate>
+    <div class="m-3">
+        <div class="d-flex flex-column mb-3 w-100">
+            <label class="fs-14px text-gray-60 ps-1">Select new status:</label>
+            <select class="form-select" [(ngModel)]="orderDataService.updateOrderStatusRequest.newStatus">
+                <ng-container *ngIf="orderDataService.updateOrderStatusRequest.currentStatus===OrderStatus.PAYMENT_IN_PROCESS.getCode()">
+                    <option [value]="OrderStatus.PAYMENT_CONFIRMED.getCode()">
+                        {{Utils.getDescriptionByOrderStatus(OrderStatus.PAYMENT_CONFIRMED.getCode())}}
+                    </option>
+                    <option [value]="OrderStatus.CANCELED.getCode()">
+                        {{Utils.getDescriptionByOrderStatus(OrderStatus.CANCELED.getCode())}}
+                    </option>
+                </ng-container>
+                <ng-container *ngIf="orderDataService.updateOrderStatusRequest.currentStatus===OrderStatus.PAYMENT_CONFIRMED.getCode()">
+                    <option [value]="OrderStatus.SHIPPED.getCode()">
+                        {{Utils.getDescriptionByOrderStatus(OrderStatus.SHIPPED.getCode())}}
+                    </option>
+                    <option [value]="OrderStatus.CANCELED.getCode()">
+                        {{Utils.getDescriptionByOrderStatus(OrderStatus.CANCELED.getCode())}}
+                    </option>
+                </ng-container>
+                <ng-container *ngIf="orderDataService.updateOrderStatusRequest.currentStatus===OrderStatus.SHIPPED.getCode()">
+                    <option [value]="OrderStatus.DELIVERED.getCode()">
+                        {{Utils.getDescriptionByOrderStatus(OrderStatus.DELIVERED.getCode())}}
+                    </option>
+                </ng-container>
+            </select>
+        </div>
+        <ng-container *ngIf="orderDataService.updateOrderStatusRequest.newStatus===OrderStatus.PAYMENT_CONFIRMED.getCode()">
+            <div class="mb-3">
+                <p class="fw-500 fs-18px">Total: {{orderDataService.updateOrderStatusRequest.total | currency:'S/'}}</p>
+                <div class="mb-3">
+                    <label class="form-label">Confirm total paid:</label>
+                    <input [(ngModel)]="orderDataService.updateOrderStatusRequest.totalPaid"
+                        class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirm total refunded:</label>
+                    <input [(ngModel)]="orderDataService.updateOrderStatusRequest.totalRefunded"
+                        class="form-control">
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="orderDataService.updateOrderStatusRequest.newStatus===OrderStatus.CANCELED.getCode()">
+            <div class="mb-4">
+                <!-- <p>Order #{{orderDataService.updateOrderStatusRequest.orderNumber}}</p> -->
+                <p class="text-red">Are you sure you want to cancel this order?</p>
+            </div>
+        </ng-container>
+        <div class="text-center mb-3">
+            <span [class]="messageClass" [innerHTML]="message"></span>
+        </div>
+        <div class="row mx-0">
+            <div class="col-6 px-2">
+                <button type="button" class="btn btn-primary text-white transition-300ms w-100"
+                    (click)="orderDataService.displayUpdateOrderStatusModal=false;">
+                    Close
+                </button>
+            </div>
+            <div class="col-6 px-2">
+                <button type="button" class="btn bg-green-with-hover text-white transition-300ms w-100"
+                    (click)="updateOrderStatus()">
+                    <i class="fa-solid fa-check"></i>
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

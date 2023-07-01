@@ -147,7 +147,7 @@
                         <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
                     </ng-template>
                 </li>
-                <li *ngFor="let i of uiPaginationArray" class="page-item" [ngClass]="{'active': i==currentPage}">
+                <li *ngFor="let i of pagesUI" class="page-item" [ngClass]="{'active': i==currentPage}">
                     <ng-container *ngIf="i != '...'; else noActivePage">
                         <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
                     </ng-container>

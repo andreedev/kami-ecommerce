@@ -12,4 +12,5 @@ public interface ProductService {
     DynamicReport<Product> search(SearchRequest req);
     Cart loadCart(List<Product> req);
     List<Product> getFeaturedProducts();
+    boolean updateProductsStock(List<Product> list);
 }

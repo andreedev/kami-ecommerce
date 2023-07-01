@@ -1,16 +1,17 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.Order;
 import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.ProductReportRequest;
 import com.example.demo.utils.Constants;
+import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,6 +22,7 @@ import java.text.ParseException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -81,6 +83,22 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public List<Product> findByListId(List<Product> req) {
+        List<String> productIds = req.stream()
+                .map(Product::getId)
+                .collect(Collectors.toList());
+        Query query = Query.query(Criteria.where("id").in(productIds));
+        query.fields()
+                .exclude("keywords")
+                .exclude("status")
+                .exclude("createdAt")
+                .exclude("updatedAt")
+        ;
+        List<Product> productList = mongoTemplate.find(query, Product.class, "products");
+        return productList;
+    }
+
+    @Override
     public boolean existsById(String id) {
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
@@ -130,8 +148,23 @@ public class ProductRepositoryImpl implements ProductRepository {
         update.set("specifications", product.getSpecifications());
         update.set("mediaUrls", product.getMediaUrls());
         update.set("keywords", product.getKeywords());
-        update.set("stock", product.getStock());
+        update.set("availableStock", product.getAvailableStock());
         UpdateResult result = mongoTemplate.updateFirst(query, update, Product.class);
         return (int) result.getModifiedCount();
+    }
+
+    @Override
+    public boolean updateProductsStock(List<Product> list) {
+        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Product.class);
+        for(Product product : list) {
+            Query query = new Query().addCriteria(new Criteria("id").is(product.getId()));
+            Update update = new Update();
+            if (product.getAvailableStock()!=null) update.set("availableStock", product.getAvailableStock());
+            if (product.getReservedStock()!=null) update.set("reservedStock", product.getReservedStock());
+            if (product.getSoldStock()!=null)  update.set("soldStock", product.getSoldStock());
+            bulkOps.updateOne(query, update);
+        }
+        BulkWriteResult results = bulkOps.execute();
+        return results.getModifiedCount() == list.size();
     }
 }

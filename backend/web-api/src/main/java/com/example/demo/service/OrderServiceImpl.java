@@ -73,6 +73,7 @@ public class OrderServiceImpl implements OrderService{
             order.getDelivery().setShippingAddress(null);
         }
         order.setTotal(order.getSubTotal().add(order.getDeliveryCost()));
+        List<Product> reducedStockProducts = Utils.updateStockOfProductsOfOrderInPaymentInProcess(order.getProducts());
         List<Product> productListReadyToBeNestedInOrderObject = order.getProducts().stream().map(value->Product.builder()
                 .id(value.getId())
                 .name(value.getName())
@@ -86,7 +87,11 @@ public class OrderServiceImpl implements OrderService{
         ).collect(Collectors.toList());
         order.setProducts(productListReadyToBeNestedInOrderObject);
         order.getPayment().setTotalPaid(order.getTotal());
-        return orderRepository.create(order);
+        Order result = orderRepository.create(order);
+        if (result!=null){
+            productRepository.updateProductsStock(reducedStockProducts);
+        }
+        return result;
     }
 
     @Override
@@ -119,7 +124,7 @@ public class OrderServiceImpl implements OrderService{
                     .orElse(null);
 
             // Check if the product exists in dbProductList and if its stock is sufficient
-            if (dbProduct != null && dbProduct.getStock() >= requestedProductQuantity) {
+            if (dbProduct != null && dbProduct.getAvailableStock() >= requestedProductQuantity) {
                 // Sufficient stock available for this product
                 continue;
             } else {

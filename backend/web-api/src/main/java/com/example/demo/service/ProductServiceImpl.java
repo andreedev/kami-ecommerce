@@ -70,5 +70,10 @@ public class ProductServiceImpl implements ProductService{
         return featuredProducts;
     }
 
+    @Override
+    public boolean updateProductsStock(List<Product> list) {
+        return productRepository.updateProductsStock(list);
+    }
+
 
 }

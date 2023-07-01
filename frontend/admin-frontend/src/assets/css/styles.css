@@ -115,8 +115,25 @@
     color: #ffffff;
 }
 
-.bg-color-1{
-    background-color: #FECCCB;
+.bg-color-1, .bg-color-1-with-hover {
+    background-color: #FECCCB !important;
+}
+
+.bg-color-1-with-hover:hover, .bg-color-1-with-hover:active,
+ .bg-color-1-with-hover:focus-visible{
+    background-color: #e2b4b3 !important;
+}
+
+.bg-outline-color-1, .bg-outline-color-1-with-hover {
+    transition: all 300ms ease;
+    border: 1px solid #e2b4b3;
+    color: #e2b4b3;
+}
+
+.bg-outline-color-1-with-hover:hover {
+    transition: all 300ms ease;
+    color: #fff;
+    background-color: #e2b4b3;
 }
 
 hr {

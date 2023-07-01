@@ -1,15 +1,17 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { DynamicReport } from 'app/core/models';
 import { Product } from 'app/core/models/product';
 import { DataService, ProductService } from 'app/core/services';
 import moment from 'moment';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'product-report',
-  templateUrl: './product-report.component.html'
+  templateUrl: './product-report.component.html',
+  providers: [MessageService]
 })
 export class ProductReportComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
@@ -37,7 +39,8 @@ export class ProductReportComponent implements OnInit {
   constructor(
     public dataService: DataService,
     public productService: ProductService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) { }
 
   async ngOnInit() {
@@ -51,8 +54,10 @@ export class ProductReportComponent implements OnInit {
     }
     this.dataService.enableLoading();
     this.loading = true;
-    const response: DynamicReport<Product> | null = await this.productService.productReport(this.query, this.currentPage, this.availabilityFilter, dateFilter);
-    if (response === null){
+    const response = await this.productService.productReport(this.query, this.currentPage, this.availabilityFilter, dateFilter);
+    if (response instanceof HttpErrorResponse) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Internal error' });
+    } else if (response === null) {
       this.router.navigate([AppRoutes.LOGIN_COMPONENT_ROUTE_NAME]);
     } else if (response.data.length !== 0) {
       this.productsList = response.data;

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.ParseException;
+import java.util.Map;
 
 @Slf4j
 @RestController()
@@ -29,10 +30,12 @@ public class OrderController {
         log.info("productReport");
         return orderService.report(req);
     }
-    @PostMapping("update")
-    ResponseEntity<?> update(@Valid @RequestBody ProductUpdateRequest req) {
-        log.info("update");
-        return ResponseEntity.ok().build();
+
+    @PostMapping("status/update")
+    public ResponseEntity<HttpResponse> updateOrderStatus(@Valid @RequestBody UpdateOrderStatusRequest order) {
+        log.info("updateOrderStatus");
+        Integer result = orderService.updateOrderStatus(order);
+        return ResponseEntity.ok().body(HttpResponse.builder().code(result).build());
     }
 
 

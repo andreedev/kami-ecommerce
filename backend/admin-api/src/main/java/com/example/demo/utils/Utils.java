@@ -86,11 +86,11 @@ public class Utils {
         return roles;
     }
 
-    public static void transferProductQuantity(List<Product> target, List<Product> origin) {
-        for (Product targetProduct : target) {
-            for (Product originProduct : origin) {
+    public static void copyProductQuantityFromGiverToTarget(List<Product> giver, List<Product> target) {
+        for (Product originProduct : giver) {
+            for (Product targetProduct : target) {
                 if (targetProduct.getId().equals(originProduct.getId())) {
-                    originProduct.setQuantity(targetProduct.getQuantity());
+                    targetProduct.setQuantity(originProduct.getQuantity());
                     break;
                 }
             }
@@ -112,5 +112,45 @@ public class Utils {
                 product.setDiscount(null);
             }
         }
+    }
+
+
+    public static List<Product> updateStockOfProductsOfOrderInPaymentInProcess(List<Product> list){
+        List<Product> newList = new ArrayList<>(list);
+        newList = newList.stream().map(value -> Product.builder()
+                .id(value.getId())
+                .availableStock(value.getAvailableStock() - value.getQuantity())
+                .reservedStock(value.getReservedStock() + value.getQuantity())
+                .build()).collect(Collectors.toList());
+        return newList;
+    }
+
+    public static List<Product> updateStockOfProductsOfOrderInPaymentConfirmed(List<Product> list){
+        List<Product> newList = new ArrayList<>(list);
+        newList = newList.stream().map(value -> Product.builder()
+                .id(value.getId())
+                .reservedStock(value.getReservedStock() - value.getQuantity())
+                .soldStock(value.getSoldStock() + value.getQuantity())
+                .build()).collect(Collectors.toList());
+        return newList;
+    }
+
+    public static List<Product> updateStockOfProductsOfOrderInCanceledStatus(String previousStatus, List<Product> list){
+        List<Product> newList = new ArrayList<>(list);
+        if (previousStatus.equals(Enums.OrderStatus.PAYMENT_IN_PROCESS.getValue())){
+            newList = newList.stream().map(value -> Product.builder()
+                    .id(value.getId())
+                    .availableStock(value.getAvailableStock() + value.getQuantity())
+                    .reservedStock(value.getReservedStock() - value.getQuantity())
+                    .build()).collect(Collectors.toList());
+
+        } else if (previousStatus.equals(Enums.OrderStatus.PAYMENT_CONFIRMED.getValue())){
+            newList = newList.stream().map(value -> Product.builder()
+                    .id(value.getId())
+                    .availableStock(value.getAvailableStock() + value.getQuantity())
+                    .soldStock(value.getSoldStock() - value.getQuantity())
+                    .build()).collect(Collectors.toList());
+        }
+        return newList;
     }
 }

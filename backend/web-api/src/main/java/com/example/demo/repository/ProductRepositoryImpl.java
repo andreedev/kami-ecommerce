@@ -1,22 +1,28 @@
 package com.example.demo.repository;
 
+import com.example.demo.model.Address;
 import com.example.demo.model.Customer;
 import com.example.demo.model.validation.DynamicReport;
 import com.example.demo.model.Product;
 import com.example.demo.model.validation.SearchRequest;
 import com.example.demo.utils.Constants;
 import com.example.demo.utils.Enums;
+import com.mongodb.bulk.BulkWriteResult;
+import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.BulkOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -129,5 +135,22 @@ public class ProductRepositoryImpl implements ProductRepository {
         List<Product> productList = mongoTemplate.find(query, Product.class, "products");
         return productList;
     }
+
+    @Override
+    public boolean updateProductsStock(List<Product> list) {
+        BulkOperations bulkOps = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, Product.class);
+        for(Product product : list) {
+            Query query = new Query().addCriteria(new Criteria("id").is(product.getId()));
+            Update update = new Update();
+            if (product.getAvailableStock()!=null) update.set("availableStock", product.getAvailableStock());
+            if (product.getReservedStock()!=null) update.set("reservedStock", product.getReservedStock());
+            if (product.getSoldStock()!=null)  update.set("soldStock", product.getSoldStock());
+            bulkOps.updateOne(query, update);
+        }
+        BulkWriteResult results = bulkOps.execute();
+        return results.getModifiedCount() == list.size();
+    }
+
+
 
 }

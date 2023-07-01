@@ -18,6 +18,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static com.example.demo.utils.Constants.CUSTOMER_REPORT_PAGE_SIZE;
+
 @Slf4j
 @Component
 public class CustomerRepositoryImpl implements CustomerRepository {
@@ -31,7 +33,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     public DynamicReport<Customer> getCustomerReport(CustomerReportRequest req) {
         Query query = new Query();
 
-        // Apply filters based on the request parameters
         if (req.getStatusFilter() != null) {
             query.addCriteria(Criteria.where("status").is(req.getStatusFilter()));
         }
@@ -52,14 +53,13 @@ public class CustomerRepositoryImpl implements CustomerRepository {
         query.addCriteria(Criteria.where("createdAt").gte(startDate.atStartOfDay()).lte(endDate.atTime(LocalTime.MAX)));
 
         int page = (req.getPage() != null) ? req.getPage() - 1 : 0;
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, CUSTOMER_REPORT_PAGE_SIZE);
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         List<Customer> customers = mongoTemplate.find(query.with(pageable).with(sort), Customer.class, "customers");
         long totalCustomers = mongoTemplate.count(query, Customer.class);
-        int totalPages = (int) Math.ceil((double) totalCustomers / 10);
+        int totalPages = (int) Math.ceil((double) totalCustomers / CUSTOMER_REPORT_PAGE_SIZE);
 
-        // Create DynamicReport object with the data and the total number of pages
         return DynamicReport.<Customer>builder()
                 .data(customers)
                 .totalPages(totalPages)

@@ -42,7 +42,7 @@ export class CategoryCreateComponent {
         this.message = '';
       }, 1000);
     } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-danger';
+      this.messageClass = 'text-red';
       const errorMessages = response.error.errorMessages;
       this.message = this.sanitizer.bypassSecurityTrustHtml(
         errorMessages.join('<br>')
@@ -53,7 +53,7 @@ export class CategoryCreateComponent {
 
 
   private validate(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
 
     if (Utils.stringIsEmpty(this.category.name!)) {
       this.message = 'The name is required';

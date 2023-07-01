@@ -59,7 +59,9 @@
                     <col style="width:90px">   <!-- availability -->
                     <col style="width:100px">  <!-- sku -->
                     <col style="width:150px">  <!-- name -->
-                    <col style="width:70px">   <!-- stock -->
+                    <col style="width:80px">   <!-- available stock -->
+                    <col style="width:80px">   <!-- reserved stock -->
+                    <col style="width:80px">   <!-- sold stock -->
                     <col style="width:70px">   <!-- price -->
                     <col style="width:160px">  <!-- discount-->
                     <col style="width:90px">   <!-- brand -->
@@ -78,7 +80,9 @@
                     <th class="fw-bold">AVAILABLE</th>
                     <th class="fw-bold">SKU</th>
                     <th class="fw-bold">NAME</th>
-                    <th class="fw-bold">STOCK</th>
+                    <th class="fw-bold">AVAILABLE STOCK</th>
+                    <th class="fw-bold">RESERVED STOCK</th>
+                    <th class="fw-bold">SOLD STOCK</th>
                     <th class="fw-bold">PRICE</th>
                     <th class="fw-bold">DISCOUNT</th>
                     <th class="fw-bold">BRAND</th>
@@ -112,7 +116,17 @@
                     <td>{{product.name}}</td>
                     <td>
                         <span class="fs-16px">
-                            {{product.stock}}
+                            {{product.availableStock}}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="fs-16px">
+                            {{product.reservedStock}}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="fs-16px">
+                            {{product.soldStock}}
                         </span>
                     </td>
                     <td>

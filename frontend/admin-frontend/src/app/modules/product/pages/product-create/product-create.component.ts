@@ -28,7 +28,7 @@ export class ProductCreateComponent {
     specifications: [],
     mediaUrls: [],
     keywords: '',
-    stock: 0
+    availableStock: 0
   };
 
   dateRange: any = {
@@ -100,7 +100,7 @@ export class ProductCreateComponent {
 
 
   private validate(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
 
     if (Utils.stringIsEmpty(this.product.name!)) {
       this.message = 'The name is required';
@@ -149,7 +149,7 @@ export class ProductCreateComponent {
     }
 
 
-    if (!Utils.validateNumberIsGreaterOrEqualThan(this.product.stock, 0)) {
+    if (!Utils.validateNumberIsGreaterOrEqualThan(this.product.availableStock, 0)) {
       this.message = 'Invalid stock';
       return false;
     }
@@ -178,7 +178,7 @@ export class ProductCreateComponent {
       specifications: [],
       mediaUrls: [],
       keywords: '',
-      stock: 0
+      availableStock: 0
     };
   }
 

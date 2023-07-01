@@ -12,7 +12,7 @@ export interface Product {
     mediaUrls?: Array<string>
     rating?: number
     keywords?: string
-    stock?: number
+    availableStock?: number
     createdAt?: string;
     updatedAt?: string;
 

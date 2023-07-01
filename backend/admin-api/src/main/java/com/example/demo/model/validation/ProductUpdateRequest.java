@@ -55,8 +55,8 @@ public class ProductUpdateRequest {
 
     private String keywords;
 
-    @NotNull(message = "Stock is required")
-    @Min(value = 0, message = "Stock cannot be negative")
-    @Digits(integer = 10, message = "Invalid stock", fraction = 0)
-    private Integer stock;
+    @NotNull(message = "Available stock is required")
+    @Min(value = 0, message = "Available stock cannot be negative")
+    @Digits(integer = 10, message = "Invalid available stock", fraction = 0)
+    private Integer availableStock;
 }

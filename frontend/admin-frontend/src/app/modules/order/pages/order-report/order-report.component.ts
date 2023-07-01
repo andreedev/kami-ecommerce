@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'app/core/constants';
+import { OrderStatus } from 'app/core/enums/order-status';
 import { Utils } from 'app/core/helpers/utils';
 import { Order, Product } from 'app/core/models';
 import { DataService, OrderDataService, OrderService } from 'app/core/services';
@@ -16,6 +17,7 @@ import { MessageService } from 'primeng/api';
 export class OrderReportComponent implements OnInit {
   readonly appRoutes: typeof AppRoutes = AppRoutes;
   readonly utils: typeof Utils = Utils;
+  readonly OrderStatus = OrderStatus;
 
   query: string = '';
   loading: boolean = true;
@@ -33,7 +35,7 @@ export class OrderReportComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
 
-  uiPaginationArray: any[] = [];
+  pagesUI: any[] = [];
 
   constructor(
     public dataService: DataService,
@@ -55,7 +57,6 @@ export class OrderReportComponent implements OnInit {
     this.dataService.enableLoading();
     this.loading = true;
     const response = await this.orderService.report(this.query, this.currentPage, this.statusFilter, dateFilter);
-    console.log(response);
     if (response instanceof HttpErrorResponse) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Internal error' });
     } else if (response === null) {
@@ -63,7 +64,8 @@ export class OrderReportComponent implements OnInit {
     } else if (response.data.length !== 0) {
       this.list = response.data;
       this.loading = false;
-      Utils.generatePagesUIArray(response.totalPages, this.currentPage);
+      this.pagesUI = Utils.generatePagesUIArray(response.totalPages, this.currentPage);
+      this.totalPages = response.totalPages;
     }
     this.dataService.disableLoading();
   }
@@ -75,7 +77,17 @@ export class OrderReportComponent implements OnInit {
   }
 
 
-  update(item: any): void {
+  updateOrderStatus(value: any): void {
+    this.orderDataService.displayUpdateOrderStatusModal = true;
+    this.orderDataService.updateOrderStatusRequest = {
+      id: value.id,
+      currentStatus: value.status,
+      total: value.total,
+      totalPaid: value.total
+    }
+  }
+
+  updateOrderData(value: any): void {
 
   }
 

@@ -152,7 +152,7 @@ export class ProductUpdateComponent implements OnInit {
     }
 
 
-    if (!Utils.validateNumberIsGreaterOrEqualThan(this.product.stock, 0)) {
+    if (!Utils.validateNumberIsGreaterOrEqualThan(this.product.availableStock, 0)) {
       this.message = 'Invalid stock';
       return false;
     }

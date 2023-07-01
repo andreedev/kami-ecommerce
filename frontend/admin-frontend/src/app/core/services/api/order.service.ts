@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService } from '..';
 import { Endpoints } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
-import { DynamicReport, Order, Product } from 'app/core/models';
+import { DynamicReport, Order } from 'app/core/models';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -36,7 +36,7 @@ export class OrderService {
   }
 
 
-  async update(request: Order): Promise<any> {
+  async updateOrderStatus(request: object): Promise<any> {
     try {
       const headers = this.authService.getAuthHeaders();
       const response = await firstValueFrom(
@@ -47,7 +47,7 @@ export class OrderService {
       if (error.status === 401) {
         const tokenRefreshed = await this.authService.refreshToken();
         if (!tokenRefreshed) return null;
-        return await this.update(request);
+        return await this.updateOrderStatus(request);
       }
       return error;
     }

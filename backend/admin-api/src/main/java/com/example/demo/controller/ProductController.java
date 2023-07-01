@@ -6,7 +6,6 @@ import com.example.demo.model.validation.ProductReportRequest;
 import com.example.demo.model.validation.ProductCreateRequest;
 import com.example.demo.model.validation.ProductUpdateRequest;
 import com.example.demo.service.ProductService;
-import com.example.demo.utils.Enums;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class ProductController {
                         .specifications(req.getSpecifications())
                         .mediaUrls(req.getMediaUrls())
                         .keywords(req.getKeywords())
-                        .stock(req.getStock())
+                        .availableStock(req.getAvailableStock())
                         .isAvailable(req.getIsAvailable())
                         .rating(0)
                         .build()
@@ -69,7 +68,7 @@ public class ProductController {
                         .specifications(req.getSpecifications())
                         .mediaUrls(req.getMediaUrls())
                         .keywords(req.getKeywords())
-                        .stock(req.getStock())
+                        .availableStock(req.getAvailableStock())
                         .build()
         ));
     }

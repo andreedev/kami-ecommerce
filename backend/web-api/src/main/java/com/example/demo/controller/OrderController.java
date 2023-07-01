@@ -7,6 +7,7 @@ import com.example.demo.model.validation.SearchOrdersRequest;
 import com.example.demo.service.AddressService;
 import com.example.demo.service.CustomerService;
 import com.example.demo.service.OrderService;
+import com.example.demo.service.ProductService;
 import com.example.demo.utils.AwsUtil;
 import com.example.demo.utils.Enums;
 import com.example.demo.utils.Utils;
@@ -14,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,8 +29,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final ProductService productService;
     private final CustomerService customerService;
     private final AwsUtil awsUtil;
+
+    @Value("${AWS_ACCESS_KEY_ID}")
+    private String awsAccessKeyId;
 
     @PostMapping("payment/calculate")
     public Order calculatePayment(
@@ -66,7 +72,11 @@ public class OrderController {
         String uploadVoucherResult = null;
         String orderNumber = Utils.generateEightDigitsCode();
         try {
-            uploadVoucherResult = awsUtil.uploadFileS3(file, orderNumber, "order/voucher/");
+            if (awsAccessKeyId.isEmpty()){//development mode
+                uploadVoucherResult = "https://picsum.photos/seed/picsum/1000";
+            } else {
+                uploadVoucherResult = awsUtil.uploadFileS3(file, orderNumber, "order/voucher/");
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setCode(-2);
@@ -98,6 +108,7 @@ public class OrderController {
             response.setCode(-4);
             return response;
         }
+
         customer.setCart(null);
         customerService.updateCart(customer);
         response.setData(orderCreated);

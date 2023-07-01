@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Response {
+public class HttpResponse {
     private Integer code;
     private String message;
     private Object data;

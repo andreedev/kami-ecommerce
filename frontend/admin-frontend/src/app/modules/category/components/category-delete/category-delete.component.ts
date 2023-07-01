@@ -37,7 +37,7 @@ export class CategoryDeleteComponent {
         this.message = '';
       }, 1000);
     } else if (response instanceof HttpErrorResponse) {
-      this.messageClass = 'text-danger';
+      this.messageClass = 'text-red';
       const errorMessages = response.error.errorMessages;
       this.message = this.sanitizer.bypassSecurityTrustHtml(
         errorMessages.join('<br>')
@@ -48,7 +48,7 @@ export class CategoryDeleteComponent {
 
 
   private validate(): boolean {
-    this.messageClass = 'text-danger';
+    this.messageClass = 'text-red';
 
     if (Utils.stringIsEmpty(this.categoryDataService.selectedCategory.name!)) {
       this.message = 'The name is required';

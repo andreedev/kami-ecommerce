@@ -18,7 +18,7 @@
             </span>
             <select class="form-select form-select-sm" [(ngModel)]="statusFilter" (change)="report()">
                 <option value="">None</option>
-                <option value="pending">Pending</option>
+                <!-- <option value="pending">Pending</option> -->
                 <option value="payment_in_process">Payment in process</option>
                 <option value="payment_confirmed">Payment confirmed</option>
                 <option value="shipped">Shipped</option>
@@ -54,7 +54,7 @@
                     <col style="width:170px">
                     <col style="width:170px">
                     <col style="width:90px">
-                    <col style="width:150px">
+                    <col style="width:140px">
                     <col style="width:80px"> <!-- delivery method -->
                     <col style="width:160px"> 
                     <col style="width:80px"> <!-- products -->
@@ -66,7 +66,7 @@
                     <col style="width:90px"> <!-- total paid -->
                     <col style="width:90px"> <!-- total paid -->
                     <col style="width:100px"> <!-- created at -->
-                    <col style="width:100px">
+                    <col style="width:150px"> <!-- action -->
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header">
@@ -91,9 +91,15 @@
             </ng-template>
             <ng-template pTemplate="body" let-item>
                 <tr [pSelectableRow]="item">
-                    <td>{{item.id}}</td>
-                    <td>{{item.customerId}}</td>
-                    <td>{{item.orderNumber}}</td>
+                    <td>
+                        <span class="text-gray-60">{{item.id}}</span>
+                    </td>
+                    <td>
+                        <span class="text-gray-60">{{item.customerId}}</span>
+                    </td>
+                    <td>
+                        <span class="fw-500">{{item.orderNumber}}</span>
+                    </td>
                     <td>
                         <a class="btn btn-sm fs-12px" [ngClass]="utils.getClassByOrderStatus(item.status)">
                             {{utils.getDescriptionByOrderStatus(item.status)}}
@@ -105,8 +111,8 @@
                     </td>
                     <td>
                         <div *ngIf="item.delivery.deliveryMethod==='delivery'">
-                            <div class="fs-16px">{{item.delivery.shippingAddress.line}}</div>
-                            <div class="fs-14px text-gray-70">{{item.delivery.shippingAddress.reference}}</div>
+                            <div class="fs-12px">{{item.delivery.shippingAddress.line}}</div>
+                            <div class="fs-10px text-gray-70">{{item.delivery.shippingAddress.reference}}</div>
                         </div>
                     </td>
                     <td>
@@ -130,21 +136,26 @@
                         <td>
                             <div class="d-flex justify-content-center">
                                 <a href="{{item.payment.voucher}}" target="_blank" class="btn btn-sm bg-green-with-hover text-white cp">
-                                    <i class="fa-regular fa-eye"></i>
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>
                             </div>
                         </td>
                     </ng-container>
-                    <td>{{item.payment.totalPaid | currency:'S/'}}</td>
+                    <td>
+                        <span class="fs-14px">{{item.payment.totalPaid | currency:'S/'}}</span>
+                    </td>
                     <ng-container *ngIf="item.payment.totalRefunded; else emptyTd">
                         {{item.payment.totalRefunded | currency:'S/'}}
                     </ng-container>
                     <td>{{item.createdAt | date:'dd-MM-YY hh:mm:ss a'}}</td>
                     <td>
-                        <a class="btn btn-sm btn-warning cp me-3" (click)="update(item)">
+                       <ng-container 
+                            *ngIf="item.status!==OrderStatus.DELIVERED.getCode() &&  item.status!==OrderStatus.CANCELED.getCode()">
+                        <a class="btn btn-sm bg-green-with-hover text-white cp ms-2" (click)="updateOrderStatus(item)">
                             <i class="far fa-edit"></i>
-                            <span class="fs-10px">UPDATE</span>
+                            <span class="ms-1">Update status</span>
                         </a>
+                       </ng-container>
                     </td>
                 </tr>
             </ng-template>
@@ -163,7 +174,7 @@
                         <span class="page-link cp"><i class="fas fa-angle-left"></i></span>
                     </ng-template>
                 </li>
-                <li *ngFor="let i of uiPaginationArray" class="page-item" [ngClass]="{'active': i==currentPage}">
+                <li *ngFor="let i of pagesUI" class="page-item" [ngClass]="{'active': i==currentPage}">
                     <ng-container *ngIf="i != '...'; else noActivePage">
                         <span (click)="updatePage(i)" class="page-link cp">{{ i }}</span>
                     </ng-container>
@@ -196,3 +207,4 @@
 <p-toast [breakpoints]="{'480px': {width: '100%', right: '0', left: '0'}}"></p-toast>
 
 <order-products-modal></order-products-modal>
+<update-order-status-modal *ngIf="orderDataService.displayUpdateOrderStatusModal" (refreshReport)="report()"></update-order-status-modal>

@@ -2,5 +2,6 @@ export interface Payment {
     paymentMethod: string
     operationCode?: string
     voucher?: string
-    total?: string
+    totalPaid?: string
+    totalRefunded?: string
 }

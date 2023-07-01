@@ -24,5 +24,5 @@ export abstract class Endpoints {
 
     static readonly ORDER: string = 'admin/order'
     static readonly ORDER_REPORT: string = `${Endpoints.ORDER}/report`
-    static readonly ORDER_UPDATE: string = `${Endpoints.ORDER}/update`
+    static readonly ORDER_UPDATE: string = `${Endpoints.ORDER}/status/update`
 }
