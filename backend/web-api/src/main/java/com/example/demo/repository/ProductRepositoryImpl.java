@@ -49,7 +49,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                     Criteria.where("name").regex(req.getQuery(), "i"),
                     Criteria.where("sku").regex(req.getQuery(), "i"),
                     Criteria.where("keywords").regex(req.getQuery(), "i"),
-                    Criteria.where("brand").regex(req.getQuery(), "i")
+                    Criteria.where("brand").regex(req.getQuery(), "i"),
+                    Criteria.where("categories").regex(req.getQuery(), "i")
             ));
         }
 
