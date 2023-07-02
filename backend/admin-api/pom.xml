@@ -9,13 +9,13 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>adminapi</artifactId>
+	<artifactId>kami-ecommerce-admin-api</artifactId>
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 	<name>adminapi</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>18</java.version>
 	</properties>
 	<dependencies>
 

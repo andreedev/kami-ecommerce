@@ -4,10 +4,10 @@ export class OrderStatus {
     public static PAYMENT_CONFIRMED = new OrderStatus('payment_confirmed');
     public static SHIPPED = new OrderStatus('shipped');
     public static DELIVERED = new OrderStatus('delivered');
-    public static CANCELLED = new OrderStatus('canceled');
+    public static CANCELED = new OrderStatus('canceled');
 
     private code: string;
-    
+
 
     private constructor(code: string) {
         this.code = code;
@@ -24,7 +24,7 @@ export class OrderStatus {
             this.PAYMENT_CONFIRMED,
             this.SHIPPED,
             this.DELIVERED,
-            this.CANCELLED
+            this.CANCELED
         ];
     }
 

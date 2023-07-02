@@ -229,7 +229,7 @@ export class Utils {
             return 'En camino'
         } else if (value === OrderStatus.DELIVERED.getCode()) {
             return 'Entregado';
-        } else if (value === OrderStatus.CANCELLED.getCode()) {
+        } else if (value === OrderStatus.CANCELED.getCode()) {
             return 'Cancelado';
         } else {
             return ''
@@ -238,28 +238,28 @@ export class Utils {
 
     static getClassByOrderStatus(value: string): string {
         if (value === OrderStatus.PENDING.getCode()) {
-            return 'bg-color-1 text-white';
+            return 'bg-gray text-white';
         } else if (value === OrderStatus.PAYMENT_IN_PROCESS.getCode()) {
-            return 'bg-cyan text-white';
+            return 'bg-yellow';
         } else if (value === OrderStatus.PAYMENT_CONFIRMED.getCode()) {
-            return 'bg-orange text-white';
-        } else if (value === OrderStatus.SHIPPED.getCode()) {
             return 'bg-blue text-white';
+        } else if (value === OrderStatus.SHIPPED.getCode()) {
+            return 'bg-cyan text-white';
         } else if (value === OrderStatus.DELIVERED.getCode()) {
             return 'bg-green text-white';
-        } else if (value === OrderStatus.CANCELLED.getCode()) {
+        } else if (value === OrderStatus.CANCELED.getCode()) {
             return 'bg-red text-white';
         } else {
             return ''
         }
     }
-    
-    static scrollToTop(): void{
-        window.scroll({ 
-            top: 0, 
-            left: 0, 
-            behavior: 'smooth' 
-     });
+
+    static scrollToTop(): void {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
     }
 
 }
