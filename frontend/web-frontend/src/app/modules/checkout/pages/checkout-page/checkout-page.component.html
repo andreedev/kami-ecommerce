@@ -151,12 +151,12 @@
                                     </ng-container>
                                     <ng-container *ngIf="orderDataService.order.payment.paymentMethod==='digital_wallet'">
                                         <p>Puedes pagar mediante Yape o Plin.</p>
-                                        <div class="row mx-0 mb-1">
-                                            <div class="col-12 col-sm-6">
-                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/yape-example.png" class="w-100">
+                                        <div class="row g-2 g-sm-3 justify-content-center mx-0 px-0 mt-0 mb-1">
+                                            <div class="col-6 col-sm-6 mb-3 mb-sm-0">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/yape-example.png" class="w-100 rounded">
                                             </div>
-                                            <div class="col-12 col-sm-6">
-                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/plin-example.png" class="w-100">
+                                            <div class="col-6 col-sm-6">
+                                                <img src="https://raw.githubusercontent.com/andreedev/public-sources/master/plin-example.png" class="w-100 rounded">
                                             </div>
                                         </div>
                                         <p class="mb-0">Número: 000 000 000</p>
@@ -234,6 +234,7 @@
     </div>
 </div>
 
+<div class="invisible my-5">-</div>
 
 <addresses-modal [selectable]="true"></addresses-modal>
 <address-add></address-add>

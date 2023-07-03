@@ -35,13 +35,15 @@ export class AddressesModalComponent {
       this.message = 'Internal error';
     } else if (response === true) {
       this.authDataService.loadProfile();
-      if (this.orderDataService.order.delivery.shippingAddress!.id == id) {
-        this.orderDataService.order.delivery.shippingAddress = {
-          id: '',
-          line: '',
-          reference: ''
+      if (this.orderDataService.order.delivery.shippingAddress){
+        if (this.orderDataService.order.delivery.shippingAddress!.id == id) {
+          this.orderDataService.order.delivery.shippingAddress = {
+            id: '',
+            line: '',
+            reference: ''
+          }
+          this.orderDataService.displayPaymentDetails = false
         }
-        this.orderDataService.displayPaymentDetails = false
       }
     }
     this.dataService.disableLoading();

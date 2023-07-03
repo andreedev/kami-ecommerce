@@ -18,7 +18,7 @@
             </span>
             <select class="form-select form-select-sm" [(ngModel)]="statusFilter" (change)="getReport()">
                 <option value="null">None</option>
-                <option value="1">Registered</option>
+                <option value="1">Unverified email</option>
                 <option value="2">Email verified</option>
                 <option value="3">Disabled</option>
             </select>
@@ -53,6 +53,7 @@
                     <col style="width:140px">
 
                     <col style="width:120px">
+                    <col style="width:120px">
 
                     <col style="width:120px">
 
@@ -74,6 +75,7 @@
                     <th class="fw-bold">ID</th>
                     <th class="fw-bold">STATUS</th>
                     <th class="fw-bold">NAME</th>
+                    <th class="fw-bold">LAST NAME</th>
                     <th class="fw-bold">EMAIL</th>
                     <th class="fw-bold">PHONE NUMBER</th>
                     <th class="fw-bold">DOC TYPE</th>
@@ -100,6 +102,7 @@
                         </container-element>
                     </td>
                     <td>{{customer.name}}</td>
+                    <td>{{customer.lastName}}</td>
                     <td>{{customer.email}}</td>
                     <td>{{customer.phoneNumber}}</td>
                     
@@ -108,14 +111,14 @@
                             <div *ngSwitchCase="1">
                                 <a class="btn btn-sm bg-cyan-with-hover fs-12px text-white">DNI</a>
                             </div>
-                            <div *ngSwitchCase="2">
-                                <a class="btn btn-sm bg-blue-with-hover text-white fs-12px">RUC</a>
-                            </div>
-                            <div *ngSwitchCase="3">
-                                <a class="btn btn-sm bg-red-30-with-hover text-white fs-12px">PS</a>
-                            </div>
                             <div *ngSwitchCase="4">
-                                <a class="btn btn-sm bg-yellow-with-hover fs-12px">CE</a>
+                                <a class="btn btn-sm bg-blue-with-hover text-white fs-12px">CE</a>
+                            </div>
+                            <div *ngSwitchCase="6">
+                                <a class="btn btn-sm bg-red-30-with-hover text-white fs-12px">RUC</a>
+                            </div>
+                            <div *ngSwitchCase="8">
+                                <a class="btn btn-sm bg-yellow-with-hover fs-12px">PS</a>
                             </div>
                         </container-element>
                     </td>

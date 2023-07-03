@@ -531,20 +531,27 @@ img {
     min-height: 300px;	
 }	
 
-.max-h-300px {	
-    max-height: 300px;	
-}	
+
 .max-h-150px{	
     max-height: 150px;	
 }	
 .max-h-200px{	
     max-height: 200px;	
 }
+.max-h-300px {	
+    max-height: 300px;	
+}	
 .max-h-350px{	
     max-height: 350px;	
 }
 .max-h-380px{	
     max-height: 380px;	
+}
+.max-h-500px{	
+    max-height: 500px;	
+}
+.max-h-600px{	
+    max-height: 600px;	
 }
 .max-h-90vh{	
     max-height: 90vh;	

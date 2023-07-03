@@ -22,6 +22,7 @@ import { DividerModule } from 'primeng/divider';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   //Components
@@ -36,6 +37,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
+
+    SharedRoutingModule,
 
     //Ui modules,(
     NgxDaterangepickerMd.forRoot(),
@@ -52,9 +55,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     DividerModule,
     InputTextModule,
     RadioButtonModule,
-    SkeletonModule
-
-    ,SharedRoutingModule
+    SkeletonModule,
+    ToastModule
   ],
 
   //Components and modules exports
@@ -80,7 +82,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     DividerModule,
     InputTextModule ,
     RadioButtonModule,
-    SkeletonModule
+    SkeletonModule,
+    ToastModule
   ]
 })
 export class SharedModule { }

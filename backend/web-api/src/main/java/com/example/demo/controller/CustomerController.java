@@ -33,6 +33,7 @@ public class CustomerController {
         log.info("getProfile");
         Customer customer = (Customer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         GetProfileResponse response=  GetProfileResponse.builder().build();
+        response.setId(customer.getId());
         response.setName(customer.getName());
         response.setLastName(customer.getLastName());
         response.setEmail(customer.getEmail());

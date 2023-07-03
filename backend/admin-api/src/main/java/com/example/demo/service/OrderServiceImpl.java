@@ -18,9 +18,11 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService{
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository) {
+    private final WebhookService webhookService;
+    public OrderServiceImpl(OrderRepository orderRepository, ProductRepository productRepository, WebhookService webhookService) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
+        this.webhookService = webhookService;
     }
 
     @Override
@@ -49,6 +51,8 @@ public class OrderServiceImpl implements OrderService{
                 }
             }
         }
+        orderDb.setStatus(req.getNewStatus());
+        webhookService.notifyOrderStatusUpdatedEvent(orderDb);
         return result;
     }
 

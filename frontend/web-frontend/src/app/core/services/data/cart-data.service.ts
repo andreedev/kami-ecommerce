@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Constants } from 'app/core/constants';
 import { Utils } from 'app/core/helpers/utils';
 import { Product } from 'app/core/models';
@@ -21,7 +21,9 @@ export class CartDataService {
   }
 
   lastUpdate: number = new Date().getTime();
-  updateTimeout: any
+  updateTimeout: any;
+
+  cartClearedEvent: EventEmitter<any> = new EventEmitter();
 
   constructor(
     private productService: ProductService,

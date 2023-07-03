@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from 'app/core/models';
 import { DataService, ProductService } from 'app/core/services';
 import { CategoryDataService } from 'app/core/services/data/category-data.service';
+import { CartDataService } from '../../../../core/services/data/cart-data.service';
 
 @Component({
   selector: 'home-page',
@@ -14,18 +15,24 @@ export class HomePageComponent implements OnInit {
 
   responsiveOptions: any[] = [
     {
-          breakpoint: '768px',
-          numVisible: 5
-      },
+      breakpoint: '768px',
+      numVisible: 5
+    },
   ];
 
   constructor(
     public dataService: DataService,
     private productService: ProductService,
     public categoryDataService: CategoryDataService,
+    private cartDataService: CartDataService
   ) {
     this.loadFeaturedProducts();
     this.categoryDataService.loadCategories();
+    this.cartDataService.cartClearedEvent.subscribe((value: any)=>{
+      this.featuredProducts.forEach((p) => {
+        p.quantity = 0;
+      })
+    })
   }
 
   async loadFeaturedProducts(): Promise<any>{

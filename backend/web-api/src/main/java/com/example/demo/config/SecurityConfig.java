@@ -31,11 +31,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.httpBasic().disable();
         http.cors().configurationSource(request ->  {
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.applyPermitDefaultValues();
             corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8090","http://localhost:4200","http://localhost:4201", "http://kamistore.com.s3-website-us-east-1.amazonaws.com"));
+            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:4200","http://localhost:4201", "http://kamistore.com.s3-website-us-east-1.amazonaws.com"));
+            corsConfiguration.setAllowCredentials(true);
             return corsConfiguration;
         });
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

@@ -8,7 +8,7 @@ public class CustomInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Thread.sleep(1000);
+        Thread.sleep(500);
         return true;
     }
 

@@ -13,7 +13,7 @@ import { AuthStatus } from 'app/core/enums/auth-status';
   templateUrl: './cart.component.html'
 })
 export class CartComponent {
-  private readonly resourcesUrl: string = environment.resourcesUrl;
+  readonly resourcesUrl: string = environment.resourcesUrl;
 
   constructor(
     public dataService: DataService,
@@ -25,9 +25,10 @@ export class CartComponent {
 
   clear(): void {
     this.searchDataService.searchResults.data.forEach((p) => {
-      p.quantity = 0
+      p.quantity = 0;
     })
-    this.cartDataService.clearCart()
+    this.cartDataService.clearCart();
+    this.cartDataService.cartClearedEvent.emit();
   }
 
   checkout(): any {

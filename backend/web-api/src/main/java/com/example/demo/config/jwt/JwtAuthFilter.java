@@ -38,7 +38,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         return new AntPathMatcher().match("/api/auth/**", request.getServletPath())
             || new AntPathMatcher().match("/api/product/**", request.getServletPath())
             || new AntPathMatcher().match("/api/category/**", request.getServletPath())
-            || new AntPathMatcher().match("/api/test/**", request.getServletPath());
+            || new AntPathMatcher().match("/api/test/**", request.getServletPath())
+            || new AntPathMatcher().match("/ws/**", request.getServletPath())
+            || new AntPathMatcher().match("/api/webhook/**", request.getServletPath())
+        ;
     }
 
     @Override

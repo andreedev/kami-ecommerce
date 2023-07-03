@@ -11,21 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController()
-@RequestMapping("test")
-public class TestController {
-    @Autowired
-    PasswordEncoder passwordEncoder;
+@RequestMapping("webhook")
+public class WebhookController {
 
     @Autowired
     WebSocketService webSocketService;
-    @GetMapping("encrypt/{str}")
-    public String encrypt(@PathVariable("str") String str){
-        return passwordEncoder.encode(str);
-    }
-
-    @PostMapping(path = "/test-socket")
-    public ResponseEntity<String> testSocket(@RequestBody Order req) {
-        webSocketService.orderStatusUpdatedEvent(req);
-        return new ResponseEntity<String>("ok", HttpStatus.OK);
+    @PostMapping(path = "/order-status-updated-event")
+    public ResponseEntity<?> orderStatusUpdatedEvent(@RequestBody Order order) {
+        webSocketService.orderStatusUpdatedEvent(order);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

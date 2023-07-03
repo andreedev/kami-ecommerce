@@ -21,6 +21,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
   message: SafeHtml = 'Recuerda elegir un tipo de entrega';
   messageClass: string = 'text-dark';
 
+
   constructor(
     public orderDataService: OrderDataService,
     private orderService: OrderService,
@@ -40,6 +41,7 @@ export class CheckoutPageComponent implements OnInit, OnDestroy {
     this.addressDataService.addressSelectedEvent.subscribe((value) => {
       this.calculatePayment();
     })
+
   }
 
   continue(): void {

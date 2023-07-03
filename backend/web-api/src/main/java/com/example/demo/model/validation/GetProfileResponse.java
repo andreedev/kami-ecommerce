@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetProfileResponse {
+    private String id;
     private String name;
     private String lastName;
     private String email;

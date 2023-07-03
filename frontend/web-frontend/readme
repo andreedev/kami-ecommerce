@@ -13,9 +13,12 @@ npm install primeicons --save
 npm i moment
 npm i moment-timezone
 npm install @types/moment-timezone --save-dev
-npm install ngx-daterangepicker-material --saves
+npm install ngx-daterangepicker-material --save
 npm i @abacritt/angularx-social-login@1
-
+npm i sockjs-client --save
+npm i --save-dev @types/sockjs-client
+npm i @stomp/stompjs --save
+npm i @stomp/rx-stomp
 
 - Auxiliary libraries
 npm install @angular/cdk --save
