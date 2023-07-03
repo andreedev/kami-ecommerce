@@ -20,8 +20,8 @@
     <div class="container-fluid container-xl my-3 px-0">
         <div class="row justify-content-between m-0-force grid gx-5">
             <div class="d-none d-xl-block h-max-content bg-light col-2 px-0-force px-md-2 px-lg-3">
-                <search-filters (clearFiltersEventEmitter)="clearFilters()"
-                    (applyFiltersEventEmitter)="applyFilters()"></search-filters>
+                <search-filters (clearFiltersEventEmitter)="clearFilters(); displayFiltersModal=false;"
+                    (applyFiltersEventEmitter)="applyFilters(); displayFiltersModal=false;"></search-filters>
             </div>
 
             <div class="col-12 col-xl-10 px-0 px-md-3 px-xl-4">
@@ -138,6 +138,6 @@
 
 <p-dialog #filtrosModal header="FILTROS" [(visible)]="displayFiltersModal" [baseZIndex]="1" [modal]="true"
     [style]="{width: '350px'}" [contentStyle]="{padding: '0'}" [draggable]="false" [resizable]="false">
-    <search-filters (clearFiltersEventEmitter)="clearFilters()"
-        (applyFiltersEventEmitter)="applyFilters()"></search-filters>
+    <search-filters (clearFiltersEventEmitter)="clearFilters(); displayFiltersModal=false;"
+        (applyFiltersEventEmitter)="applyFilters(); displayFiltersModal=false;"></search-filters>
 </p-dialog>

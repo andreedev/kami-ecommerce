@@ -53,6 +53,11 @@ export class OrdersComponent {
     });
   }
 
+  filterByStatus():void{
+    this.page = 1;
+    this.searchOrders();
+  }
+
 
   async searchOrders(): Promise<void> {
     this.dataService.enableLoading();
